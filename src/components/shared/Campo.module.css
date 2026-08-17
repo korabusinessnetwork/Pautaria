@@ -1,0 +1,49 @@
+.grupo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+}
+
+.rotulo {
+  font-size: var(--txt-12-5);
+  font-weight: var(--peso-medio);
+  color: var(--txt-forte);
+}
+
+.input {
+  background: var(--card);
+  border: 1px solid var(--borda-forte);
+  border-radius: var(--raio-botao);
+  padding: 10px 12px;
+  font-size: var(--txt-14);
+  outline: none;
+  transition: border-color var(--transicao-rapida);
+  width: 100%;
+}
+.input:focus {
+  border-color: var(--ac);
+  box-shadow: 0 0 0 3px var(--acFaint);
+}
+.input:disabled {
+  background: rgba(31, 27, 22, 0.04);
+  color: var(--txt-secundario);
+}
+
+.comErro {
+  border-color: var(--perigo);
+}
+.comErro:focus {
+  border-color: var(--perigo);
+  box-shadow: 0 0 0 3px var(--perigo-suave);
+}
+
+.dica {
+  font-size: var(--txt-11-5);
+  color: var(--txt-secundario);
+}
+
+.erro {
+  font-size: var(--txt-11-5);
+  color: var(--perigo-forte);
+  font-weight: var(--peso-medio);
+}

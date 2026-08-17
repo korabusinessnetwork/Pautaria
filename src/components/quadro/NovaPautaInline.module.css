@@ -1,0 +1,31 @@
+.caixa {
+  margin-top: var(--esp-4);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.input {
+  background: var(--card);
+  border: 1.5px solid var(--ac);
+  border-radius: var(--raio-botao);
+  padding: 9px 11px;
+  font-size: var(--txt-13);
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.dica {
+  font-size: var(--txt-10-5);
+  color: var(--txt-suave);
+  padding-left: 2px;
+}
+
+.erro {
+  font-size: var(--txt-11);
+  color: var(--perigo-forte);
+  font-weight: var(--peso-medio);
+  padding-left: 2px;
+  line-height: 1.4;
+}

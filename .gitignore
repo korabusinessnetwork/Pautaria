@@ -1,0 +1,52 @@
+# Dependências
+node_modules/
+.pnp
+.pnp.js
+
+# Build
+dist/
+dist-ssr/
+build/
+*.local
+
+# Ambiente — NUNCA versionar. Só .env.example entra no git.
+.env
+.env.*
+!.env.example
+
+# Supabase
+supabase/.branches/
+supabase/.temp/
+supabase/.env
+.supabase/
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Testes e cobertura
+coverage/
+.nyc_output/
+
+# Vercel
+.vercel
+
+# Cache
+.eslintcache
+*.tsbuildinfo
+.turbo/

@@ -1,0 +1,62 @@
+.base {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--esp-3);
+  padding: var(--esp-4) var(--esp-5);
+  border-radius: var(--raio-botao);
+  border: 1px solid;
+  font-size: var(--txt-13);
+  line-height: 1.5;
+}
+
+.corpo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.titulo {
+  font-weight: var(--peso-semi);
+}
+
+.erro {
+  background: var(--perigo-suave);
+  border-color: oklch(55% 0.19 25 / 0.3);
+  color: var(--perigo-forte);
+}
+
+.atencao {
+  background: oklch(65% 0.14 75 / 0.12);
+  border-color: oklch(65% 0.14 75 / 0.35);
+  color: oklch(42% 0.12 75);
+}
+
+.info {
+  background: var(--acFaint);
+  border-color: var(--acSoft);
+  color: var(--acDeep);
+}
+
+.acao {
+  align-self: flex-start;
+  margin-top: 2px;
+  font-size: var(--txt-12-5);
+  font-weight: var(--peso-semi);
+  color: inherit;
+  text-decoration: underline;
+}
+
+.fechar {
+  background: transparent;
+  border: none;
+  color: inherit;
+  opacity: 0.6;
+  padding: 0 2px;
+  font-size: var(--txt-13);
+  line-height: 1;
+}
+.fechar:hover {
+  opacity: 1;
+}

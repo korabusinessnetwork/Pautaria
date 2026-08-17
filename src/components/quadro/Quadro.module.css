@@ -1,0 +1,99 @@
+.area {
+  flex: 1;
+  overflow: auto;
+  padding: var(--esp-7) var(--esp-8) 30px;
+  /* A grade de pontos: 1px a cada 22px. Textura de papel milimetrado. */
+  background-image: var(--grade-fundo);
+  background-size: var(--grade-ponto) var(--grade-ponto);
+}
+
+.trilho {
+  display: flex;
+  gap: var(--esp-5);
+  align-items: flex-start;
+  min-height: 100%;
+}
+
+.coluna,
+.colunaRecebendo {
+  width: var(--largura-coluna);
+  flex: none;
+  border-radius: var(--raio-painel);
+  padding: 8px;
+  box-sizing: border-box;
+  outline: 1.5px dashed transparent;
+  transition: background var(--transicao-rapida);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Coluna recebendo o card: accent quase transparente + contorno tracejado.
+   O tracejado importa — ele diz "solte aqui" sem precisar de texto.          */
+.colunaRecebendo {
+  background: var(--acFaint);
+  outline-color: var(--ac);
+}
+
+.cabecalhoColuna {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 4px 10px;
+}
+
+.contagem {
+  font-size: var(--txt-11-5);
+  color: var(--txt-rotulo);
+  font-weight: var(--peso-semi);
+}
+
+.pilha {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-4);
+  min-height: 10px;
+}
+
+/* Linha de inserção: mostra exatamente entre quais cards o card vai cair. */
+.marcador {
+  height: 2px;
+  margin: -1px 0;
+  border-radius: var(--raio-pill);
+  background: var(--ac);
+}
+
+.vazia {
+  border: 1.5px dashed var(--borda-forte);
+  border-radius: var(--raio-coluna);
+  padding: var(--esp-5);
+  text-align: center;
+  font-size: var(--txt-11-5);
+  color: var(--txt-suave);
+}
+
+.adicionar {
+  margin-top: var(--esp-4);
+  background: transparent;
+  border: none;
+  border-radius: var(--raio-item);
+  padding: 7px 8px;
+  font-size: var(--txt-12-5);
+  color: var(--txt-secundario);
+  text-align: left;
+  width: 100%;
+  transition: all var(--transicao-rapida);
+}
+.adicionar:hover:not(:disabled) {
+  background: rgba(255, 253, 248, 0.9);
+  color: var(--tinta);
+}
+
+@media (max-width: 720px) {
+  .area {
+    padding: var(--esp-5) var(--esp-6) 24px;
+  }
+  .coluna,
+  .colunaRecebendo {
+    width: 84vw;
+  }
+}

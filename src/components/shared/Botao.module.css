@@ -1,0 +1,78 @@
+.base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--esp-2);
+  border-radius: var(--raio-botao);
+  padding: 9px 16px;
+  font-size: var(--txt-13);
+  font-weight: var(--peso-semi);
+  border: 1px solid transparent;
+  transition: all var(--transicao-rapida);
+  white-space: nowrap;
+}
+
+.larguraTotal {
+  width: 100%;
+}
+
+.principal {
+  background: var(--ac);
+  color: var(--card);
+}
+.principal:hover:not(:disabled) {
+  filter: brightness(0.93);
+}
+
+.secundario {
+  background: transparent;
+  border-color: var(--borda-media);
+  color: var(--txt-forte);
+}
+.secundario:hover:not(:disabled) {
+  border-color: var(--ac);
+  color: var(--tinta);
+}
+
+.fantasma {
+  background: transparent;
+  color: var(--txt-secundario);
+  padding: 7px 8px;
+  font-weight: var(--peso-medio);
+  font-size: var(--txt-12-5);
+}
+.fantasma:hover:not(:disabled) {
+  background: rgba(255, 253, 248, 0.9);
+  color: var(--tinta);
+}
+
+.perigo {
+  background: transparent;
+  border-color: var(--borda-media);
+  color: var(--txt-terciario);
+}
+.perigo:hover:not(:disabled) {
+  border-color: var(--perigo);
+  color: var(--perigo-forte);
+  background: var(--perigo-suave);
+}
+
+.carregando {
+  cursor: progress;
+}
+
+.spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: var(--raio-pill);
+  animation: girar 0.7s linear infinite;
+  opacity: 0.7;
+}
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}

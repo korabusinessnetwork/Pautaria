@@ -1,0 +1,27 @@
+.base {
+  display: inline-block;
+  font-size: var(--txt-11);
+  padding: 3px 8px;
+  border-radius: var(--raio-pill);
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.preenchido {
+  font-weight: var(--peso-semi);
+  background: var(--acSoft);
+  color: var(--acDeep);
+}
+
+.contorno {
+  font-weight: var(--peso-medio);
+  border: 1px solid var(--borda-forte);
+  color: var(--txt-terciario);
+}
+
+.mono {
+  font-family: var(--fonte-mono);
+  font-size: var(--txt-10-5);
+}

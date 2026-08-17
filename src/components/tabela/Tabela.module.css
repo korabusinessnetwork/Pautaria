@@ -1,0 +1,111 @@
+.area {
+  flex: 1;
+  overflow: auto;
+  padding: var(--esp-7) var(--esp-8) 30px;
+}
+
+.painel {
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-painel);
+  overflow: hidden;
+  min-width: 640px;
+}
+
+.cabecalho,
+.linha {
+  display: grid;
+  grid-template-columns: 2.4fr 0.95fr 1fr 1fr 0.65fr 46px;
+  gap: var(--esp-4);
+  align-items: center;
+}
+
+.cabecalho {
+  padding: 11px var(--esp-6);
+  font-size: var(--txt-10-5);
+  font-weight: var(--peso-semi);
+  letter-spacing: var(--ls-cabecalho);
+  color: var(--txt-rotulo);
+  border-bottom: 1px solid var(--borda-fraca);
+}
+
+.linha {
+  padding: 12px var(--esp-6);
+  border-bottom: 1px solid rgba(31, 27, 22, 0.06);
+  cursor: pointer;
+  transition: background var(--transicao-rapida);
+}
+.linha:hover,
+.linha:focus-visible {
+  background: var(--acFaint);
+}
+.linha:last-child {
+  border-bottom: none;
+}
+
+.titulo {
+  font-size: var(--txt-13-5);
+  font-weight: var(--peso-semi);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pillEtapa {
+  display: inline-block;
+  font-size: var(--txt-11);
+  font-weight: var(--peso-semi);
+  padding: 3px 9px;
+  border-radius: var(--raio-pill);
+  background: var(--acSoft);
+  color: var(--acDeep);
+  white-space: nowrap;
+}
+
+.campo,
+.campoMono {
+  font-size: var(--txt-12-5);
+  color: var(--txt-forte);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.campoMono {
+  font-family: var(--fonte-mono);
+  font-size: var(--txt-11-5);
+}
+
+.prazo {
+  font-size: var(--txt-12);
+  color: var(--txt-secundario);
+}
+
+.prazoAtrasado {
+  font-size: var(--txt-12);
+  font-weight: var(--peso-semi);
+  color: var(--perigo-forte);
+}
+
+.vazio {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  padding: 64px var(--esp-7);
+  text-align: center;
+  background: var(--superficie);
+  border: 1.5px dashed var(--borda-forte);
+  border-radius: var(--raio-painel);
+}
+
+.vazioTitulo {
+  font-family: var(--fonte-display);
+  font-weight: var(--peso-semi);
+  font-size: var(--txt-16);
+}
+
+.vazioTexto {
+  font-size: var(--txt-13);
+  color: var(--txt-secundario);
+}

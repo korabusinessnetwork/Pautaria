@@ -1,0 +1,41 @@
+.grade {
+  display: grid;
+  grid-template-columns: var(--largura-sidebar) 1fr;
+  min-height: 100vh;
+  background: var(--fundo);
+  color: var(--tinta);
+  font-family: var(--fonte-ui);
+}
+
+.principal {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+.faixa {
+  padding: var(--esp-4) var(--esp-8) 0;
+}
+
+.centro {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--esp-8);
+}
+
+@media (max-width: 900px) {
+  .grade {
+    grid-template-columns: 1fr;
+  }
+  .principal {
+    height: auto;
+    min-height: 0;
+  }
+  .faixa {
+    padding: var(--esp-4) var(--esp-6) 0;
+  }
+}

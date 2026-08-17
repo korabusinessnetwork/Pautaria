@@ -1,0 +1,110 @@
+/* Camada compartilhada das telas de entrada, cadastro e senha.
+   Um arquivo em vez de quatro quase idênticos: as telas de auth são variações
+   do mesmo cartão centrado, e duplicar o CSS garantiria que elas divergissem na
+   primeira alteração.                                                        */
+
+.tela {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--esp-8);
+  padding: 48px 24px;
+  background:
+    radial-gradient(1100px 520px at 50% -12%, var(--acFaint), transparent 62%),
+    var(--fundo);
+  font-family: var(--fonte-ui);
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  color: var(--tinta);
+}
+.marca:hover {
+  text-decoration: none;
+}
+
+.bolinha {
+  width: 11px;
+  height: 11px;
+  border-radius: var(--raio-pill);
+  background: var(--ac);
+}
+
+.wordmark {
+  font-family: var(--fonte-display);
+  font-weight: var(--peso-forte);
+  font-size: var(--txt-20);
+  letter-spacing: var(--ls-titulo-suave);
+}
+
+.cartao {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-6);
+  padding: 32px;
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-tile);
+  animation: subir 0.4s ease both;
+}
+
+.titulo {
+  font-family: var(--fonte-display);
+  font-weight: var(--peso-forte);
+  font-size: 26px;
+  line-height: 1.15;
+  letter-spacing: var(--ls-titulo);
+}
+
+.subtitulo {
+  font-size: var(--txt-13-5);
+  line-height: 1.5;
+  color: var(--txt-corpo);
+  margin-top: -10px;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-5);
+}
+
+.requisitos {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: var(--txt-11-5);
+  color: var(--txt-secundario);
+  padding: var(--esp-4);
+  background: rgba(31, 27, 22, 0.03);
+  border-radius: var(--raio-item);
+}
+
+.requisitoOk {
+  color: var(--sucesso);
+}
+
+.rodape {
+  font-size: var(--txt-12-5);
+  color: var(--txt-secundario);
+  text-align: center;
+}
+
+.sucesso {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-4);
+  padding: var(--esp-6);
+  background: var(--acFaint);
+  border: 1px solid var(--acSoft);
+  border-radius: var(--raio-botao);
+  font-size: var(--txt-13);
+  line-height: 1.55;
+  color: var(--acDeep);
+}

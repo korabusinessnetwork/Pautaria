@@ -1,0 +1,105 @@
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-card);
+  box-shadow: var(--sombra-card);
+  transition: all var(--transicao-rapida);
+  cursor: grab;
+}
+
+.card:hover {
+  transform: translateY(-2px) rotate(-0.3deg);
+  box-shadow: var(--sombra-card-hover);
+  border-color: var(--ac);
+}
+
+.card:active {
+  cursor: grabbing;
+}
+
+/* Durante o arrasto o card fica fantasma no lugar de origem — assim a coluna
+   não "pula" e o usuário mantém a referência de onde ele saiu.               */
+.arrastando {
+  opacity: 0.4;
+  transform: none;
+}
+
+/* O pino: 7px de accent no topo central, meio para fora da borda.            */
+.pino {
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  margin-left: -3px;
+  width: 7px;
+  height: 7px;
+  border-radius: var(--raio-pill);
+  background: var(--ac);
+  box-shadow: 0 1px 2px rgba(31, 27, 22, 0.3);
+  z-index: 1;
+}
+
+.gatilho {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+  width: 100%;
+  padding: 13px;
+  background: transparent;
+  border: none;
+  border-radius: var(--raio-card);
+  text-align: left;
+  cursor: inherit;
+}
+
+.compacta .gatilho {
+  padding: 9px 11px;
+  gap: var(--esp-2);
+}
+
+.titulo {
+  font-size: var(--txt-14);
+  font-weight: var(--peso-semi);
+  line-height: 1.35;
+  text-wrap: pretty;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-1);
+}
+
+.rodape {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.espacador {
+  flex: 1;
+}
+
+.prazo {
+  font-size: var(--txt-11-5);
+  color: var(--txt-secundario);
+}
+
+/* Atraso e urgência têm cor própria, fora do accent do ofício: um prazo
+   vencido precisa ler como vencido em qualquer matiz.                        */
+.prazoAtrasado {
+  font-size: var(--txt-11-5);
+  font-weight: var(--peso-semi);
+  color: var(--perigo-forte);
+}
+
+.prazoUrgente {
+  font-size: var(--txt-11-5);
+  font-weight: var(--peso-semi);
+  color: var(--acDeep);
+}
+
+.semPrazo {
+  font-size: var(--txt-11-5);
+  color: var(--txt-suave);
+}

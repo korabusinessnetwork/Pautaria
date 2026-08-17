@@ -1,0 +1,175 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Base — reset mínimo e elementos globais.
+   Tudo o mais é CSS Module co-localizado com seu componente.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@import './tokens.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--fundo);
+  color: var(--tinta);
+  font-family: var(--fonte-ui);
+  font-size: var(--txt-14);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-family: var(--fonte-display);
+  font-weight: var(--peso-semi);
+  letter-spacing: var(--ls-titulo-suave);
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: var(--acDeep);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--tinta);
+  text-decoration: underline;
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+input,
+textarea,
+select {
+  font-family: inherit;
+  color: var(--tinta);
+}
+input::placeholder,
+textarea::placeholder {
+  color: var(--txt-suave);
+}
+
+::selection {
+  background: oklch(60% 0.16 45 / 0.25);
+}
+
+/* Foco visível de verdade. O anel segue o accent do ofício, então ele é
+   coerente com o tema sem nunca sumir — remover outline "porque fica feio" é
+   como tirar o corrimão da escada.                                           */
+:where(a, button, input, textarea, select, [tabindex]):focus-visible {
+  outline: 2px solid var(--ac);
+  outline-offset: 2px;
+  border-radius: var(--raio-etiqueta);
+}
+
+/* Link de pular para o conteúdo: primeiro Tab da página. Invisível até
+   receber foco.                                                              */
+.pular-para-conteudo {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  padding: 10px 16px;
+  background: var(--card);
+  border: 1px solid var(--ac);
+  border-radius: var(--raio-botao);
+  font-weight: var(--peso-semi);
+}
+.pular-para-conteudo:focus {
+  left: 12px;
+  top: 12px;
+}
+
+/* Texto só para leitor de tela. */
+.apenas-leitor {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@keyframes subir {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes entrarPelaDireita {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes pulsar {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+/* Barra de rolagem discreta — o quadro rola muito na horizontal e a barra
+   padrão do sistema quebra a sensação de mesa de trabalho.                   */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(31, 27, 22, 0.18) transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: rgba(31, 27, 22, 0.16);
+  border-radius: var(--raio-pill);
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(31, 27, 22, 0.28);
+  background-clip: content-box;
+}

@@ -1,0 +1,18 @@
+.fita,
+.reta {
+  display: inline-block;
+  font-family: var(--fonte-mono);
+  font-size: var(--txt-10-5);
+  font-weight: var(--peso-semi);
+  letter-spacing: var(--ls-etiqueta);
+  text-transform: uppercase;
+  background: var(--acSoft);
+  color: var(--acDeep);
+  padding: 3px 10px;
+  border-radius: var(--raio-etiqueta);
+  white-space: nowrap;
+}
+
+.fita {
+  transform: rotate(-1.2deg);
+}

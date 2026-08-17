@@ -1,0 +1,154 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Tokens — o handoff hi-fi traduzido para CSS.
+
+   Estas variáveis são a única fonte de cor, tipografia, raio e espaçamento do
+   Pautaria. Nenhum componente escreve `#FBFAF6` ou `13px` direto: escreve
+   `var(--superficie)` e `var(--txt-13)`. É o que permite o white-label — trocar
+   a identidade de um tenant é trocar valores aqui, não caçar hexadecimais em
+   quarenta arquivos.
+
+   As variáveis `--ac*` são deliberadamente ausentes desta lista: elas mudam por
+   ofício e são injetadas em runtime por `src/utils/tema.ts`. Os valores abaixo
+   são só o fallback de quando ainda não há ofício escolhido.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Papel e tinta ──────────────────────────────────────────────────────
+     A base "studio pinboard": papel quente, não branco. O card é um tom
+     acima da superfície, e a superfície um tom acima do fundo — é o que dá a
+     sensação de ficha alfinetada em vez de retângulo desenhado.            */
+  --fundo: #f2efe7;
+  --sidebar: #eeeae0;
+  --superficie: #fbfaf6;
+  --card: #fffdf8;
+  --tinta: #1f1b16;
+
+  /* ── Bordas e texto secundário ──────────────────────────────────────────
+     Sempre a tinta com alfa, nunca um cinza próprio. Um cinza neutro sobre
+     papel quente parece sujo; a tinta translúcida mantém a temperatura.    */
+  --borda-fraca: rgba(31, 27, 22, 0.1);
+  --borda: rgba(31, 27, 22, 0.11);
+  --borda-forte: rgba(31, 27, 22, 0.14);
+  --borda-media: rgba(31, 27, 22, 0.16);
+
+  --txt-suave: rgba(31, 27, 22, 0.38);
+  --txt-secundario: rgba(31, 27, 22, 0.5);
+  --txt-terciario: rgba(31, 27, 22, 0.58);
+  --txt-corpo: rgba(31, 27, 22, 0.62);
+  --txt-rotulo: rgba(31, 27, 22, 0.42);
+  --txt-forte: rgba(31, 27, 22, 0.72);
+
+  /* ── Accent — sobrescrito por ofício em runtime ────────────────────────
+     Fallback: Marketing (hue 45, chroma .16).                              */
+  --ac: oklch(60% 0.16 45);
+  --acSoft: oklch(60% 0.16 45 / 0.13);
+  --acFaint: oklch(60% 0.16 45 / 0.07);
+  --acDeep: oklch(44% 0.16 45);
+
+  /* ── Semânticos ────────────────────────────────────────────────────────
+     Perigo e atraso não seguem o accent: uma ação destrutiva precisa ler
+     como destrutiva mesmo num ofício de matiz vermelha.                    */
+  --perigo: oklch(55% 0.19 25);
+  --perigo-forte: oklch(48% 0.19 25);
+  --perigo-suave: oklch(55% 0.19 25 / 0.1);
+  --atencao: oklch(65% 0.14 75);
+  --sucesso: oklch(58% 0.13 150);
+
+  /* ── Tipografia ────────────────────────────────────────────────────────
+     Space Grotesk para display (títulos, nomes, números que importam),
+     Instrument Sans para UI, monoespaçada para etiquetas e para o modo
+     `mono` do ofício de TI.                                                */
+  --fonte-display: 'Space Grotesk', system-ui, sans-serif;
+  --fonte-ui: 'Instrument Sans', system-ui, -apple-system, sans-serif;
+  --fonte-mono: ui-monospace, SFMono-Regular, Menlo, 'Cascadia Mono', monospace;
+
+  /* Escala do handoff. Os meios-pixels são intencionais: 11.5 e 12.5 estão
+     no design original e mudá-los para inteiros altera o ritmo vertical.   */
+  --txt-56: 56px;
+  --txt-23: 23px;
+  --txt-21: 21px;
+  --txt-20: 20px;
+  --txt-16: 16.5px;
+  --txt-14: 14px;
+  --txt-13-5: 13.5px;
+  --txt-13: 13px;
+  --txt-12-5: 12.5px;
+  --txt-12: 12px;
+  --txt-11-5: 11.5px;
+  --txt-11: 11px;
+  --txt-10-5: 10.5px;
+  --txt-10: 10px;
+
+  --peso-normal: 400;
+  --peso-medio: 500;
+  --peso-semi: 600;
+  --peso-forte: 700;
+
+  /* Espaçamentos de letra que carregam identidade */
+  --ls-eyebrow: 0.22em;
+  --ls-rotulo: 0.18em;
+  --ls-cabecalho: 0.14em;
+  --ls-etiqueta: 0.12em;
+  --ls-titulo: -0.02em;
+  --ls-titulo-suave: -0.01em;
+
+  /* ── Raios ─────────────────────────────────────────────────────────────
+     O raio 3 da etiqueta é o detalhe que faz ela parecer fita adesiva e não
+     pílula. Não arredonde.                                                 */
+  --raio-tile: 16px;
+  --raio-painel: 14px;
+  --raio-card: 12px;
+  --raio-coluna: 11px;
+  --raio-botao: 10px;
+  --raio-item: 9px;
+  --raio-etiqueta: 3px;
+  --raio-pill: 999px;
+
+  /* ── Espaçamento ───────────────────────────────────────────────────────*/
+  --esp-1: 5px;
+  --esp-2: 6px;
+  --esp-3: 9px;
+  --esp-4: 10px;
+  --esp-5: 14px;
+  --esp-6: 16px;
+  --esp-7: 22px;
+  --esp-8: 26px;
+  --esp-9: 40px;
+
+  /* ── Sombras ───────────────────────────────────────────────────────────
+     Sombras de deslocamento negativo grande e opacidade baixa: o card
+     "levanta" do papel sem ganhar contorno escuro.                         */
+  --sombra-card: 0 1px 2px rgba(31, 27, 22, 0.06);
+  --sombra-card-hover: 0 10px 22px -14px rgba(31, 27, 22, 0.4);
+  --sombra-tile-hover: 0 18px 34px -20px;
+  --sombra-ativo: 0 1px 3px rgba(31, 27, 22, 0.1);
+  --sombra-drawer: -16px 0 40px -24px rgba(31, 27, 22, 0.35);
+
+  /* ── Movimento ─────────────────────────────────────────────────────────*/
+  --transicao-rapida: 0.15s ease;
+  --transicao: 0.18s ease;
+  --transicao-drawer: 0.22s ease;
+
+  /* ── Layout ────────────────────────────────────────────────────────────*/
+  --largura-sidebar: 230px;
+  --largura-coluna: 266px;
+  --largura-drawer: 340px;
+  --grade-ponto: 22px;
+}
+
+/* A grade de pontos do quadro: 1px a cada 22px, quase invisível. É o que dá
+   a textura de papel milimetrado da mesa de trabalho.                       */
+:root {
+  --grade-fundo: radial-gradient(rgba(31, 27, 22, 0.055) 1px, transparent 1px);
+}
+
+/* Quem pediu menos movimento recebe menos movimento. Não é acessibilidade
+   decorativa: as animações deste app incluem rotação e deslocamento, que são
+   exatamente os gatilhos de desconforto vestibular.                         */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transicao-rapida: 0.01ms;
+    --transicao: 0.01ms;
+    --transicao-drawer: 0.01ms;
+  }
+}

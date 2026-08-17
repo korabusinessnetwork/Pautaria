@@ -1,0 +1,119 @@
+# Configuração do projeto Supabase local (supabase start / db reset).
+# Referência: https://supabase.com/docs/guides/local-development/cli/config
+
+project_id = "pautaria"
+
+[api]
+enabled = true
+port = 54321
+# Só `public` é exposto pela API. O schema `app` guarda as funções de
+# autorização e permanece inalcançável a partir do browser — de propósito.
+schemas = ["public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+shadow_port = 54320
+major_version = 15
+
+[db.seed]
+enabled = true
+sql_paths = ["./seeds/0001_oficios.sql"]
+
+[studio]
+enabled = true
+port = 54323
+
+[inbucket]
+enabled = true
+port = 54324
+
+[auth]
+enabled = true
+site_url = "http://localhost:5173"
+additional_redirect_urls = ["http://localhost:5173/entrar", "http://localhost:5173/convite"]
+
+# Sessão curta com refresh rotativo: um access token vazado tem uma hora de
+# utilidade, não uma semana. A rotação garante que reuso de refresh token
+# derruba a família inteira de tokens.
+jwt_expiry = 3600
+enable_refresh_token_rotation = true
+refresh_token_reuse_interval = 10
+
+enable_signup = true
+enable_anonymous_sign_ins = false
+
+[auth.email]
+enable_signup = true
+double_confirm_changes = true
+enable_confirmations = true
+secure_password_change = true
+# Link de confirmação/recuperação vale 1 hora. O padrão de 24h é generoso
+# demais para um e-mail que pode ficar aberto numa máquina compartilhada.
+otp_expiry = 3600
+
+[auth.email.template.confirmation]
+subject = "Confirme seu e-mail — Pautaria"
+
+[auth.email.template.recovery]
+subject = "Redefinir sua senha — Pautaria"
+
+[auth.email.template.invite]
+subject = "Você foi convidado para um workspace no Pautaria"
+
+# Senha: 10 caracteres com exigência de variedade. Comprimento importa mais que
+# símbolo obrigatório, mas o mínimo padrão (6) é curto demais para um SaaS pago.
+[auth.password]
+min_length = 10
+required_characters = "abcdefghijklmnopqrstuvwxyz:ABCDEFGHIJKLMNOPQRSTUVWXYZ:0123456789"
+
+# Verificação contra vazamentos conhecidos (HaveIBeenPwned). Gratuito e é a
+# defesa mais eficaz que existe contra credential stuffing.
+[auth.password.hibp]
+enabled = true
+
+[auth.rate_limit]
+email_sent = 10
+sign_in_sign_ups = 20
+token_refresh = 150
+anonymous_users = 0
+
+[auth.mfa]
+# TOTP fica para a Fase 4 (ver docs/09_BACKLOG). O suporte é ativado aqui
+# quando a UI de inscrição/verificação existir — ligar antes só criaria uma
+# funcionalidade sem porta de entrada.
+max_enrolled_factors = 10
+
+[auth.mfa.totp]
+enroll_enabled = false
+verify_enabled = false
+
+[edge_runtime]
+enabled = true
+policy = "oneshot"
+inspector_port = 8083
+
+# ── Edge Functions ───────────────────────────────────────────────────────────
+# `verify_jwt = false` APENAS onde quem chama não tem JWT do Supabase:
+#   • asaas-webhook            → chamador é a Asaas; autentica por token próprio
+#                                (asaas-access-token), verificado em tempo
+#                                constante dentro da função
+#   • assinaturas-reconciliar  → chamador é o agendador; autentica por x-cron-token
+# Toda função que o app chama exige JWT. Mudar qualquer linha abaixo para
+# `false` sem um mecanismo de autenticação equivalente é vulnerabilidade.
+
+[functions.assinatura-criar]
+verify_jwt = true
+
+[functions.assinatura-portal]
+verify_jwt = true
+
+[functions.assinatura-cancelar]
+verify_jwt = true
+
+[functions.asaas-webhook]
+verify_jwt = false
+
+[functions.assinaturas-reconciliar]
+verify_jwt = false

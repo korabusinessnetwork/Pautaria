@@ -1,0 +1,169 @@
+/* Abertura — recriação fiel do handoff hi-fi.
+   Medidas, pesos e ângulos vêm do protótipo e são finais.                    */
+
+.tela {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--esp-9);
+  padding: 64px 24px;
+  /* O wash radial no topo tinge o papel com o accent do ofício em foco. */
+  background:
+    radial-gradient(1100px 520px at 50% -12%, var(--acFaint), transparent 62%),
+    var(--fundo);
+  font-family: var(--fonte-ui);
+  color: var(--tinta);
+}
+
+.cabecalho {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  text-align: center;
+  animation: subir 0.5s ease both;
+}
+
+.eyebrow {
+  font-family: var(--fonte-mono);
+  font-size: var(--txt-11);
+  letter-spacing: var(--ls-eyebrow);
+  color: var(--txt-secundario);
+}
+
+.titulo {
+  font-family: var(--fonte-display);
+  font-weight: var(--peso-forte);
+  font-size: var(--txt-56);
+  line-height: 1.04;
+  letter-spacing: var(--ls-titulo);
+  max-width: 640px;
+  text-wrap: balance;
+}
+
+.destaque {
+  color: var(--ac);
+}
+
+.subtitulo {
+  font-size: var(--txt-16);
+  line-height: 1.55;
+  color: var(--txt-corpo);
+  max-width: 520px;
+  text-wrap: pretty;
+}
+
+.faixaErro {
+  width: 100%;
+  max-width: 520px;
+}
+
+.tiles {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--esp-6);
+  max-width: 1120px;
+  animation: subir 0.5s 0.12s ease both;
+}
+
+.tile {
+  position: relative;
+  width: 250px;
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-tile);
+  padding: var(--esp-7);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  text-align: left;
+  transition: all var(--transicao);
+}
+
+/* A inclinação alterna de sentido entre os tiles — no protótipo o terceiro
+   gira para o outro lado. É o que impede a fileira de parecer um carrossel de
+   cartões idênticos.                                                         */
+.tile:hover:not(:disabled) {
+  transform: translateY(-4px) rotate(-0.5deg);
+  border-color: var(--tile-ac);
+  box-shadow: var(--sombra-tile-hover) color-mix(in oklch, var(--tile-ac) 60%, transparent);
+}
+.tile:nth-child(3):hover:not(:disabled) {
+  transform: translateY(-4px) rotate(0.5deg);
+}
+.tile:disabled {
+  opacity: 0.75;
+}
+
+.glifo {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--raio-botao);
+  background: var(--tile-soft);
+  color: var(--tile-deep);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+}
+
+.nome {
+  font-family: var(--fonte-display);
+  font-weight: var(--peso-semi);
+  font-size: var(--txt-20);
+}
+
+.descricao {
+  font-size: var(--txt-13);
+  line-height: 1.45;
+  color: var(--txt-terciario);
+}
+
+.etapas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-1);
+}
+
+.etapa,
+.etapaMono {
+  font-size: var(--txt-10-5);
+  font-weight: var(--peso-medio);
+  padding: 3px 8px;
+  border-radius: var(--raio-pill);
+  border: 1px solid var(--borda-forte);
+  color: var(--txt-terciario);
+}
+
+.etapaMono {
+  font-family: var(--fonte-mono);
+}
+
+.montando {
+  position: absolute;
+  inset: auto 0 -22px 0;
+  font-size: var(--txt-11-5);
+  color: var(--tile-deep);
+  text-align: center;
+  animation: pulsar 1.2s ease-in-out infinite;
+}
+
+.rodape {
+  font-size: var(--txt-12-5);
+  color: var(--txt-rotulo);
+  animation: subir 0.5s 0.2s ease both;
+}
+
+@media (max-width: 640px) {
+  .titulo {
+    font-size: 38px;
+  }
+  .tile {
+    width: 100%;
+    max-width: 340px;
+  }
+}

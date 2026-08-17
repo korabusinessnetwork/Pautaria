@@ -1,0 +1,230 @@
+.sidebar {
+  border-right: 1px solid var(--borda-fraca);
+  background: var(--sidebar);
+  padding: 18px 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-7);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  padding: 2px 8px;
+  color: var(--tinta);
+}
+.marca:hover {
+  text-decoration: none;
+}
+
+.bolinha {
+  width: 11px;
+  height: 11px;
+  border-radius: var(--raio-pill);
+  background: var(--ac);
+  flex: none;
+}
+
+.wordmark {
+  font-family: var(--fonte-display);
+  font-weight: var(--peso-forte);
+  font-size: 18px;
+  letter-spacing: var(--ls-titulo-suave);
+}
+
+.secao,
+.secaoBaixa {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rotuloSecao {
+  font-size: var(--txt-10);
+  font-weight: var(--peso-semi);
+  letter-spacing: var(--ls-rotulo);
+  color: var(--txt-rotulo);
+  padding: 0 8px 4px;
+}
+
+.item,
+.itemAtivo {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  padding: 8px;
+  border-radius: var(--raio-item);
+  background: transparent;
+  border: 1px solid transparent;
+  text-align: left;
+  width: 100%;
+  transition: background var(--transicao-rapida);
+}
+
+.item:hover:not(:disabled) {
+  background: rgba(255, 253, 248, 0.7);
+}
+
+.itemAtivo {
+  background: rgba(255, 253, 248, 0.85);
+  box-shadow: var(--sombra-ativo);
+  border-color: rgba(31, 27, 22, 0.09);
+}
+
+.item:disabled,
+.itemAtivo:disabled {
+  opacity: 1; /* ofício ativo desabilitado não deve parecer indisponível */
+}
+.item:disabled {
+  opacity: 0.6;
+}
+
+.glifo {
+  width: 16px;
+  text-align: center;
+  font-size: 12px;
+  flex: none;
+}
+
+.itemNome {
+  font-size: var(--txt-13-5);
+  font-weight: var(--peso-medio);
+  flex: 1;
+}
+
+.girando {
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--acDeep);
+  border-right-color: transparent;
+  border-radius: var(--raio-pill);
+  animation: girarSidebar 0.7s linear infinite;
+}
+
+@keyframes girarSidebar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.template {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 8px;
+  border-radius: var(--raio-item);
+  background: transparent;
+  border: none;
+  color: var(--txt-forte);
+  text-align: left;
+  width: 100%;
+}
+.template:hover:not(:disabled) {
+  background: rgba(255, 253, 248, 0.7);
+  color: var(--tinta);
+}
+
+.mais {
+  font-size: var(--txt-13);
+  color: var(--acDeep);
+  font-weight: var(--peso-semi);
+}
+
+.templateNome {
+  font-size: var(--txt-12-5);
+}
+
+.erro {
+  font-size: var(--txt-11-5);
+}
+
+.espacador {
+  flex: 1;
+}
+
+.secaoBaixa {
+  gap: 2px;
+}
+
+.linkBaixo {
+  padding: 7px 8px;
+  border-radius: var(--raio-item);
+  font-size: var(--txt-12-5);
+  color: var(--txt-forte);
+}
+.linkBaixo:hover {
+  background: rgba(255, 253, 248, 0.7);
+  color: var(--tinta);
+  text-decoration: none;
+}
+
+.usuario {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-4);
+  padding: 8px;
+  border-radius: var(--raio-coluna);
+  background: rgba(255, 253, 248, 0.6);
+}
+
+.usuarioTexto {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.usuarioNome {
+  font-size: var(--txt-13);
+  font-weight: var(--peso-semi);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.usuarioPlano {
+  font-size: var(--txt-11);
+  color: var(--txt-secundario);
+}
+
+.sair {
+  background: transparent;
+  border: none;
+  color: var(--txt-secundario);
+  font-size: var(--txt-13);
+  padding: 4px;
+  border-radius: var(--raio-etiqueta);
+}
+.sair:hover {
+  color: var(--perigo-forte);
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    position: static;
+    height: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    border-right: none;
+    border-bottom: 1px solid var(--borda-fraca);
+    gap: var(--esp-5);
+  }
+  .secao {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .rotuloSecao {
+    display: none;
+  }
+  .espacador {
+    display: none;
+  }
+}

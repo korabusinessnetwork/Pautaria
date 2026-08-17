@@ -1,0 +1,142 @@
+name: CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_dispatch:
+
+# Sem permissão de escrita: o CI valida, não publica.
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ───────────────────────────────────────────────────────────────────────────
+  # Aplicação: lint, tipos, testes e build.
+  # ───────────────────────────────────────────────────────────────────────────
+  aplicacao:
+    name: Aplicação
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci
+
+      - name: Lint (zero warning)
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Testes
+        run: npm test
+
+      - name: Build de produção
+        # As variáveis são obrigatórias: o plugin `exigirAmbiente` aborta o build
+        # sem elas. São valores de verificação, não segredos — a chave `anon` é
+        # pública por design e este projeto sequer é o alvo delas.
+        env:
+          VITE_SUPABASE_URL: https://ci.supabase.co
+          VITE_SUPABASE_ANON_KEY: chave-anon-de-verificacao
+        run: npm run build
+
+      - name: O bundle contém a aplicação
+        # Guarda contra a regressão do bug B1 (memory/bugs.md): um build verde
+        # produzindo bundle vazio por eliminação de código morto. Verificar o
+        # código de saída não bastaria — ele era zero.
+        run: |
+          if ! grep -rq "sotaque" dist/assets/*.js; then
+            echo "✗ O bundle não contém a aplicação — provável eliminação de código morto."
+            ls -la dist/assets/
+            exit 1
+          fi
+          echo "✓ Aplicação presente no bundle."
+
+      - name: Nenhum segredo no bundle
+        run: |
+          if grep -rlE 'service_role|\$aact_|ASAAS_API_KEY|CRON_TOKEN' dist/ 2>/dev/null; then
+            echo "✗ Segredo encontrado no bundle publicado."
+            exit 1
+          fi
+          echo "✓ Nenhum segredo no bundle."
+
+  # ───────────────────────────────────────────────────────────────────────────
+  # Banco: migrations, seeds e o teste de isolamento entre tenants.
+  # É o gate de segurança mais importante do projeto.
+  # ───────────────────────────────────────────────────────────────────────────
+  banco:
+    name: Banco e isolamento entre tenants
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        # Mesma major do Supabase, para o teste rodar contra a versão real.
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cliente psql
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends postgresql-client
+
+      - name: Migrations, seeds e isolamento
+        env:
+          DB_URL: postgresql://postgres:postgres@localhost:5432/postgres
+        run: bash scripts/banco-efemero.sh
+
+  # ───────────────────────────────────────────────────────────────────────────
+  # Segurança: dependências e segredos.
+  # ───────────────────────────────────────────────────────────────────────────
+  seguranca:
+    name: Segurança
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # A varredura de segredos usa `git grep` sobre o histórico do checkout.
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci
+
+      - name: Vulnerabilidades em dependências
+        run: npm run seguranca:audit
+
+      - name: Varredura de segredos
+        run: npm run seguranca:segredos
+
+      - name: schema.sql está em dia com as migrations
+        # schema.sql é gerado. Se alguém adicionar migration e esquecer de
+        # regenerar, a "fonte de verdade legível" passa a mentir — que é pior do
+        # que não existir.
+        run: |
+          bash scripts/gerar-schema.sh
+          if ! git diff --quiet -- supabase/schema.sql; then
+            echo "✗ supabase/schema.sql desatualizado."
+            echo "  Rode: bash scripts/gerar-schema.sh && git add supabase/schema.sql"
+            git diff --stat -- supabase/schema.sql
+            exit 1
+          fi
+          echo "✓ schema.sql em dia."

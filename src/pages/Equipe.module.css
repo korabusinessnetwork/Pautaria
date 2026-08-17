@@ -1,0 +1,229 @@
+.tela {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-6);
+  padding: 40px 24px 72px;
+  max-width: 760px;
+  margin: 0 auto;
+  width: 100%;
+  font-family: var(--fonte-ui);
+}
+
+.cabecalho {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+}
+
+.voltar {
+  font-size: var(--txt-12-5);
+  color: var(--txt-secundario);
+  align-self: flex-start;
+  margin-bottom: var(--esp-2);
+}
+.voltar:hover {
+  color: var(--tinta);
+  text-decoration: none;
+}
+
+.titulo {
+  font-family: var(--fonte-display);
+  font-weight: var(--peso-forte);
+  font-size: 30px;
+  letter-spacing: var(--ls-titulo);
+}
+
+.subtitulo {
+  font-size: var(--txt-13-5);
+  color: var(--txt-secundario);
+}
+
+.painel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-5);
+  padding: var(--esp-8);
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-painel);
+}
+
+.tituloSecao {
+  font-family: var(--fonte-display);
+  font-weight: var(--peso-semi);
+  font-size: var(--txt-16);
+}
+
+.lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-5);
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(31, 27, 22, 0.06);
+}
+.item:last-child {
+  border-bottom: none;
+}
+
+.pessoa {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.nome {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
+  font-size: var(--txt-13-5);
+  font-weight: var(--peso-semi);
+}
+
+.voce {
+  font-size: var(--txt-10);
+  font-weight: var(--peso-semi);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 2px 6px;
+  border-radius: var(--raio-pill);
+  background: var(--acSoft);
+  color: var(--acDeep);
+}
+
+.email {
+  font-size: var(--txt-12);
+  color: var(--txt-secundario);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.papel {
+  font-size: var(--txt-12);
+  font-weight: var(--peso-semi);
+  color: var(--txt-secundario);
+  white-space: nowrap;
+}
+
+.select {
+  background: var(--card);
+  border: 1px solid var(--borda-forte);
+  border-radius: var(--raio-item);
+  padding: 6px 10px;
+  font-size: var(--txt-12-5);
+  font-family: inherit;
+  color: var(--tinta);
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-5);
+  align-items: stretch;
+}
+
+.campoPapel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+}
+
+.rotuloPapel {
+  font-size: var(--txt-12-5);
+  font-weight: var(--peso-medio);
+  color: var(--txt-forte);
+}
+
+.linkCaixa {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-4);
+  padding: var(--esp-6);
+  background: var(--acFaint);
+  border: 1px solid var(--acSoft);
+  border-radius: var(--raio-botao);
+}
+
+.linkAviso {
+  font-size: var(--txt-12-5);
+  line-height: 1.55;
+  color: var(--acDeep);
+}
+
+.linkLinha {
+  display: flex;
+  gap: var(--esp-3);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.link {
+  flex: 1;
+  min-width: 220px;
+  font-family: var(--fonte-mono);
+  font-size: var(--txt-11-5);
+  background: var(--card);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-item);
+  padding: 9px 11px;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.convites {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+  padding-top: var(--esp-5);
+  border-top: 1px solid var(--borda-fraca);
+}
+
+.tituloConvites {
+  font-size: var(--txt-12-5);
+  font-weight: var(--peso-semi);
+  letter-spacing: var(--ls-rotulo);
+  text-transform: uppercase;
+  color: var(--txt-rotulo);
+}
+
+.convite {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-4);
+  flex-wrap: wrap;
+  font-size: var(--txt-12-5);
+}
+
+.conviteEmail {
+  flex: 1;
+  min-width: 160px;
+  font-weight: var(--peso-medio);
+}
+
+.convitePapel {
+  color: var(--txt-secundario);
+}
+
+.conviteData {
+  font-size: var(--txt-11-5);
+  color: var(--txt-suave);
+}
+
+@media (max-width: 640px) {
+  .painel {
+    padding: var(--esp-6);
+  }
+  .item {
+    flex-wrap: wrap;
+  }
+}
