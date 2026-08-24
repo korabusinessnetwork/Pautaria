@@ -9,7 +9,8 @@
  */
 
 import { supabase } from './supabase';
-import { normalizar } from './erros';
+import { demo, seDemo } from './demo';
+import { normalizar, ErroApp } from './erros';
 import { zOficio, type Oficio } from './tipos';
 import { validarLista, validarUm } from './validar';
 
@@ -25,6 +26,9 @@ const CAMPOS = `
  * usuário autenticado, sem workspace ainda criado.
  */
 export async function listarOficiosDoSistema(): Promise<Oficio[]> {
+  const d = import.meta.env.DEV ? await seDemo(() => demo.oficiosDoSistema()) : null;
+  if (d) return d;
+
   const { data, error } = await supabase
     .from('oficios')
     .select(CAMPOS)
@@ -37,6 +41,9 @@ export async function listarOficiosDoSistema(): Promise<Oficio[]> {
 
 /** Do sistema + os próprios do workspace. É o que a sidebar lista. */
 export async function listarOficiosDisponiveis(workspaceId: string): Promise<Oficio[]> {
+  const d = import.meta.env.DEV ? await seDemo(() => demo.oficiosDisponiveis()) : null;
+  if (d) return d;
+
   const { data, error } = await supabase
     .from('oficios')
     .select(CAMPOS)
@@ -48,6 +55,12 @@ export async function listarOficiosDisponiveis(workspaceId: string): Promise<Ofi
 }
 
 export async function buscarOficio(id: string): Promise<Oficio> {
+  const d = import.meta.env.DEV ? await seDemo(() => ({ v: demo.oficio(id) })) : null;
+  if (d) {
+    if (!d.v) throw new ErroApp('nao_encontrado', 'Ofício não encontrado.');
+    return d.v;
+  }
+
   const { data, error } = await supabase
     .from('oficios')
     .select(CAMPOS)
@@ -82,6 +95,9 @@ export interface NovoOficio {
  * Solo — a UI já desabilita o caminho, mas a recusa que vale é a do banco.
  */
 export async function criarOficio(entrada: NovoOficio): Promise<Oficio> {
+  const d = import.meta.env.DEV ? await seDemo(() => demo.criarOficio(entrada)) : null;
+  if (d) return d;
+
   const { data: oficio, error } = await supabase
     .from('oficios')
     .insert({
@@ -122,6 +138,12 @@ export async function criarOficio(entrada: NovoOficio): Promise<Oficio> {
 }
 
 export async function excluirOficio(id: string): Promise<void> {
+  const d = import.meta.env.DEV ? await seDemo(() => {
+    demo.excluirOficio(id);
+    return true;
+  }) : null;
+  if (d) return;
+
   const { error } = await supabase.from('oficios').delete().eq('id', id);
   if (error) throw normalizar(error);
 }

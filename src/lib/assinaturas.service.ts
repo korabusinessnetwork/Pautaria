@@ -9,6 +9,7 @@
  */
 
 import { supabase } from './supabase';
+import { demo, seDemo } from './demo';
 import { normalizar } from './erros';
 import { chamarFuncao } from './edge';
 import {
@@ -26,6 +27,9 @@ import { validarLista, validarUm } from './validar';
 
 /** Catálogo público — a página de preços funciona sem login. */
 export async function listarPlanos(): Promise<PlanoCatalogo[]> {
+  const d = import.meta.env.DEV ? await seDemo(() => demo.planos()) : null;
+  if (d) return d;
+
   const { data, error } = await supabase
     .from('planos')
     .select('chave, nome, chamada, preco_mensal_centavos, preco_anual_centavos, limites, destaques, ordem')
@@ -36,6 +40,11 @@ export async function listarPlanos(): Promise<PlanoCatalogo[]> {
 }
 
 export async function carregarAssinatura(workspaceId: string): Promise<Assinatura | null> {
+  // `{ v }` porque `null` é resposta válida — workspace sem assinatura viva.
+  // Sem a caixa, esse nulo cairia no caminho real e chamaria o Supabase.
+  const d = import.meta.env.DEV ? await seDemo(() => ({ v: demo.assinatura() })) : null;
+  if (d) return d.v;
+
   const { data, error } = await supabase
     .from('assinaturas')
     .select('id, plano, ciclo, status, valor_centavos, proxima_cobranca, fim_periodo, cancelada_em')
@@ -61,6 +70,9 @@ export interface LinhaCobranca {
 }
 
 export async function listarCobrancas(workspaceId: string): Promise<LinhaCobranca[]> {
+  const d = import.meta.env.DEV ? await seDemo(() => demo.cobrancas()) : null;
+  if (d) return d;
+
   const { data, error } = await supabase
     .from('cobrancas')
     .select('id, status, valor_centavos, vencimento, pago_em, url_fatura, forma_pagamento')
@@ -110,7 +122,10 @@ export interface RespostaContratacao {
  * tabela `planos` dentro da Edge Function. Mandar valor daqui deixaria o
  * cliente escolher quanto pagar.
  */
-export function contratar(dados: DadosContratacao): Promise<RespostaContratacao> {
+export async function contratar(dados: DadosContratacao): Promise<RespostaContratacao> {
+  const d = import.meta.env.DEV ? await seDemo(() => demo.contratar(dados)) : null;
+  if (d) return d;
+
   return chamarFuncao<RespostaContratacao>('assinatura-criar', {
     workspaceId: dados.workspaceId,
     plano: dados.plano,
@@ -133,7 +148,10 @@ export interface RespostaPortal {
 }
 
 /** Recupera a fatura em aberto (boleto vencido, Pix expirado, aba fechada). */
-export function abrirFatura(workspaceId: string): Promise<RespostaPortal> {
+export async function abrirFatura(workspaceId: string): Promise<RespostaPortal> {
+  const d = import.meta.env.DEV ? await seDemo(() => demo.abrirFatura()) : null;
+  if (d) return d;
+
   return chamarFuncao<RespostaPortal>('assinatura-portal', { workspaceId });
 }
 
@@ -143,10 +161,13 @@ export interface RespostaCancelamento {
   acessoAte: string | null;
 }
 
-export function cancelar(
+export async function cancelar(
   workspaceId: string,
   motivo?: string,
 ): Promise<RespostaCancelamento> {
+  const d = import.meta.env.DEV ? await seDemo(() => demo.cancelar()) : null;
+  if (d) return d;
+
   return chamarFuncao<RespostaCancelamento>('assinatura-cancelar', {
     workspaceId,
     motivo: motivo ?? '',

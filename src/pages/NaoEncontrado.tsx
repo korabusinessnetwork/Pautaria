@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import estilos from './Auth.module.css';
+import { ROTA_DO_APP } from '@/constants/rotas';
 
 export function NaoEncontrado() {
   return (
@@ -16,7 +17,7 @@ export function NaoEncontrado() {
           coisas levam de volta para o mesmo lugar.
         </p>
         <p className={estilos.rodape}>
-          <Link to="/">Voltar para as minhas pautas</Link>
+          <Link to={ROTA_DO_APP}>Voltar para as minhas pautas</Link>
         </p>
       </div>
     </div>

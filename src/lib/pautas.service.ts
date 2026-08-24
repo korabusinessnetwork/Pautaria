@@ -9,6 +9,7 @@
  */
 
 import { supabase } from './supabase';
+import { demo, estaEmDemo, seDemo } from './demo';
 import { normalizar, ErroApp } from './erros';
 import { zPauta, zQuadro, type Pauta, type Quadro } from './tipos';
 import { validarLista, validarUm } from './validar';
@@ -25,6 +26,9 @@ const CAMPOS_PAUTA = `
 // ─────────────────────────────────────────────────────────────────────────────
 
 export async function listarQuadros(workspaceId: string): Promise<Quadro[]> {
+  const d = import.meta.env.DEV ? await seDemo(() => demo.quadros()) : null;
+  if (d) return d;
+
   const { data, error } = await supabase
     .from('quadros')
     .select(CAMPOS_QUADRO)
@@ -41,6 +45,11 @@ export async function criarQuadro(entrada: {
   oficioId: string;
   titulo: string;
 }): Promise<Quadro> {
+  const d = import.meta.env.DEV ? await seDemo(() =>
+    demo.criarQuadro({ oficioId: entrada.oficioId, titulo: entrada.titulo }),
+  ) : null;
+  if (d) return d;
+
   const { data, error } = await supabase
     .from('quadros')
     .insert({
@@ -56,6 +65,12 @@ export async function criarQuadro(entrada: {
 }
 
 export async function renomearQuadro(id: string, titulo: string): Promise<void> {
+  const d = import.meta.env.DEV ? await seDemo(() => {
+    demo.renomearQuadro(id, titulo);
+    return true;
+  }) : null;
+  if (d) return;
+
   const { error } = await supabase
     .from('quadros')
     .update({ titulo: titulo.trim() })
@@ -72,6 +87,12 @@ export async function trocarOficioDoQuadro(
   quadroId: string,
   oficioId: string,
 ): Promise<void> {
+  const d = import.meta.env.DEV ? await seDemo(() => {
+    demo.trocarOficioDoQuadro(quadroId, oficioId);
+    return true;
+  }) : null;
+  if (d) return;
+
   const { error } = await supabase.rpc('trocar_oficio_quadro', {
     p_quadro: quadroId,
     p_oficio: oficioId,
@@ -84,6 +105,9 @@ export async function trocarOficioDoQuadro(
 // ─────────────────────────────────────────────────────────────────────────────
 
 export async function listarPautas(quadroId: string): Promise<Pauta[]> {
+  const d = import.meta.env.DEV ? await seDemo(() => demo.pautas(quadroId)) : null;
+  if (d) return d;
+
   const { data, error } = await supabase
     .from('pautas')
     .select(CAMPOS_PAUTA)
@@ -114,6 +138,10 @@ export async function criarPauta(entrada: NovaPauta): Promise<Pauta> {
   if (!titulo) {
     throw new ErroApp('entrada_invalida', 'A pauta precisa de um título.');
   }
+
+  // Depois da validação: título vazio é recusado com ou sem backend.
+  const d = import.meta.env.DEV ? await seDemo(() => demo.criarPauta(entrada)) : null;
+  if (d) return d;
 
   const { data, error } = await supabase
     .from('pautas')
@@ -151,6 +179,12 @@ export async function atualizarPauta(
   id: string,
   campos: CamposEditaveis,
 ): Promise<Pauta> {
+  const d = import.meta.env.DEV ? await seDemo(() => ({ v: demo.atualizarPauta(id, campos) })) : null;
+  if (d) {
+    if (!d.v) throw new ErroApp('nao_encontrado', 'Esta pauta não existe mais.');
+    return d.v;
+  }
+
   const patch: Record<string, unknown> = {};
   if (campos.titulo !== undefined) patch.titulo = campos.titulo.trim().slice(0, 200);
   if (campos.campo1 !== undefined) patch.campo1 = campos.campo1?.trim() || null;
@@ -184,6 +218,12 @@ export async function moverPauta(entrada: {
   anterior?: number;
   proxima?: number;
 }): Promise<Pauta> {
+  const d = import.meta.env.DEV ? await seDemo(() => ({ v: demo.moverPauta(entrada) })) : null;
+  if (d) {
+    if (!d.v) throw new ErroApp('nao_encontrado', 'Esta pauta não existe mais.');
+    return d.v;
+  }
+
   const { data, error } = await supabase
     .from('pautas')
     .update({
@@ -204,6 +244,12 @@ export async function moverPauta(entrada: {
  * reversível por SQL em vez de irreversível para sempre.
  */
 export async function arquivarPauta(id: string): Promise<void> {
+  const d = import.meta.env.DEV ? await seDemo(() => {
+    demo.arquivarPauta(id);
+    return true;
+  }) : null;
+  if (d) return;
+
   const { error } = await supabase
     .from('pautas')
     .update({ arquivada_em: new Date().toISOString() })
@@ -212,6 +258,12 @@ export async function arquivarPauta(id: string): Promise<void> {
 }
 
 export async function desarquivarPauta(id: string): Promise<void> {
+  const d = import.meta.env.DEV ? await seDemo(() => {
+    demo.desarquivarPauta(id);
+    return true;
+  }) : null;
+  if (d) return;
+
   const { error } = await supabase
     .from('pautas')
     .update({ arquivada_em: null })
@@ -220,6 +272,9 @@ export async function desarquivarPauta(id: string): Promise<void> {
 }
 
 export async function listarArquivadas(quadroId: string): Promise<Pauta[]> {
+  const d = import.meta.env.DEV ? await seDemo(() => demo.arquivadas(quadroId)) : null;
+  if (d) return d;
+
   const { data, error } = await supabase
     .from('pautas')
     .select(CAMPOS_PAUTA)
@@ -234,6 +289,12 @@ export async function listarArquivadas(quadroId: string): Promise<Pauta[]> {
 
 /** Exclusão definitiva. Só o caminho de "esvaziar arquivo" chega aqui. */
 export async function excluirPauta(id: string): Promise<void> {
+  const d = import.meta.env.DEV ? await seDemo(() => {
+    demo.excluirPauta(id);
+    return true;
+  }) : null;
+  if (d) return;
+
   const { error } = await supabase.from('pautas').delete().eq('id', id);
   if (error) throw normalizar(error);
 }
@@ -249,6 +310,10 @@ export function observarPautas(
   quadroId: string,
   aoMudar: () => void,
 ): () => void {
+  // Síncrona, então sem `seDemo`. Sem servidor não há evento para escutar: o
+  // quadro em demonstração se atualiza pelo refetch do TanStack Query.
+  if (estaEmDemo()) return () => {};
+
   const canal = supabase
     .channel(`quadro:${quadroId}`)
     .on(

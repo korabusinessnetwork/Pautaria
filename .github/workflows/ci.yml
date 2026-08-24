@@ -69,6 +69,28 @@ jobs:
           fi
           echo "✓ Nenhum segredo no bundle."
 
+      - name: O modo demonstração não vaza para produção
+        # O modo demo existe só em desenvolvimento e some do bundle porque cada
+        # desvio fica atrás de `import.meta.env.DEV`, que o Vite troca por
+        # `false` ao construir. A garantia é frágil de um jeito específico: basta
+        # alguém escrever `await seDemo(...)` sem o ternário para a closure ser
+        # construída em produção, e a referência a `demo.*` arrastar os ~9 KB de
+        # dados fictícios de volta para o bundle publicado. Já aconteceu uma vez
+        # (memory/learnings.md A9) e passou despercebido no build verde.
+        run: |
+          falhou=0
+          for marcador in MODO_DEMONSTRACAO 'Estúdio Aurora' aurora 'Marina Alves'; do
+            if grep -rql "$marcador" dist/ 2>/dev/null; then
+              echo "✗ vestígio do modo demonstração no bundle: $marcador"
+              falhou=1
+            fi
+          done
+          [ "$falhou" -eq 0 ] || {
+            echo "  Verifique se todo desvio usa: const d = import.meta.env.DEV ? await seDemo(...) : null;"
+            exit 1
+          }
+          echo "✓ Nenhum vestígio do modo demonstração no bundle."
+
   # ───────────────────────────────────────────────────────────────────────────
   # Banco: migrations, seeds e o teste de isolamento entre tenants.
   # É o gate de segurança mais importante do projeto.

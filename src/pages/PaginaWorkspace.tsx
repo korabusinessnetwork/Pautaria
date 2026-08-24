@@ -20,8 +20,10 @@ import { ProvedorWorkspace, useWorkspace } from '@/context/WorkspaceContext';
 import { useQuadro } from '@/hooks/useQuadro';
 import { useLimites } from '@/hooks/useLimites';
 import { listarMembros } from '@/lib/membros.service';
+import { gerarCsvPautas, nomeArquivoCsv } from '@/utils/exportar';
 import { Sidebar } from '@/components/workspace/Sidebar';
 import { Topbar, type Visao } from '@/components/workspace/Topbar';
+import { ControleVisual, type Densidade } from '@/components/workspace/ControleVisual';
 import { Quadro } from '@/components/quadro/Quadro';
 import { Tabela } from '@/components/tabela/Tabela';
 import { DrawerPauta } from '@/components/pauta/DrawerPauta';
@@ -52,6 +54,7 @@ function Conteudo() {
   } = useWorkspace();
 
   const [visao, setVisao] = useState<Visao>('quadro');
+  const [densidade, setDensidade] = useState<Densidade>('confortavel');
   const [pautaAbertaId, setPautaAbertaId] = useState<string | null>(null);
   const [etapaAdicionando, setEtapaAdicionando] = useState<string | null>(null);
 
@@ -69,6 +72,30 @@ function Conteudo() {
     () => quadro.pautas.find((p) => p.id === pautaAbertaId) ?? null,
     [quadro.pautas, pautaAbertaId],
   );
+
+  /**
+   * Baixa o CSV. `gerarCsvPautas` é função pura e testada (inclusive contra
+   * injeção de fórmula em planilha); aqui fica só a parte que toca o navegador.
+   * O objeto URL é revogado logo depois — sem isso, cada exportação seguraria o
+   * blob na memória da aba até o recarregamento.
+   */
+  function exportarCsv() {
+    if (!oficioAtivo || !quadroAtivo) return;
+
+    const csv = gerarCsvPautas({
+      pautas: quadro.pautas,
+      oficio: oficioAtivo,
+      membros: mostrarResponsavel ? membros : undefined,
+    });
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const ancora = document.createElement('a');
+    ancora.href = url;
+    ancora.download = nomeArquivoCsv(quadroAtivo.titulo);
+    ancora.click();
+    URL.revokeObjectURL(url);
+  }
 
   if (carregando) return <Carregando mensagem="Abrindo sua pauta…" />;
   if (erro) {
@@ -119,6 +146,19 @@ function Conteudo() {
           pautasNoQuadro={quadro.total}
         />
 
+        {/* Barra de ferramentas: densidade e exportação. Fora da Topbar de
+            propósito — ela já carrega título, contador, busca, alternador e a
+            ação principal. Empilhar mais dois controles ali tornaria o alvo de
+            clique da ação principal disputado. */}
+        <div className={estilos.ferramentas}>
+          <ControleVisual
+            densidade={densidade}
+            aoTrocarDensidade={setDensidade}
+            aoExportar={exportarCsv}
+            limiteExportar={limites.exportar}
+          />
+        </div>
+
         {/* Avisos que precedem o conteúdo: estado do workspace e teto do plano.
             Aparecem antes do quadro porque mudam o que a pessoa pode fazer nele. */}
         {!gravavel ? (
@@ -162,6 +202,7 @@ function Conteudo() {
             oficio={oficioAtivo}
             membros={membros}
             mostrarResponsavel={mostrarResponsavel}
+            compacta={densidade === 'compacta'}
             podeEditar={podeEditar}
             motivoBloqueio={limites.criarPauta.motivo || 'Workspace em modo somente leitura.'}
             etapaAdicionando={etapaAdicionando}

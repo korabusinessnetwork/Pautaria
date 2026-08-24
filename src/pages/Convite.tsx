@@ -20,6 +20,7 @@ import { normalizar } from '@/lib/erros';
 import { Carregando } from '@/components/shared/Carregando';
 import { Aviso } from '@/components/shared/Aviso';
 import estilos from './Auth.module.css';
+import { ROTA_DO_APP } from '@/constants/rotas';
 
 export function Convite() {
   const [parametros] = useSearchParams();
@@ -66,7 +67,7 @@ export function Convite() {
           um novo a quem administra o workspace.
         </p>
         <p className={estilos.rodape}>
-          <Link to="/">Ir para as minhas pautas</Link>
+          <Link to={ROTA_DO_APP}>Ir para as minhas pautas</Link>
         </p>
       </div>
     </div>

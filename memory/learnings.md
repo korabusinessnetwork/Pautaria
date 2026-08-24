@@ -237,3 +237,51 @@ primeira metade não prova nada — um `exit 0` fixo também passaria.
 **Lição.** Precisão não é polimento de ferramenta de segurança: é o que determina se ela
 será obedecida. E todo detector precisa ser testado com um positivo verdadeiro, não só com
 a ausência de alarme.
+
+---
+
+## A9 — "O bundler elimina" é hipótese, não garantia
+*2026-08-24 · front · **eu mesmo tinha afirmado o contrário***
+
+**O que aconteceu.** Escrevi o modo demonstração atrás de `import.meta.env.DEV`
+e afirmei, em commit e em comentário de código, que o Vite removeria o módulo
+inteiro do bundle de produção. Ao **verificar**, os dados de demonstração
+estavam lá: "Estúdio Aurora", "Marina Alves", os 973 linhas de fixtures. O chunk
+do app carregava ~9 KB de dado fictício para todo usuário.
+
+**Por quê.** O desvio nos serviços era assim:
+
+```ts
+const d = await seDemo(() => demo.pautas(quadroId));
+```
+
+`seDemo` só devolve dado quando a demonstração está ligada — mas **a closure é
+construída sempre**, inclusive em produção. Para o bundler, `demo.pautas` é uma
+referência viva, e uma referência viva mantém `dados.ts` inteiro no grafo. O
+`import.meta.env.DEV` estava *dentro* de `seDemo`, tarde demais: quando ele é
+avaliado, o mal já está feito.
+
+A correção move a decisão para fora, onde o bundler consegue vê-la:
+
+```ts
+const d = import.meta.env.DEV ? await seDemo(() => demo.pautas(quadroId)) : null;
+```
+
+Em produção isso vira `const d = null`, a closure some, e com ela a última
+referência a `demo.*`. Foram 47 desvios em 7 serviços.
+
+**Por que dói mais que um bug comum.** O aprendizado A1 desta mesma memória é
+sobre eliminação de código morto — o bug em que o minificador apagou a aplicação
+inteira. Eu conhecia o mecanismo, escrevi um parágrafo explicando-o, e mesmo
+assim errei o lado dele: da primeira vez o bundler removeu o que eu não queria;
+desta vez manteve o que eu jurava que ele removeria. Conhecer o mecanismo não
+substitui medir o resultado.
+
+**O que mudou.** O CI agora procura quatro marcadores do modo demonstração em
+`dist/` e reprova o build se achar qualquer um. É a mesma forma do gate que já
+existia para "o bundle contém a aplicação" — porque o build verde não distingue
+nenhum dos dois casos.
+
+**Lição.** Toda afirmação sobre o que o bundler faz precisa de um gate que a
+verifique. Se a afirmação for verdadeira, o gate custa dois segundos por build;
+se for falsa, ele é a única coisa entre a suposição e a produção.

@@ -9,6 +9,7 @@ import { Botao } from '@/components/shared/Botao';
 import { Aviso } from '@/components/shared/Aviso';
 import { Carregando } from '@/components/shared/Carregando';
 import estilos from './Auth.module.css';
+import { ROTA_DO_APP } from '@/constants/rotas';
 
 export function Entrar() {
   const navegar = useNavigate();
@@ -25,7 +26,7 @@ export function Entrar() {
   // Já logado não vê tela de login: vai direto para onde queria ir.
   if (autenticado) {
     const de = (local.state as { de?: string } | null)?.de;
-    return <Navigate to={de ?? '/'} replace />;
+    return <Navigate to={de ?? ROTA_DO_APP} replace />;
   }
 
   async function enviar(evento: FormEvent) {
@@ -35,7 +36,7 @@ export function Entrar() {
     try {
       await entrar(email, senha);
       const de = (local.state as { de?: string } | null)?.de;
-      navegar(de ?? '/', { replace: true });
+      navegar(de ?? ROTA_DO_APP, { replace: true });
     } catch (e) {
       setErro(normalizar(e));
     } finally {

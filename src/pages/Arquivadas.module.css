@@ -1,0 +1,256 @@
+/* Arquivadas — o arquivo do quadro.
+   Mesmo esqueleto de tela interna de Equipe e Configurações (coluna estreita
+   centrada sobre o papel), com uma diferença deliberada de temperatura: a ficha
+   arquivada é mais apagada que o card do quadro. Ela existe, mas não está mais
+   no mural — e a tela precisa dizer isso antes de qualquer texto. */
+
+.tela {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-6);
+  padding: var(--esp-9) var(--esp-8) var(--esp-9);
+  max-width: 760px;
+  margin: 0 auto;
+  width: 100%;
+  font-family: var(--fonte-ui);
+}
+
+.cabecalho {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+}
+
+.voltar {
+  font-size: var(--txt-12-5);
+  color: var(--txt-secundario);
+  align-self: flex-start;
+  margin-bottom: var(--esp-2);
+}
+.voltar:hover {
+  color: var(--tinta);
+  text-decoration: none;
+}
+
+.titulo {
+  font-family: var(--fonte-display);
+  font-weight: var(--peso-forte);
+  font-size: var(--txt-23);
+  letter-spacing: var(--ls-titulo);
+}
+
+.subtitulo {
+  font-size: var(--txt-13-5);
+  color: var(--txt-secundario);
+}
+
+.linkAviso {
+  font-weight: var(--peso-semi);
+  white-space: nowrap;
+}
+
+/* ── Seletor de quadro ──────────────────────────────────────────────────────
+   Só aparece com mais de um quadro. Com um só, um seletor de uma opção é ruído
+   que faz a pessoa procurar a escolha que não existe.                        */
+
+.seletor {
+  display: flex;
+  flex-wrap: wrap;
+  /* 2px de gap e 3px de trilho são os mesmos do alternador de ciclo em
+     `Plano.module.css`: é o mesmo objeto de interface, e dois controles
+     segmentados com respiros diferentes na mesma app leem como um bug. */
+  gap: 2px;
+  align-self: flex-start;
+  padding: 3px;
+  background: var(--acFaint);
+  border-radius: var(--raio-coluna);
+}
+
+.aba,
+.abaAtiva {
+  background: transparent;
+  border: none;
+  border-radius: var(--raio-item);
+  padding: var(--esp-2) var(--esp-5);
+  font-family: inherit;
+  font-size: var(--txt-12-5);
+  font-weight: var(--peso-semi);
+  color: var(--txt-secundario);
+  transition: all var(--transicao-rapida);
+}
+
+.aba:hover {
+  color: var(--tinta);
+}
+
+.abaAtiva {
+  background: var(--card);
+  color: var(--tinta);
+  box-shadow: var(--sombra-ativo);
+}
+
+/* ── Painel ────────────────────────────────────────────────────────────────*/
+
+.painel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-5);
+  padding: var(--esp-8);
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-painel);
+}
+
+.lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-5);
+}
+
+.item {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: var(--esp-5);
+  padding: var(--esp-5);
+  background: var(--card);
+  border: 1px solid var(--borda-fraca);
+  border-radius: var(--raio-card);
+  box-shadow: var(--sombra-card);
+}
+
+/* O pino do card, apagado. A ficha continua sendo uma ficha; o que mudou é que
+   ela não está mais alfinetada no quadro. Trocar por um retângulo sem pino
+   custaria a metáfora inteira do produto por dois pixels de CSS.             */
+.pino {
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  margin-left: -3px;
+  width: 7px;
+  height: 7px;
+  border-radius: var(--raio-pill);
+  background: var(--txt-suave);
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+  flex: 1;
+  min-width: 0;
+}
+
+.tituloPauta {
+  font-size: var(--txt-14);
+  font-weight: var(--peso-semi);
+  line-height: 1.35;
+  color: var(--txt-forte);
+  text-wrap: pretty;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-1);
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--esp-3);
+}
+
+.quando {
+  font-size: var(--txt-11-5);
+  color: var(--txt-suave);
+}
+
+.acoes {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  flex-wrap: wrap;
+}
+
+/* ── Confirmação da exclusão ───────────────────────────────────────────────
+   Ocupa a linha inteira de propósito: a única ação sem volta desta tela não
+   divide espaço com nada. O tom de perigo é o semântico, não o accent — uma
+   exclusão precisa ler como exclusão mesmo num ofício de matiz vermelha.     */
+
+.confirmacao {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-4);
+  flex-basis: 100%;
+  padding: var(--esp-5);
+  background: var(--perigo-suave);
+  border: 1px solid var(--perigo);
+  border-radius: var(--raio-botao);
+}
+
+.confirmacaoTexto {
+  font-size: var(--txt-12-5);
+  line-height: 1.5;
+  color: var(--perigo-forte);
+}
+
+.confirmacaoAcoes {
+  display: flex;
+  gap: var(--esp-3);
+  flex-wrap: wrap;
+}
+
+/* ── Estado vazio ──────────────────────────────────────────────────────────
+   Ensina a próxima ação em vez de constatar a ausência. "Nada arquivado" e
+   ponto final deixaria a pessoa sem saber como arquivar — e sem saber que o
+   arquivo é reversível, que é justamente o que esta tela veio provar.        */
+
+.vazio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--esp-4);
+  padding: var(--esp-9) var(--esp-6);
+  text-align: center;
+  border: 1px dashed var(--borda-forte);
+  border-radius: var(--raio-coluna);
+}
+
+.vazioTitulo {
+  font-family: var(--fonte-display);
+  font-weight: var(--peso-semi);
+  font-size: var(--txt-16);
+  color: var(--txt-forte);
+}
+
+.vazioTexto {
+  font-size: var(--txt-12-5);
+  line-height: 1.6;
+  color: var(--txt-corpo);
+  max-width: 46ch;
+}
+
+.vazioAcao {
+  font-size: var(--txt-12-5);
+  font-weight: var(--peso-semi);
+  color: var(--acDeep);
+}
+
+@media (max-width: 640px) {
+  .tela {
+    padding: var(--esp-8) var(--esp-6) var(--esp-9);
+  }
+  .painel {
+    padding: var(--esp-6);
+  }
+  .acoes {
+    flex-basis: 100%;
+  }
+}

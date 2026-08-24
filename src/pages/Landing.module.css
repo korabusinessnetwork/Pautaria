@@ -1,0 +1,668 @@
+/* Landing — a porta do funil.
+   Mesma linguagem visual da Abertura e da página de Preços: papel quente, wash
+   radial do accent no topo, Space Grotesk no display. Nada aqui é cor ou medida
+   nova: tudo sai de src/styles/tokens.css.                                    */
+
+.pagina {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--fonte-ui);
+  color: var(--tinta);
+  background:
+    radial-gradient(1100px 520px at 50% -12%, var(--acFaint), transparent 62%),
+    var(--fundo);
+}
+
+/* ── Barra ──────────────────────────────────────────────────────────────── */
+
+.barra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-5);
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: var(--esp-7) var(--esp-8) 0;
+}
+
+.marca {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-3);
+  color: var(--tinta);
+}
+
+.bolinha {
+  width: 11px;
+  height: 11px;
+  border-radius: var(--raio-pill);
+  background: var(--ac);
+  flex: none;
+}
+
+.wordmark {
+  font-family: var(--fonte-display);
+  font-weight: var(--peso-forte);
+  font-size: var(--txt-20);
+}
+
+.barraLinks {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-6);
+}
+
+.linkBarra {
+  font-size: var(--txt-13);
+  font-weight: var(--peso-medio);
+  color: var(--txt-forte);
+}
+.linkBarra:hover {
+  color: var(--tinta);
+  text-decoration: none;
+}
+
+/* ── Seções ─────────────────────────────────────────────────────────────── */
+
+.heroi,
+.problema,
+.vitrine,
+.prova,
+.preco {
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 var(--esp-8);
+}
+
+.heroi {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 18px;
+  padding-top: 72px;
+  padding-bottom: var(--esp-9);
+  animation: subir 0.5s ease both;
+}
+
+.eyebrow {
+  font-family: var(--fonte-mono);
+  font-size: var(--txt-11);
+  letter-spacing: var(--ls-eyebrow);
+  color: var(--txt-secundario);
+}
+
+/* O H1 do handoff é 56px. O `clamp` não reinterpreta o handoff: mantém o valor
+   final em tela larga e evita que ele estoure a viewport no celular — 56px em
+   360px de largura quebraria "sotaque." no meio.                              */
+.titulo {
+  font-family: var(--fonte-display);
+  font-weight: var(--peso-forte);
+  font-size: clamp(34px, 8.6vw, var(--txt-56));
+  line-height: 1.04;
+  letter-spacing: var(--ls-titulo);
+  max-width: 700px;
+  text-wrap: balance;
+}
+
+.destaque {
+  color: var(--ac);
+}
+
+.subtitulo {
+  font-size: var(--txt-16);
+  line-height: 1.55;
+  color: var(--txt-corpo);
+  max-width: 540px;
+  text-wrap: pretty;
+}
+
+.acoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--esp-4);
+  margin-top: var(--esp-2);
+}
+
+.ctaPrincipal,
+.ctaSecundario {
+  display: inline-block;
+  padding: 13px 22px;
+  border-radius: var(--raio-botao);
+  font-size: var(--txt-14);
+  font-weight: var(--peso-semi);
+  transition: all var(--transicao-rapida);
+}
+
+.ctaPrincipal {
+  background: var(--ac);
+  color: var(--card);
+  box-shadow: var(--sombra-ativo);
+}
+.ctaPrincipal:hover {
+  filter: brightness(0.93);
+  color: var(--card);
+  text-decoration: none;
+}
+
+.ctaSecundario {
+  border: 1px solid var(--borda-media);
+  color: var(--txt-forte);
+}
+.ctaSecundario:hover {
+  border-color: var(--ac);
+  color: var(--tinta);
+  text-decoration: none;
+}
+
+.notaCta {
+  font-size: var(--txt-12-5);
+  color: var(--txt-rotulo);
+}
+
+/* ── O problema ─────────────────────────────────────────────────────────── */
+
+.problema {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--esp-5);
+  text-align: center;
+  padding-top: var(--esp-9);
+  padding-bottom: var(--esp-9);
+}
+
+.rotulo {
+  font-family: var(--fonte-mono);
+  font-size: var(--txt-11);
+  font-weight: var(--peso-semi);
+  letter-spacing: var(--ls-rotulo);
+  text-transform: uppercase;
+  color: var(--txt-rotulo);
+}
+
+.frase {
+  font-family: var(--fonte-display);
+  font-weight: var(--peso-medio);
+  font-size: var(--txt-23);
+  line-height: 1.42;
+  letter-spacing: var(--ls-titulo-suave);
+  max-width: 720px;
+  text-wrap: pretty;
+  color: var(--txt-forte);
+}
+
+.frase em {
+  font-style: normal;
+  font-family: var(--fonte-mono);
+  font-size: var(--txt-20);
+  color: var(--txt-secundario);
+}
+
+/* ── Vitrine dos ofícios ────────────────────────────────────────────────── */
+
+.vitrine,
+.prova,
+.preco {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--esp-4);
+  text-align: center;
+  padding-bottom: var(--esp-9);
+}
+
+.vitrine {
+  animation: subir 0.5s 0.12s ease both;
+}
+
+.tituloSecao {
+  font-family: var(--fonte-display);
+  font-weight: var(--peso-forte);
+  font-size: 32px;
+  line-height: 1.12;
+  letter-spacing: var(--ls-titulo);
+}
+
+.apoio {
+  font-size: var(--txt-13-5);
+  line-height: 1.55;
+  color: var(--txt-secundario);
+  max-width: 560px;
+}
+
+.grade {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--esp-6);
+  width: 100%;
+  margin-top: var(--esp-5);
+}
+
+/* O bloco nasce neutro. As variáveis --tile-* chegam do ofício pelo React e só
+   entram em jogo no hover, no foco e no bloco escolhido — é o "assume o accent
+   daquele ofício" do handoff.                                                 */
+.tile,
+.tileAtivo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--esp-4);
+  padding: var(--esp-7);
+  text-align: left;
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-tile);
+  transition: all var(--transicao);
+}
+
+.tile:hover,
+.tile:focus-visible,
+.tileAtivo {
+  transform: translateY(-4px) rotate(-0.5deg);
+  border-color: var(--tile-ac);
+  box-shadow: var(--sombra-tile-hover) color-mix(in oklch, var(--tile-ac) 60%, transparent);
+}
+
+/* A inclinação alterna de sentido: uma fileira que gira toda para o mesmo lado
+   parece carrossel, não mural.                                                */
+.tile:nth-child(3):hover,
+.tile:nth-child(3):focus-visible,
+.tileAtivo:nth-child(3) {
+  transform: translateY(-4px) rotate(0.5deg);
+}
+
+/* O anel de foco global arredonda para o raio da etiqueta; aqui o bloco é um
+   tile e mantém o raio dele.                                                  */
+.tile:focus-visible,
+.tileAtivo:focus-visible {
+  border-radius: var(--raio-tile);
+}
+
+.glifo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--raio-botao);
+  background: var(--borda-fraca);
+  color: var(--txt-terciario);
+  font-size: 15px;
+  transition: all var(--transicao);
+}
+
+.tile:hover .glifo,
+.tile:focus-visible .glifo,
+.tileAtivo .glifo {
+  background: var(--tile-soft);
+  color: var(--tile-deep);
+}
+
+.nomeOficio {
+  font-family: var(--fonte-display);
+  font-weight: var(--peso-semi);
+  font-size: var(--txt-20);
+}
+
+.descricaoOficio {
+  font-size: var(--txt-13);
+  line-height: 1.45;
+  color: var(--txt-terciario);
+}
+
+.blocoRotulo {
+  font-family: var(--fonte-mono);
+  font-size: var(--txt-10);
+  letter-spacing: var(--ls-rotulo);
+  text-transform: uppercase;
+  color: var(--txt-suave);
+  margin-top: var(--esp-1);
+}
+
+.listaEtapas,
+.listaCampos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-1);
+  margin-top: -6px;
+}
+
+.etapaTag,
+.etapaTagMono {
+  font-size: var(--txt-10-5);
+  font-weight: var(--peso-medio);
+  padding: 3px 8px;
+  border-radius: var(--raio-pill);
+  border: 1px solid var(--borda-forte);
+  color: var(--txt-terciario);
+  transition: all var(--transicao);
+}
+
+.etapaTagMono {
+  font-family: var(--fonte-mono);
+}
+
+.tile:hover .etapaTag,
+.tile:hover .etapaTagMono,
+.tile:focus-visible .etapaTag,
+.tile:focus-visible .etapaTagMono,
+.tileAtivo .etapaTag,
+.tileAtivo .etapaTagMono {
+  border-color: color-mix(in oklch, var(--tile-ac) 45%, transparent);
+  color: var(--tile-deep);
+}
+
+/* O campo é o vocabulário do ofício — "Canal", "Sprint", "Contexto". Ele ganha
+   o mesmo peso visual do chip preenchido do card, porque é a mesma promessa. */
+.campoTag,
+.campoTagMono {
+  font-size: var(--txt-11);
+  font-weight: var(--peso-semi);
+  padding: 3px 10px;
+  border-radius: var(--raio-etiqueta);
+  background: var(--borda-fraca);
+  color: var(--txt-forte);
+  transition: all var(--transicao);
+}
+
+.campoTagMono {
+  font-family: var(--fonte-mono);
+  font-size: var(--txt-10-5);
+}
+
+.tile:hover .campoTag,
+.tile:hover .campoTagMono,
+.tile:focus-visible .campoTag,
+.tile:focus-visible .campoTagMono,
+.tileAtivo .campoTag,
+.tileAtivo .campoTagMono {
+  background: var(--tile-soft);
+  color: var(--tile-deep);
+}
+
+/* ── Prova do produto ───────────────────────────────────────────────────── */
+
+.prova {
+  animation: subir 0.5s 0.2s ease both;
+}
+
+/* A mesa de trabalho: papel com a grade de pontos a cada 22px, a mesma textura
+   do quadro de verdade.                                                       */
+.mesa {
+  width: 100%;
+  margin-top: var(--esp-5);
+  padding: var(--esp-7);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-painel);
+  background-color: var(--superficie);
+  background-image: var(--grade-fundo);
+  background-size: var(--grade-ponto) var(--grade-ponto);
+  overflow-x: auto;
+  text-align: left;
+}
+
+.trilho {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--esp-5);
+  min-width: min-content;
+}
+
+.coluna {
+  width: var(--largura-coluna);
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  border-radius: var(--raio-painel);
+}
+
+.cabecalhoColuna {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 4px 10px;
+}
+
+.contagem {
+  font-size: var(--txt-11-5);
+  font-weight: var(--peso-semi);
+  color: var(--txt-rotulo);
+}
+
+.pilha {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-4);
+}
+
+/* Coluna vazia nunca fica muda: ela ensina o gesto seguinte. */
+.colunaVazia {
+  border: 1.5px dashed var(--borda-forte);
+  border-radius: var(--raio-coluna);
+  padding: var(--esp-5);
+  text-align: center;
+  font-size: var(--txt-11-5);
+  color: var(--txt-suave);
+}
+
+.cartao {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+  padding: 13px;
+  background: var(--card);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-card);
+  box-shadow: var(--sombra-card);
+}
+
+/* O pino: 7px de accent no topo central, meio para fora da borda. É um dos três
+   detalhes que carregam a metáfora inteira — não vire retângulo genérico.     */
+.pino {
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  margin-left: -3px;
+  width: 7px;
+  height: 7px;
+  border-radius: var(--raio-pill);
+  background: var(--ac);
+  box-shadow: var(--sombra-ativo);
+}
+
+.tituloCartao {
+  font-family: var(--fonte-ui);
+  font-size: var(--txt-14);
+  font-weight: var(--peso-semi);
+  line-height: 1.35;
+  letter-spacing: normal;
+  text-wrap: pretty;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-1);
+}
+
+.prazo {
+  font-size: var(--txt-11-5);
+  color: var(--txt-secundario);
+}
+
+/* Atraso tem cor própria, fora do accent: um prazo vencido precisa ler como
+   vencido em qualquer matiz de ofício.                                        */
+.prazoAtrasado {
+  font-size: var(--txt-11-5);
+  font-weight: var(--peso-semi);
+  color: var(--perigo-forte);
+}
+
+.semPrazo {
+  font-size: var(--txt-11-5);
+  color: var(--txt-suave);
+}
+
+.legenda {
+  font-size: var(--txt-12-5);
+  color: var(--txt-rotulo);
+  max-width: 560px;
+  margin-top: var(--esp-5);
+  line-height: 1.55;
+}
+
+/* ── Preço ──────────────────────────────────────────────────────────────── */
+
+.preco {
+  gap: var(--esp-5);
+}
+
+.linhaPreco {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  gap: var(--esp-6);
+}
+
+.itemPreco {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--esp-2);
+}
+
+.itemPreco:not(:last-child)::after {
+  content: '·';
+  margin-left: var(--esp-4);
+  color: var(--txt-suave);
+}
+
+.nomePlano {
+  font-size: var(--txt-13);
+  font-weight: var(--peso-medio);
+  color: var(--txt-secundario);
+}
+
+.valorPlano {
+  font-family: var(--fonte-display);
+  font-weight: var(--peso-forte);
+  font-size: var(--txt-23);
+  letter-spacing: var(--ls-titulo);
+}
+
+.precoIndisponivel {
+  font-size: var(--txt-13-5);
+  color: var(--txt-secundario);
+  line-height: 1.55;
+}
+
+/* ── Rodapé ─────────────────────────────────────────────────────────────── */
+
+.rodape {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--esp-4);
+  width: 100%;
+  max-width: 1080px;
+  margin: var(--esp-9) auto 0;
+  padding: var(--esp-8) var(--esp-8) 56px;
+  border-top: 1px solid var(--borda-fraca);
+  text-align: center;
+}
+
+.assinatura {
+  font-family: var(--fonte-display);
+  font-size: var(--txt-14);
+  color: var(--txt-rotulo);
+}
+
+.rodapeLinks {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--esp-6);
+  font-size: var(--txt-12-5);
+  font-weight: var(--peso-medio);
+  margin-top: var(--esp-2);
+}
+
+/* ── Responsivo ─────────────────────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+  .grade {
+    grid-template-columns: 1fr;
+    max-width: 420px;
+  }
+  .tituloSecao {
+    font-size: 26px;
+  }
+  .frase {
+    font-size: var(--txt-20);
+  }
+  .frase em {
+    font-size: var(--txt-16);
+  }
+}
+
+@media (max-width: 640px) {
+  .barra,
+  .heroi,
+  .problema,
+  .vitrine,
+  .prova,
+  .preco,
+  .rodape {
+    padding-left: var(--esp-6);
+    padding-right: var(--esp-6);
+  }
+  .heroi {
+    padding-top: var(--esp-9);
+  }
+  .acoes {
+    width: 100%;
+    flex-direction: column;
+  }
+  .ctaPrincipal,
+  .ctaSecundario {
+    text-align: center;
+  }
+  .mesa {
+    padding: var(--esp-5);
+  }
+  .coluna {
+    width: 78vw;
+  }
+  .linhaPreco {
+    gap: var(--esp-4);
+  }
+  .itemPreco:not(:last-child)::after {
+    margin-left: var(--esp-2);
+  }
+}
+
+/* Quem pediu menos movimento não recebe a entrada escalonada. As rotações e
+   deslocamentos são exatamente o gatilho de desconforto vestibular.           */
+@media (prefers-reduced-motion: reduce) {
+  .heroi,
+  .vitrine,
+  .prova {
+    animation: none;
+  }
+  .tile:hover,
+  .tile:focus-visible,
+  .tileAtivo,
+  .tile:nth-child(3):hover,
+  .tile:nth-child(3):focus-visible,
+  .tileAtivo:nth-child(3) {
+    transform: none;
+  }
+}

@@ -1,0 +1,64 @@
+/* Controle visual — densidade e exportação.
+
+   O alternador é o mesmo segmentado de "Quadro | Tabela" da topbar: mesma
+   trilha, mesmo raio, mesma pastilha branca sob a opção ativa. Deliberado — os
+   dois controles ficam lado a lado na mesma faixa, e duas versões do mesmo
+   componente a 30px de distância é o tipo de inconsistência que ninguém nomeia
+   mas todo mundo sente.
+
+   Três valores aqui não têm token: o alfa .07 da trilha e as medidas de 2px e
+   3px do segmentado. Eles vêm do handoff hi-fi e estão hoje escritos assim
+   também em `Topbar.module.css`. O lugar certo deles é `tokens.css`, como um
+   par `--trilha-*`; não estão lá ainda, e este arquivo repete o valor em vez de
+   inventar um parecido, porque aproximar seria justamente criar a diferença
+   visível. Ver a nota de integração. */
+
+.controle {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-4);
+  flex-wrap: wrap;
+}
+
+.alternador {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  background: rgba(31, 27, 22, 0.07);
+  border-radius: var(--raio-coluna);
+}
+
+.opcao,
+.opcaoAtiva {
+  background: transparent;
+  border: none;
+  border-radius: var(--raio-item);
+  padding: var(--esp-2) var(--esp-5);
+  font-family: var(--fonte-ui);
+  font-size: var(--txt-12-5);
+  font-weight: var(--peso-semi);
+  color: var(--txt-secundario);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background var(--transicao-rapida), color var(--transicao-rapida);
+}
+
+.opcao:hover {
+  color: var(--tinta);
+}
+
+/* A pastilha clara é o que marca a opção ativa. Não é só cor de texto de
+   propósito: quem enxerga pouco contraste precisa de uma diferença de forma,
+   não só de tom. */
+.opcaoAtiva {
+  background: var(--card);
+  color: var(--tinta);
+  box-shadow: var(--sombra-ativo);
+}
+
+@media (max-width: 720px) {
+  .controle {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

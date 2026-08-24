@@ -1,0 +1,512 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Legal — Termos e Privacidade.
+
+   Duas decisões carregam esta tela:
+
+   1. **Medida de leitura curta.** O corpo do texto tem `max-width: 68ch`, não a
+      largura do painel. Documento legal é longo por natureza; linha longa é o
+      que faz a pessoa desistir na terceira rolagem e clicar "aceito" sem ler.
+
+   2. **Índice fixo à esquerda.** Ele é a única coisa que informa o tamanho do
+      que vem pela frente e permite pular direto para "Cancelamento" ou "Seus
+      direitos" — as duas seções que as pessoas realmente vêm procurar.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.tela {
+  min-height: 100vh;
+  padding: 40px 24px 72px;
+  background:
+    radial-gradient(1100px 520px at 50% -14%, var(--acFaint), transparent 62%),
+    var(--fundo);
+  font-family: var(--fonte-ui);
+}
+
+/* ── Topo ───────────────────────────────────────────────────────────────── */
+
+.topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-5);
+  flex-wrap: wrap;
+  max-width: 1080px;
+  margin: 0 auto var(--esp-6);
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  color: var(--tinta);
+}
+.marca:hover {
+  text-decoration: none;
+}
+
+.bolinha {
+  width: 11px;
+  height: 11px;
+  border-radius: var(--raio-pill);
+  background: var(--ac);
+}
+
+.wordmark {
+  font-family: var(--fonte-display);
+  font-weight: var(--peso-forte);
+  font-size: var(--txt-20);
+}
+
+/* Mesmo alternador da página de preços, valor por valor. É o mesmo gesto ("dois
+   documentos irmãos, um ativo") e não pode ter dois desenhos no mesmo produto.
+   O 0.07 é a tinta com alfa, como manda o design system — não há token para
+   este passo específico, e é o valor usado em `Precos.module.css`.            */
+.alternador {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  background: rgba(31, 27, 22, 0.07);
+  border-radius: var(--raio-coluna);
+}
+
+.aba,
+.abaAtiva {
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: var(--txt-12-5);
+  font-weight: var(--peso-semi);
+  color: var(--txt-secundario);
+}
+.aba:hover {
+  color: var(--tinta);
+  text-decoration: none;
+}
+
+.abaAtiva {
+  background: var(--card);
+  color: var(--tinta);
+  box-shadow: var(--sombra-ativo);
+}
+.abaAtiva:hover {
+  text-decoration: none;
+}
+
+.avisoMinuta {
+  max-width: 1080px;
+  margin: 0 auto var(--esp-7);
+}
+
+/* ── Estrutura de duas colunas ──────────────────────────────────────────── */
+
+.corpo {
+  display: grid;
+  grid-template-columns: 244px minmax(0, 1fr);
+  gap: var(--esp-9);
+  max-width: 1080px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+/* ── Índice ─────────────────────────────────────────────────────────────── */
+
+.indice {
+  position: sticky;
+  top: var(--esp-7);
+  max-height: calc(100vh - var(--esp-9));
+  overflow-y: auto;
+  padding: var(--esp-6);
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-painel);
+}
+
+.indiceTitulo {
+  font-family: var(--fonte-mono);
+  font-size: var(--txt-10-5);
+  font-weight: var(--peso-semi);
+  letter-spacing: var(--ls-rotulo);
+  text-transform: uppercase;
+  color: var(--txt-rotulo);
+  margin-bottom: var(--esp-4);
+}
+
+.indiceLista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.indiceLink,
+.indiceLinkAtivo {
+  display: block;
+  padding: 6px var(--esp-3);
+  border-left: 2px solid transparent;
+  border-radius: 0 var(--raio-etiqueta) var(--raio-etiqueta) 0;
+  font-size: var(--txt-12-5);
+  line-height: 1.35;
+  color: var(--txt-secundario);
+  transition: color var(--transicao-rapida), background var(--transicao-rapida);
+}
+.indiceLink:hover {
+  background: var(--acFaint);
+  color: var(--tinta);
+  text-decoration: none;
+}
+
+/* A seção em leitura ganha a barra do accent: o mesmo recurso da etiqueta de
+   etapa no quadro, para o índice não parecer um menu de outro produto.        */
+.indiceLinkAtivo {
+  background: var(--acSoft);
+  border-left-color: var(--ac);
+  color: var(--acDeep);
+  font-weight: var(--peso-semi);
+}
+.indiceLinkAtivo:hover {
+  color: var(--acDeep);
+  text-decoration: none;
+}
+
+/* ── Documento ──────────────────────────────────────────────────────────── */
+
+.documento {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-8);
+  padding: var(--esp-9);
+  background: var(--card);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-painel);
+  box-shadow: var(--sombra-card);
+  animation: subir 0.5s ease both;
+}
+
+.cabecalho {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-4);
+  padding-bottom: var(--esp-7);
+  border-bottom: 1px solid var(--borda-fraca);
+}
+
+.eyebrow {
+  font-family: var(--fonte-mono);
+  font-size: var(--txt-10);
+  font-weight: var(--peso-semi);
+  letter-spacing: var(--ls-eyebrow);
+  color: var(--txt-suave);
+}
+
+.titulo {
+  font-family: var(--fonte-display);
+  font-weight: var(--peso-forte);
+  font-size: 34px;
+  line-height: 1.1;
+  letter-spacing: var(--ls-titulo);
+}
+
+.subtitulo {
+  font-size: var(--txt-14);
+  color: var(--txt-corpo);
+  max-width: 56ch;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-7);
+  margin: var(--esp-2) 0 0;
+}
+
+.metaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.metaRotulo {
+  font-family: var(--fonte-mono);
+  font-size: var(--txt-10);
+  font-weight: var(--peso-semi);
+  letter-spacing: var(--ls-rotulo);
+  text-transform: uppercase;
+  color: var(--txt-rotulo);
+}
+
+.metaValor {
+  margin: 0;
+  font-family: var(--fonte-display);
+  font-size: var(--txt-13-5);
+  font-weight: var(--peso-semi);
+  color: var(--tinta);
+}
+
+.acoes {
+  display: flex;
+  gap: var(--esp-3);
+  margin-top: var(--esp-2);
+}
+
+/* ── Resumo ─────────────────────────────────────────────────────────────── */
+
+.resumo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-4);
+  padding: var(--esp-7);
+  background: var(--acFaint);
+  border: 1px solid var(--acSoft);
+  border-radius: var(--raio-botao);
+}
+
+.resumoTitulo {
+  font-family: var(--fonte-display);
+  font-size: var(--txt-16);
+  font-weight: var(--peso-semi);
+  color: var(--acDeep);
+}
+
+.resumoLista {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+  margin: 0;
+  padding-left: var(--esp-6);
+  font-size: var(--txt-13-5);
+  line-height: 1.6;
+  color: var(--txt-forte);
+  max-width: 68ch;
+}
+.resumoLista::marker {
+  color: var(--ac);
+}
+
+.resumoNota {
+  font-size: var(--txt-12);
+  line-height: 1.55;
+  color: var(--txt-secundario);
+  max-width: 68ch;
+}
+
+/* ── Seções ─────────────────────────────────────────────────────────────── */
+
+.secao {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-5);
+}
+
+.tituloSecao {
+  font-family: var(--fonte-display);
+  font-size: var(--txt-20);
+  font-weight: var(--peso-semi);
+  letter-spacing: var(--ls-titulo-suave);
+  /* A âncora precisa parar abaixo da borda do painel, não colada nela. */
+  scroll-margin-top: var(--esp-7);
+}
+
+.paragrafo {
+  font-size: var(--txt-13-5);
+  line-height: 1.7;
+  color: var(--txt-forte);
+  max-width: 68ch;
+}
+
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+  margin: 0;
+  padding-left: var(--esp-7);
+  font-size: var(--txt-13-5);
+  line-height: 1.65;
+  color: var(--txt-forte);
+  max-width: 68ch;
+}
+.lista::marker {
+  color: var(--txt-suave);
+}
+
+/* Observação de contexto — explica o porquê de uma escolha, sem ter o peso
+   normativo do parágrafo. Fica com a barra lateral e um tom mais baixo.       */
+.nota {
+  padding-left: var(--esp-5);
+  border-left: 2px solid var(--borda-media);
+  font-size: var(--txt-12-5);
+  line-height: 1.65;
+  color: var(--txt-secundario);
+  max-width: 64ch;
+}
+
+/* O contraponto: quando a honestidade é a informação principal da seção
+   (o que ainda NÃO existe), ela não pode ficar em tom mais baixo.             */
+.destaqueHonesto {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-4);
+  padding: var(--esp-6);
+  background: var(--superficie);
+  border: 1px solid var(--borda-forte);
+  border-left: 3px solid var(--atencao);
+  border-radius: var(--raio-botao);
+}
+
+/* ── Tabela de dados tratados ───────────────────────────────────────────── */
+
+.tabelaEnvolucro {
+  overflow-x: auto;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-botao);
+}
+
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--txt-12-5);
+  line-height: 1.55;
+  text-align: left;
+}
+
+.tabela thead th {
+  padding: var(--esp-4) var(--esp-5);
+  background: var(--superficie);
+  border-bottom: 1px solid var(--borda-forte);
+  font-family: var(--fonte-mono);
+  font-size: var(--txt-10);
+  font-weight: var(--peso-semi);
+  letter-spacing: var(--ls-cabecalho);
+  text-transform: uppercase;
+  color: var(--txt-rotulo);
+  white-space: nowrap;
+}
+
+.tabela tbody th {
+  padding: var(--esp-4) var(--esp-5);
+  font-family: var(--fonte-ui);
+  font-size: var(--txt-12-5);
+  font-weight: var(--peso-semi);
+  letter-spacing: normal;
+  color: var(--tinta);
+  vertical-align: top;
+  min-width: 148px;
+}
+
+.tabela td {
+  padding: var(--esp-4) var(--esp-5);
+  color: var(--txt-forte);
+  vertical-align: top;
+}
+
+.tabela tbody tr + tr th,
+.tabela tbody tr + tr td {
+  border-top: 1px solid var(--borda-fraca);
+}
+
+/* ── Lacuna a preencher ─────────────────────────────────────────────────── */
+
+/* Contorno tracejado e cor de atenção: é para doer de ver. Uma lacuna jurídica
+   que se camufla no texto é uma lacuna que vai para produção.                 */
+.pendente {
+  background: transparent;
+  border-bottom: 1px dashed var(--atencao);
+  color: var(--atencao);
+  font-weight: var(--peso-medio);
+  font-style: italic;
+}
+
+/* ── Rodapé ─────────────────────────────────────────────────────────────── */
+
+.rodape {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-4);
+  padding-top: var(--esp-7);
+  border-top: 1px solid var(--borda-fraca);
+}
+
+.rodapeLinha {
+  font-size: var(--txt-11-5);
+  color: var(--txt-suave);
+}
+
+.rodapeLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-6);
+  font-size: var(--txt-12-5);
+  font-weight: var(--peso-medio);
+}
+
+/* ── Responsivo ─────────────────────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+  .corpo {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--esp-6);
+  }
+  .indice {
+    position: static;
+    max-height: 38vh;
+  }
+  .documento {
+    padding: var(--esp-7);
+  }
+}
+
+@media (max-width: 640px) {
+  .tela {
+    padding: var(--esp-7) var(--esp-6) 56px;
+  }
+  .topo {
+    justify-content: flex-start;
+  }
+  .titulo {
+    font-size: 27px;
+  }
+  .documento {
+    padding: var(--esp-6);
+  }
+  .resumo {
+    padding: var(--esp-6);
+  }
+  .meta {
+    gap: var(--esp-6);
+  }
+}
+
+/* ── Impressão ──────────────────────────────────────────────────────────── */
+
+/* Documento legal é feito para ser arquivado. Quem imprime quer o texto, a
+   versão e a data — não o índice de navegação nem o botão que abriu o diálogo
+   de impressão.                                                               */
+@media print {
+  .tela {
+    padding: 0;
+    background: none;
+  }
+  .topo,
+  .indice,
+  .acoes,
+  .rodapeLinks {
+    display: none;
+  }
+  .corpo {
+    display: block;
+    max-width: none;
+  }
+  .documento {
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    background: none;
+    animation: none;
+  }
+  .secao {
+    break-inside: avoid;
+  }
+  .pendente {
+    color: var(--tinta);
+    border-bottom: 1px dashed var(--tinta);
+  }
+}

@@ -18,6 +18,7 @@ import { Campo } from '@/components/shared/Campo';
 import { Botao } from '@/components/shared/Botao';
 import { Aviso } from '@/components/shared/Aviso';
 import estilos from './Auth.module.css';
+import { ROTA_DO_APP } from '@/constants/rotas';
 
 const REGRAS: Array<{ rotulo: string; testa: (s: string) => boolean }> = [
   { rotulo: `pelo menos ${SENHA_MINIMA} caracteres`, testa: (s) => s.length >= SENHA_MINIMA },
@@ -37,7 +38,7 @@ export function CriarConta() {
 
   const forca = useMemo(() => forcaDaSenha(senha), [senha]);
 
-  if (autenticado) return <Navigate to="/" replace />;
+  if (autenticado) return <Navigate to={ROTA_DO_APP} replace />;
 
   async function enviar(evento: FormEvent) {
     evento.preventDefault();

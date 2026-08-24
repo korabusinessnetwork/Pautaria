@@ -50,3 +50,4 @@ coverage/
 .eslintcache
 *.tsbuildinfo
 .turbo/
+.telas/

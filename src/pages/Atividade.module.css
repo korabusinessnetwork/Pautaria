@@ -1,0 +1,318 @@
+/* Atividade — linha do tempo do workspace.
+
+   A régua vertical e o pino de 7px são a mesma metáfora do quadro: cada
+   registro é uma ficha alfinetada numa linha, não uma célula de tabela.
+
+   O estado do pino carrega informação, não decoração — cheio quando o servidor
+   confirmou o registro, vazado quando foi só o navegador que afirmou. É a
+   distinção que esta tela existe para mostrar, e ela precisa sobreviver a uma
+   leitura de relance, sem exigir que se leia o texto do selo.                */
+
+.tela {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-6);
+  padding: var(--esp-9) var(--esp-8) calc(var(--esp-9) * 2);
+  max-width: 760px;
+  margin: 0 auto;
+  width: 100%;
+  font-family: var(--fonte-ui);
+}
+
+.cabecalho {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+}
+
+.voltar {
+  font-size: var(--txt-12-5);
+  color: var(--txt-secundario);
+  align-self: flex-start;
+  margin-bottom: var(--esp-2);
+}
+.voltar:hover {
+  color: var(--tinta);
+  text-decoration: none;
+}
+
+/* 30px é o tamanho de H1 já usado por Equipe, Plano e Configurações. Fica fora
+   da escala de tokens, e trocá-lo por `--txt-23` só aqui deixaria esta tela
+   menor que as três irmãs no mesmo grupo de navegação.                       */
+.titulo {
+  font-family: var(--fonte-display);
+  font-weight: var(--peso-forte);
+  font-size: 30px;
+  letter-spacing: var(--ls-titulo);
+}
+
+.subtitulo {
+  font-size: var(--txt-13-5);
+  color: var(--txt-secundario);
+}
+
+.painel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-5);
+  padding: var(--esp-8);
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-painel);
+}
+
+/* ── Barra de filtro e legenda ──────────────────────────────────────────── */
+
+.barra {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-4);
+  padding-bottom: var(--esp-5);
+  border-bottom: 1px solid var(--borda-fraca);
+}
+
+.filtros {
+  display: flex;
+  gap: var(--esp-3);
+  flex-wrap: wrap;
+}
+
+.legenda {
+  font-size: var(--txt-12);
+  line-height: 1.6;
+  color: var(--txt-secundario);
+  max-width: 62ch;
+}
+
+/* Só espaçamento: a aparência do selo pertence ao componente Etiqueta, para que
+   mude num lugar só quando o design system mudar.                            */
+.marca {
+  display: inline-block;
+  margin-right: var(--esp-2);
+}
+.frase .marca {
+  margin-right: 0;
+  margin-left: var(--esp-2);
+}
+
+/* ── Estados ────────────────────────────────────────────────────────────── */
+
+.erro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-4);
+  align-items: flex-start;
+}
+
+/* O vazio ensina a próxima ação; a borda tracejada diz "aqui caberia conteúdo"
+   em vez de parecer um painel quebrado.                                      */
+.vazio {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+  align-items: flex-start;
+  padding: var(--esp-7) var(--esp-6);
+  background: var(--acFaint);
+  border: 1px dashed var(--borda-media);
+  border-radius: var(--raio-botao);
+}
+
+.vazioTitulo {
+  font-family: var(--fonte-display);
+  font-weight: var(--peso-semi);
+  font-size: var(--txt-14);
+}
+
+.vazioTexto {
+  font-size: var(--txt-12-5);
+  line-height: 1.6;
+  color: var(--txt-corpo);
+  max-width: 46ch;
+}
+
+.acaoVazio {
+  font-size: var(--txt-12-5);
+  font-weight: var(--peso-semi);
+  color: var(--acDeep);
+}
+
+/* ── Agrupamento por dia ────────────────────────────────────────────────── */
+
+.dia {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-4);
+}
+
+.tituloDia {
+  font-family: var(--fonte-mono);
+  font-size: var(--txt-10-5);
+  font-weight: var(--peso-semi);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-rotulo);
+  color: var(--txt-rotulo);
+}
+
+.linha {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Item ───────────────────────────────────────────────────────────────── */
+
+.item {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--esp-5);
+  padding: var(--esp-4) var(--esp-4) var(--esp-4) var(--esp-7);
+}
+
+/* A régua que costura os itens do dia. No último ela para logo abaixo do pino,
+   para a linha não continuar apontando para o nada.                          */
+.item::before {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--borda-fraca);
+}
+.item:last-child::before {
+  bottom: auto;
+  height: var(--esp-8);
+}
+
+/* O pino de 7px do card, agora como nó da linha do tempo. Vazado por padrão: o
+   registro é apenas o que o navegador afirmou.                               */
+.pino {
+  position: absolute;
+  left: 0;
+  top: var(--esp-7);
+  width: 7px;
+  height: 7px;
+  border-radius: var(--raio-pill);
+  background: var(--superficie);
+  box-shadow: inset 0 0 0 2px var(--borda-media);
+}
+
+/* Cheio, na cor do ofício: escrito pelo servidor, logo confiável. */
+.itemServidor {
+  background: var(--acFaint);
+  border-radius: 0 var(--raio-item) var(--raio-item) 0;
+}
+.itemServidor .pino {
+  background: var(--ac);
+  box-shadow: none;
+}
+
+.corpo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+  flex: 1;
+  min-width: 0;
+}
+
+.frase {
+  font-size: var(--txt-13);
+  line-height: 1.55;
+  color: var(--txt-forte);
+}
+
+.ator {
+  font-weight: var(--peso-semi);
+  color: var(--tinta);
+}
+
+.hora {
+  font-family: var(--fonte-mono);
+  font-size: var(--txt-11);
+  color: var(--txt-suave);
+  white-space: nowrap;
+  align-self: flex-start;
+}
+
+/* ── Detalhes (o `meta` do registro) ────────────────────────────────────── */
+
+.detalhes {
+  font-size: var(--txt-11-5);
+}
+
+.detalhesResumo {
+  cursor: pointer;
+  color: var(--txt-secundario);
+  width: fit-content;
+  border-radius: var(--raio-etiqueta);
+}
+.detalhesResumo:hover {
+  color: var(--tinta);
+}
+.detalhesResumo:focus-visible {
+  outline: 2px solid var(--ac);
+  outline-offset: 2px;
+}
+
+.detalhesLista {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-1);
+  margin-top: var(--esp-3);
+  padding: var(--esp-4);
+  background: var(--card);
+  border: 1px solid var(--borda-fraca);
+  border-radius: var(--raio-item);
+  overflow-x: auto;
+}
+
+.detalhesLinha {
+  display: flex;
+  gap: var(--esp-3);
+  align-items: baseline;
+}
+
+.detalhesChave {
+  font-family: var(--fonte-mono);
+  font-size: var(--txt-10-5);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-etiqueta);
+  color: var(--txt-rotulo);
+  min-width: 10ch;
+}
+
+.detalhesValor {
+  font-family: var(--fonte-mono);
+  font-size: var(--txt-11);
+  color: var(--txt-forte);
+  word-break: break-word;
+}
+
+/* ── Rodapé ─────────────────────────────────────────────────────────────── */
+
+.rodape {
+  display: flex;
+  justify-content: center;
+  padding-top: var(--esp-5);
+  border-top: 1px solid var(--borda-fraca);
+}
+
+@media (max-width: 640px) {
+  .tela {
+    padding: var(--esp-7) var(--esp-6) var(--esp-9);
+  }
+  .painel {
+    padding: var(--esp-6);
+  }
+  .item {
+    gap: var(--esp-4);
+    padding-left: var(--esp-6);
+  }
+  .detalhesChave {
+    min-width: 8ch;
+  }
+}

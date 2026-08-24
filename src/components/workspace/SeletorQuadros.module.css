@@ -1,0 +1,259 @@
+/* Seletor de quadros.
+
+   Cada `.linha` recebe as quatro variáveis de accent do ofício **daquele**
+   quadro via `style` (é o único jeito de um valor vindo do banco virar token).
+   Daqui para baixo, tudo lê `var(--ac*)` normalmente — inclusive o anel de foco
+   global, que passa a acompanhar a cor do quadro sob o cursor. */
+
+.raiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-1);
+}
+
+/* Um quadro só não merece uma seção inteira da sidebar. Some o rótulo, some o
+   realce de "ativo" (não há de que se distinguir) e some o nome do ofício —
+   ele já está logo abaixo, destacado na seção OFÍCIO. Sobra uma linha quieta e
+   um convite discreto a criar o segundo quadro. */
+.discreto .itemAtivo {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.discreto .oficio {
+  display: none;
+}
+
+.raiz.discreto .novo {
+  font-size: var(--txt-11-5);
+  color: var(--txt-secundario);
+}
+
+.rotuloSecao {
+  font-size: var(--txt-10);
+  font-weight: var(--peso-semi);
+  letter-spacing: var(--ls-rotulo);
+  color: var(--txt-rotulo);
+  padding: 0 var(--esp-3) var(--esp-1);
+}
+
+.lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-1);
+}
+
+.linha {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-1);
+}
+
+.item,
+.itemAtivo {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  flex: 1;
+  min-width: 0;
+  padding: var(--esp-2) var(--esp-3);
+  border-radius: var(--raio-item);
+  background: transparent;
+  border: 1px solid transparent;
+  text-align: left;
+  transition:
+    background var(--transicao-rapida),
+    border-color var(--transicao-rapida);
+}
+
+.item:hover:not(:disabled) {
+  background: var(--acFaint);
+}
+
+.itemAtivo {
+  background: var(--card);
+  border-color: var(--borda-fraca);
+  box-shadow: var(--sombra-ativo);
+}
+
+/* Durante uma edição os outros quadros ficam inertes — mas não apagados: eles
+   continuam sendo a informação que a pessoa está olhando enquanto digita. */
+.item:disabled,
+.itemAtivo:disabled {
+  opacity: 0.75;
+}
+
+.glifo {
+  width: var(--esp-6);
+  flex: none;
+  text-align: center;
+  font-size: var(--txt-12);
+  color: var(--ac);
+}
+
+.texto {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.titulo {
+  font-size: var(--txt-13);
+  font-weight: var(--peso-medio);
+  color: var(--tinta);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* O nome do ofício em linha secundária: é o que diz para onde a troca leva. */
+.oficio {
+  font-size: var(--txt-10-5);
+  color: var(--txt-secundario);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.renomear {
+  flex: none;
+  padding: var(--esp-2);
+  border: none;
+  background: transparent;
+  color: var(--txt-suave);
+  font-size: var(--txt-11-5);
+  line-height: 1;
+  border-radius: var(--raio-etiqueta);
+  opacity: 0;
+  transition:
+    opacity var(--transicao-rapida),
+    color var(--transicao-rapida);
+}
+
+/* A caneta aparece no hover da linha, mas nunca depende dele: foco de teclado
+   e toque a revelam também, e ela permanece na ordem de tabulação sempre. */
+.linha:hover .renomear,
+.renomear:focus-visible {
+  opacity: 1;
+}
+
+.renomear:hover:not(:disabled) {
+  color: var(--acDeep);
+  background: var(--acSoft);
+}
+
+.renomear:disabled {
+  opacity: 0.35;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+  width: 100%;
+  padding: var(--esp-3);
+  background: var(--card);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-item);
+}
+
+.rotuloCampo {
+  font-size: var(--txt-10);
+  font-weight: var(--peso-semi);
+  letter-spacing: var(--ls-etiqueta);
+  text-transform: uppercase;
+  color: var(--txt-rotulo);
+}
+
+.entrada {
+  width: 100%;
+  padding: var(--esp-2) var(--esp-3);
+  font-family: inherit;
+  font-size: var(--txt-12-5);
+  color: var(--tinta);
+  background: var(--superficie);
+  border: 1px solid var(--borda-forte);
+  border-radius: var(--raio-etiqueta);
+}
+
+.entrada:focus {
+  border-color: var(--ac);
+}
+
+.dica {
+  font-size: var(--txt-10);
+  color: var(--txt-suave);
+}
+
+.acoes {
+  display: flex;
+  gap: var(--esp-2);
+  flex-wrap: wrap;
+}
+
+/* Dois seletores de propósito: o `.novo` chega ao <Botao> por `className` e
+   precisa vencer a variante `fantasma` dele, que tem a mesma especificidade. */
+.raiz .novo {
+  justify-content: flex-start;
+  color: var(--acDeep);
+}
+
+/* O motivo do bloqueio ocupa espaço de propósito: um botão apagado sem
+   explicação visível é uma parede, e tooltip não existe no toque. */
+.motivo {
+  font-size: var(--txt-10-5);
+  line-height: 1.45;
+  color: var(--txt-secundario);
+  padding: 0 var(--esp-3) var(--esp-1);
+}
+
+.vazio {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-1);
+  padding: var(--esp-4) var(--esp-3);
+  font-size: var(--txt-12-5);
+  font-weight: var(--peso-medio);
+  color: var(--txt-forte);
+  background: var(--acFaint);
+  border: 1px dashed var(--borda-media);
+  border-radius: var(--raio-item);
+}
+
+.vazioDica {
+  font-size: var(--txt-11);
+  font-weight: var(--peso-normal);
+  line-height: 1.5;
+  color: var(--txt-secundario);
+}
+
+.erro {
+  font-size: var(--txt-11-5);
+  padding-top: var(--esp-1);
+}
+
+.sucesso {
+  font-size: var(--txt-10-5);
+  color: var(--sucesso);
+  padding: 0 var(--esp-3);
+  min-height: var(--esp-5);
+}
+
+/* Na sidebar horizontal do mobile a lista deita junto com o resto. */
+@media (max-width: 900px) {
+  .lista {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .rotuloSecao {
+    display: none;
+  }
+  .renomear {
+    opacity: 1;
+  }
+}

@@ -15,6 +15,7 @@
  */
 
 import { supabase } from './supabase';
+import { demo, estaEmDemo, seDemo } from './demo';
 import { ErroApp, normalizar } from './erros';
 import { zPerfil, type Perfil } from './tipos';
 import { validarUm } from './validar';
@@ -59,6 +60,11 @@ export async function cadastrar({ nome, email, senha }: DadosCadastro): Promise<
     );
   }
 
+  // O desvio vem depois da validação, não antes: a demonstração precisa recusar
+  // uma senha fraca com a mesma mensagem que o app real recusa.
+  const d = import.meta.env.DEV ? await seDemo(() => true) : null;
+  if (d) return;
+
   const { error } = await supabase.auth.signUp({
     email: email.trim().toLowerCase(),
     password: senha,
@@ -88,6 +94,9 @@ export async function cadastrar({ nome, email, senha }: DadosCadastro): Promise<
 }
 
 export async function entrar(email: string, senha: string): Promise<Session> {
+  const d = import.meta.env.DEV ? await seDemo(() => demo.sessao()) : null;
+  if (d) return d;
+
   const { data, error } = await supabase.auth.signInWithPassword({
     email: email.trim().toLowerCase(),
     password: senha,
@@ -102,11 +111,17 @@ export async function entrar(email: string, senha: string): Promise<Session> {
 }
 
 export async function sair(): Promise<void> {
+  const d = import.meta.env.DEV ? await seDemo(() => true) : null;
+  if (d) return;
+
   const { error } = await supabase.auth.signOut();
   if (error) throw normalizar(error);
 }
 
 export async function pedirRecuperacao(email: string): Promise<void> {
+  const d = import.meta.env.DEV ? await seDemo(() => true) : null;
+  if (d) return;
+
   await supabase.auth.resetPasswordForEmail(email.trim().toLowerCase(), {
     redirectTo: `${window.location.origin}/nova-senha`,
   });
@@ -119,16 +134,28 @@ export async function definirNovaSenha(senha: string): Promise<void> {
   if (!forca.valida) {
     throw new ErroApp('entrada_invalida', `A senha precisa de ${forca.faltando.join(', ')}.`);
   }
+
+  const d = import.meta.env.DEV ? await seDemo(() => true) : null;
+  if (d) return;
+
   const { error } = await supabase.auth.updateUser({ password: senha });
   if (error) throw normalizar(error);
 }
 
 export async function sessaoAtual(): Promise<Session | null> {
+  // Envelopado em `{ v }` porque `null` é resposta legítima aqui: sem a caixa,
+  // um valor nulo do modo demo cairia no caminho real e falaria com o Supabase.
+  const d = import.meta.env.DEV ? await seDemo(() => ({ v: demo.sessao() })) : null;
+  if (d) return d.v;
+
   const { data } = await supabase.auth.getSession();
   return data.session;
 }
 
 export async function meuPerfil(): Promise<Perfil | null> {
+  const d = import.meta.env.DEV ? await seDemo(() => ({ v: demo.perfil() })) : null;
+  if (d) return d.v;
+
   const { data: sessao } = await supabase.auth.getSession();
   const userId = sessao.session?.user.id;
   if (!userId) return null;
@@ -148,6 +175,12 @@ export async function atualizarPerfil(campos: {
   nome?: string;
   iniciais?: string;
 }): Promise<void> {
+  const d = import.meta.env.DEV ? await seDemo(() => {
+    demo.atualizarPerfil(campos);
+    return true;
+  }) : null;
+  if (d) return;
+
   const { data: sessao } = await supabase.auth.getSession();
   const userId = sessao.session?.user.id;
   if (!userId) throw new ErroApp('nao_autenticado', 'Entre para continuar.');
@@ -169,6 +202,11 @@ export async function atualizarPerfil(campos: {
 export function observarSessao(
   callback: (sessao: Session | null) => void,
 ): () => void {
+  // A única função síncrona do arquivo, então sem `seDemo`. Não chamamos o
+  // callback: em demonstração a sessão nunca muda sozinha, e emitir `null` aqui
+  // derrubaria o app para a tela de login logo depois de entrar.
+  if (estaEmDemo()) return () => {};
+
   const { data } = supabase.auth.onAuthStateChange((_evento, sessao) => {
     callback(sessao);
   });

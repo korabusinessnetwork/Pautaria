@@ -39,3 +39,18 @@
     padding: var(--esp-4) var(--esp-6) 0;
   }
 }
+
+/* Barra de ferramentas sob a topbar: densidade e exportação.
+   Alinhada à direita para não competir com o título do quadro, e sem borda
+   própria — ela pertence visualmente ao cabeçalho, não ao conteúdo. */
+.ferramentas {
+  display: flex;
+  justify-content: flex-end;
+  padding: var(--esp-3) var(--esp-8) 0;
+}
+
+@media (max-width: 900px) {
+  .ferramentas {
+    padding: var(--esp-3) var(--esp-6) 0;
+  }
+}

@@ -1,5 +1,10 @@
 /**
- * Sidebar — ofícios, modelos e o chip do usuário.
+ * Sidebar — quadros, ofícios, modelos e o chip do usuário.
+ *
+ * A ordem das seções segue a hierarquia real do produto: primeiro **qual
+ * quadro**, depois **qual ofício** aquele quadro fala. Invertê-la sugeriria que
+ * o ofício é uma preferência global, quando na verdade ele pertence ao quadro —
+ * dois quadros do mesmo workspace podem ter sotaques diferentes.
  *
  * O seletor de ofício é o coração da promessa "troque quando quiser". Clicar
  * num ofício diferente chama `trocar_oficio_quadro`, que remapeia as pautas
@@ -12,16 +17,19 @@
  * deixa a troca legível antes de acontecer.
  */
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useWorkspace } from '@/context/WorkspaceContext';
 import { useSessao } from '@/context/SessaoContext';
-import { trocarOficioDoQuadro } from '@/lib/pautas.service';
+import { useLimites } from '@/hooks/useLimites';
+import { criarQuadro, renomearQuadro, trocarOficioDoQuadro } from '@/lib/pautas.service';
 import { normalizar } from '@/lib/erros';
 import { accentDe } from '@/utils/tema';
 import { Avatar } from '@/components/shared/Avatar';
 import { Aviso } from '@/components/shared/Aviso';
+import { SeletorQuadros, type QuadroDoSeletor } from './SeletorQuadros';
 import type { Template } from '@/lib/tipos';
+import { ROTA_DO_APP, rotaWorkspace } from '@/constants/rotas';
 import estilos from './Sidebar.module.css';
 
 interface Props {
@@ -31,8 +39,19 @@ interface Props {
 export function Sidebar({ aoUsarTemplate }: Props) {
   const navegar = useNavigate();
   const { perfil, sair } = useSessao();
-  const { workspace, oficios, oficioAtivo, quadroAtivo, uso, podeAdministrar, gravavel, recarregar } =
-    useWorkspace();
+  const {
+    workspace,
+    quadros,
+    quadroAtivo,
+    oficios,
+    oficioAtivo,
+    uso,
+    podeAdministrar,
+    gravavel,
+    selecionarQuadro,
+    recarregar,
+  } = useWorkspace();
+  const limites = useLimites();
   const [trocando, setTrocando] = useState<string | null>(null);
   const [erro, setErro] = useState<unknown>(null);
 
@@ -50,16 +69,64 @@ export function Sidebar({ aoUsarTemplate }: Props) {
     }
   }
 
-  const planoRotulo = uso?.planoNome ?? 'Plano Solo';
+  /**
+   * O seletor pede o ofício de cada quadro para pintar o glifo com o accent
+   * certo. O contexto entrega as duas listas separadas, então o casamento
+   * acontece aqui — e não dentro do seletor, que assim continua sendo um
+   * componente de props puras, testável sem contexto.
+   */
+  const quadrosDoSeletor = useMemo<QuadroDoSeletor[]>(
+    () =>
+      quadros.map((quadro) => {
+        const oficio = oficios.find((o) => o.id === quadro.oficioId);
+        return {
+          id: quadro.id,
+          titulo: quadro.titulo,
+          oficio: oficio
+            ? {
+                nome: oficio.nome,
+                glifo: oficio.glifo,
+                hue: oficio.hue,
+                chroma: oficio.chroma,
+              }
+            : null,
+        };
+      }),
+    [quadros, oficios],
+  );
+
+  const planoRotulo = uso?.planoNome ?? 'Solo';
+  const slug = workspace?.slug ?? '';
 
   return (
     <aside className={estilos.sidebar}>
-      <Link to="/" className={estilos.marca}>
+      <Link to={ROTA_DO_APP} className={estilos.marca}>
         <span className={estilos.bolinha} aria-hidden="true" />
         <span className={estilos.wordmark}>
           {workspace?.tema?.nomeExibicao || 'Pautaria'}
         </span>
       </Link>
+
+      <SeletorQuadros
+        quadros={quadrosDoSeletor}
+        quadroAtivoId={quadroAtivo?.id ?? null}
+        aoSelecionar={selecionarQuadro}
+        aoCriar={async (titulo) => {
+          if (!workspace || !oficioAtivo) return;
+          await criarQuadro({
+            workspaceId: workspace.id,
+            oficioId: oficioAtivo.id,
+            titulo,
+          });
+          await recarregar();
+        }}
+        aoRenomear={async (quadroId, titulo) => {
+          await renomearQuadro(quadroId, titulo);
+          await recarregar();
+        }}
+        podeAdministrar={podeAdministrar && gravavel}
+        limiteCriar={limites.criarQuadro}
+      />
 
       <nav className={estilos.secao} aria-label="Ofício do quadro">
         <span className={estilos.rotuloSecao}>OFÍCIO</span>
@@ -123,12 +190,26 @@ export function Sidebar({ aoUsarTemplate }: Props) {
 
       <div className={estilos.espacador} />
 
-      <nav className={estilos.secaoBaixa} aria-label="Configurações do workspace">
-        <Link to={`/w/${workspace?.slug}/plano`} className={estilos.linkBaixo}>
-          Plano e cobrança
+      <nav className={estilos.secaoBaixa} aria-label="Gestão do workspace">
+        <Link to={rotaWorkspace.arquivadas(slug)} className={estilos.linkBaixo}>
+          Arquivadas
         </Link>
-        <Link to={`/w/${workspace?.slug}/equipe`} className={estilos.linkBaixo}>
+        {/* Atividade e cobrança leem dado que a RLS só libera para dono e admin.
+            Esconder o link em vez de deixar a tela explicar evita oferecer um
+            caminho que termina em "você não tem permissão". */}
+        {podeAdministrar ? (
+          <Link to={rotaWorkspace.atividade(slug)} className={estilos.linkBaixo}>
+            Atividade
+          </Link>
+        ) : null}
+        <Link to={rotaWorkspace.equipe(slug)} className={estilos.linkBaixo}>
           Equipe
+        </Link>
+        <Link to={rotaWorkspace.configuracoes(slug)} className={estilos.linkBaixo}>
+          Configurações
+        </Link>
+        <Link to={rotaWorkspace.plano(slug)} className={estilos.linkBaixo}>
+          Plano e cobrança
         </Link>
       </nav>
 

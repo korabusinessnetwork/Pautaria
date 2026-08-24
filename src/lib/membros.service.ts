@@ -13,11 +13,15 @@
  */
 
 import { supabase } from './supabase';
+import { demo, seDemo } from './demo';
 import { normalizar, ouEstoura, ErroApp } from './erros';
 import { zMembro, type Membro, type Papel } from './tipos';
 import { validarLista } from './validar';
 
 export async function listarMembros(workspaceId: string): Promise<Membro[]> {
+  const d = import.meta.env.DEV ? await seDemo(() => demo.membros()) : null;
+  if (d) return d;
+
   const { data, error } = await supabase
     .from('workspace_members')
     .select('workspace_id, user_id, papel, profiles ( nome, iniciais, avatar_hue, email )')
@@ -44,6 +48,9 @@ export interface Convite {
 }
 
 export async function listarConvites(workspaceId: string): Promise<Convite[]> {
+  const d = import.meta.env.DEV ? await seDemo(() => demo.convites()) : null;
+  if (d) return d;
+
   const { data, error } = await supabase
     .from('convites')
     .select('id, email, papel, expira_em, aceito_em')
@@ -97,6 +104,10 @@ export async function convidar(entrada: {
     throw new ErroApp('entrada_invalida', 'E-mail inválido.');
   }
 
+  // Depois da validação: e-mail malformado é recusado com ou sem backend.
+  const d = import.meta.env.DEV ? await seDemo(() => demo.convidar({ email, papel: entrada.papel })) : null;
+  if (d) return d;
+
   const { data: sessao } = await supabase.auth.getSession();
   const userId = sessao.session?.user.id;
   if (!userId) throw new ErroApp('nao_autenticado', 'Entre para continuar.');
@@ -126,6 +137,12 @@ export async function convidar(entrada: {
 }
 
 export async function revogarConvite(id: string): Promise<void> {
+  const d = import.meta.env.DEV ? await seDemo(() => {
+    demo.revogarConvite(id);
+    return true;
+  }) : null;
+  if (d) return;
+
   const { error } = await supabase.from('convites').delete().eq('id', id);
   if (error) throw normalizar(error);
 }
@@ -138,6 +155,12 @@ export async function aceitarConvite(token: string): Promise<{
   workspaceId: string;
   slug: string;
 }> {
+  const d = import.meta.env.DEV ? await seDemo(() => {
+    const ws = demo.porSlug();
+    return { workspaceId: ws.id, slug: ws.slug };
+  }) : null;
+  if (d) return d;
+
   const { data, error } = await supabase.rpc('aceitar_convite', { p_token: token });
   const linha = ouEstoura(Array.isArray(data) ? data[0] : data, error);
   return { workspaceId: linha.workspace_id as string, slug: linha.slug as string };
@@ -148,6 +171,12 @@ export async function mudarPapel(
   userId: string,
   papel: Papel,
 ): Promise<void> {
+  const d = import.meta.env.DEV ? await seDemo(() => {
+    demo.mudarPapel(userId, papel);
+    return true;
+  }) : null;
+  if (d) return;
+
   const { error } = await supabase
     .from('workspace_members')
     .update({ papel })
@@ -162,6 +191,12 @@ export async function mudarPapel(
  * `proteger_ultimo_owner` impede deixar o workspace sem dono.
  */
 export async function removerMembro(workspaceId: string, userId: string): Promise<void> {
+  const d = import.meta.env.DEV ? await seDemo(() => {
+    demo.removerMembro(userId);
+    return true;
+  }) : null;
+  if (d) return;
+
   const { error } = await supabase
     .from('workspace_members')
     .delete()

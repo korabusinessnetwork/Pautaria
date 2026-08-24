@@ -1,0 +1,72 @@
+/* `sticky` e não `fixed`, por um motivo que só apareceu ao ver a tela: como
+   `fixed`, a faixa saía do fluxo e cobria o cabeçalho da landing — escondia
+   justamente a interface que ela existe para deixar ver. Em `sticky` ela ocupa
+   espaço, empurra o conteúdo para baixo e continua acompanhando a rolagem.
+
+   z-index acima do drawer (50) e do seu backdrop (40): um aviso que some atrás
+   de um painel não cumpre a função de avisar. */
+.faixa {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: var(--esp-4);
+  padding: 8px var(--esp-6);
+  background: oklch(65% 0.14 75 / 0.16);
+  border-bottom: 1px solid oklch(65% 0.14 75 / 0.4);
+  backdrop-filter: blur(6px);
+  font-family: var(--fonte-ui);
+  font-size: var(--txt-12-5);
+  color: oklch(38% 0.1 75);
+}
+
+.texto {
+  flex: 1;
+  min-width: 0;
+  line-height: 1.45;
+}
+
+.texto code {
+  font-family: var(--fonte-mono);
+  font-size: var(--txt-11);
+  background: rgba(31, 27, 22, 0.06);
+  padding: 1px 5px;
+  border-radius: var(--raio-etiqueta);
+}
+
+.acao {
+  flex: none;
+  background: var(--ac);
+  color: var(--card);
+  border: none;
+  border-radius: var(--raio-botao);
+  padding: 6px 13px;
+  font-size: var(--txt-12);
+  font-weight: var(--peso-semi);
+  white-space: nowrap;
+}
+.acao:hover {
+  filter: brightness(0.93);
+}
+
+.fechar {
+  flex: none;
+  background: transparent;
+  border: none;
+  color: inherit;
+  opacity: 0.6;
+  padding: 2px 6px;
+  font-size: var(--txt-13);
+  line-height: 1;
+}
+.fechar:hover {
+  opacity: 1;
+}
+
+@media (max-width: 720px) {
+  .faixa {
+    flex-wrap: wrap;
+    gap: var(--esp-2);
+  }
+}

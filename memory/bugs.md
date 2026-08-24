@@ -98,6 +98,18 @@ ataque, e um `UPDATE ... WHERE true` sem filtro como teste-canário.
 **Correção.** `if not exists` explícito em vez de `ON CONFLICT`.
 *Promovido para `learnings.md` A5.*
 
+### B7 — `[CORRIGIDO]` Dados de demonstração vazaram para o bundle de produção
+*alto · 2026-08-24*
+
+**Sintoma.** Build verde, e ~9 KB de fixtures ("Estúdio Aurora", "Marina Alves")
+publicados para todo usuário.
+**Causa.** `await seDemo(() => demo.pautas(id))` constrói a closure mesmo em
+produção; a referência a `demo.*` manteve `dados.ts` no grafo do bundler.
+**Correção.** 47 desvios reescritos como
+`import.meta.env.DEV ? await seDemo(...) : null`, que o Vite resolve em tempo de
+build. Gate no CI procurando quatro marcadores em `dist/`.
+*Promovido para `learnings.md` A9.*
+
 ---
 
 ## Limitações aceitas (não são bugs)
@@ -110,11 +122,12 @@ mesmos cards**. Inatingível no uso real de um quadro de pautas.
 `precisaRenumerar()` e `renumerar()` existem e estão testados; falta ligá-los a um gatilho
 automático — hoje seria intervenção manual. Registrado por honestidade.
 
-### L2 — Arquivar não tem UI de desarquivar
-*médio · Fase 2*
+### L2 — `[RESOLVIDO 2026-08-24]` Arquivar não tinha UI de desarquivar
+*era médio*
 
-`desarquivarPauta()` e `listarArquivadas()` existem no serviço; falta a tela. Enquanto não
-existir, o drawer trata arquivar como irreversível e **confirma** antes.
+A tela `/w/:slug/arquivadas` existe: lista, desarquiva e (com confirmação
+explícita) exclui em definitivo. O drawer ainda confirma antes de arquivar —
+agora por cortesia, não por falta de caminho de volta.
 
 ### L3 — Drag-and-drop não funciona por teclado
 *médio · por desenho*
