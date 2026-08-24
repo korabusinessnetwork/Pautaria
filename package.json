@@ -21,7 +21,9 @@
     "db:reset": "supabase db reset",
     "db:push": "supabase db push",
     "fn:deploy": "supabase functions deploy",
-    "fn:serve": "supabase functions serve --env-file supabase/.env"
+    "fn:serve": "supabase functions serve --env-file supabase/.env",
+    "telas": "node scripts/checar-transbordo.mjs",
+    "telas:mobile": "node scripts/checar-transbordo.mjs 390"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.112.3",

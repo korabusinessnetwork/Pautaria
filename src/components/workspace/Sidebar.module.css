@@ -205,26 +205,70 @@
   color: var(--perigo-forte);
 }
 
+/* Em telas pequenas a sidebar vira uma **barra horizontal rolável**, não uma
+   lista empilhada.
+
+   A versão anterior usava `flex-wrap: wrap`, e o resultado media ~630px de
+   altura: quem abria o quadro no celular via só menu, e precisava rolar uma
+   tela inteira para chegar à primeira pauta. Numa ferramenta cujo valor é o
+   quadro, isso inverte a prioridade da tela.
+
+   `nowrap` + `overflow-x: auto` mantém tudo alcançável num deslize lateral e
+   devolve a altura ao conteúdo. Cada item vira `flex: none` para não ser
+   comprimido, e `.usuario` sai do fim do fluxo — no modo empilhado ele
+   flutuava por cima dos links de navegação. */
 @media (max-width: 900px) {
   .sidebar {
     position: static;
     height: auto;
     flex-direction: row;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    overflow-x: auto;
     align-items: center;
+    gap: var(--esp-5);
+    padding: 10px var(--esp-6);
     border-right: none;
     border-bottom: 1px solid var(--borda-fraca);
-    gap: var(--esp-5);
+    /* A barra é a última coisa a receber foco de rolagem vertical. */
+    overscroll-behavior-x: contain;
   }
-  .secao {
+
+  .marca,
+  .secao,
+  .secaoBaixa,
+  .usuario {
+    flex: none;
+  }
+
+  .secao,
+  .secaoBaixa {
     flex-direction: row;
+    flex-wrap: nowrap;
     align-items: center;
-    flex-wrap: wrap;
+    gap: 2px;
   }
-  .rotuloSecao {
+
+  .item,
+  .itemAtivo,
+  .template,
+  .linkBaixo {
+    white-space: nowrap;
+    width: auto;
+  }
+
+  /* Rótulos de seção e o espaçador só fazem sentido no eixo vertical. */
+  .rotuloSecao,
+  .espacador {
     display: none;
   }
-  .espacador {
+
+  /* O nome do plano dobraria a altura da barra por uma informação secundária —
+     ela continua visível na tela de Plano e cobrança. */
+  .usuarioPlano {
+    display: none;
+  }
+
+  .erro {
     display: none;
   }
 }

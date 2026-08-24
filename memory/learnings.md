@@ -285,3 +285,41 @@ nenhum dos dois casos.
 **Lição.** Toda afirmação sobre o que o bundler faz precisa de um gate que a
 verifique. Se a afirmação for verdadeira, o gate custa dois segundos por build;
 se for falsa, ele é a única coisa entre a suposição e a produção.
+
+---
+
+## A10 — Uma verificação verde pode estar medindo a coisa errada
+*2026-08-24 · front · **duas falhas na mesma ferramenta***
+
+**O que aconteceu.** Ao conferir o mobile, as capturas em 390px mostravam tudo
+cortado na direita. Diagnostiquei "transbordo horizontal" e comecei a consertar
+CSS. Nenhum dos defeitos existia.
+
+**Falha 1 — a largura era mentira.** `chromium --window-size=390,900` **não**
+produz um viewport de 390px: o Chromium trava a janela num mínimo de ~500px. A
+página renderizava a 500 e a imagem saía com 390 de largura, recortada. Só
+descobri porque instrumentei a medição e ela imprimiu `cabe em 500px` quando eu
+tinha pedido 390. A correção é `Emulation.setDeviceMetricsOverride` pelo
+protocolo do DevTools — o único caminho que respeita a largura pedida.
+
+**Falha 2 — o verde vinha do vazio.** Corrigida a largura, o medidor aprovou as
+13 rotas. Mas a captura da rota mais pesada saiu **em branco**: o Vite ainda
+transformava módulos quando o script mediu, aos 2,2 s fixos. E uma página sem
+elementos trivialmente "não transborda" — o ✓ não significava nada.
+
+É o mesmo modo de falha do bug B1, num lugar novo: **verde por ausência de
+conteúdo**. A espera fixa virou espera por sinal (o `#root` precisa ter filhos e
+o corpo precisa ter texto), e não renderizar passou a ser falha explícita em vez
+de aprovação silenciosa.
+
+**O que mudou.** Captura e medição passaram a viver no mesmo script e no mesmo
+viewport — uma captura feita numa largura diferente da medição é pior que
+nenhuma. Com a ferramenta consertada, a medição real apontou que **não havia
+transbordo em nenhuma rota**; os defeitos reais do mobile eram outros (a sidebar
+empilhada ocupando 630px antes do conteúdo, e o chip do usuário sobrepondo os
+links), e esses foram corrigidos.
+
+**Lição.** Antes de consertar o que a ferramenta acusa, verifique se a
+ferramenta está medindo o que você pediu. E toda checagem que pode passar sobre
+um resultado vazio precisa de uma asserção de que há conteúdo — senão ela vira
+um carimbo.

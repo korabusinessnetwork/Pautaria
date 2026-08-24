@@ -245,15 +245,24 @@
 }
 
 /* Na sidebar horizontal do mobile a lista deita junto com o resto. */
+/* Acompanha a sidebar, que em mobile é uma barra rolável horizontal: a lista
+   de quadros também corre no eixo X, sem quebrar linha. */
 @media (max-width: 900px) {
   .lista {
     flex-direction: row;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: var(--esp-2);
   }
   .rotuloSecao {
     display: none;
   }
+  /* Sem hover em toque, o botão de renomear precisa estar sempre visível — mas
+     o subtítulo com o nome do ofício sai, para a barra não engordar. */
   .renomear {
     opacity: 1;
+  }
+  .oficio {
+    display: none;
   }
 }

@@ -16,6 +16,9 @@
 - [x] Equipe: convites com token hasheado, papéis, remoção
 - [x] Gate de build: falha sem env, falha com `VITE_*` não autorizada
 - [x] CI com validação + varredura de segredos + banco efêmero
+- [x] Modo demonstração: o front roda sem backend, com dados fixos mutáveis
+- [x] Landing, termos, privacidade, configurações, arquivadas e atividade
+- [x] 35 testes de componente + verificação de transbordo em 390px
 
 ### Pendente para o primeiro deploy real
 - [ ] Criar projeto no Supabase, `db push`, publicar funções
@@ -77,9 +80,9 @@
 | `documento.ts` duplicado entre front e Edge Function | Divergência silenciosa se um lado mudar | Comentado nos dois arquivos; testes cobrem os dois |
 | Realtime invalida a consulta em vez de aplicar o delta | Tráfego a mais em quadros grandes | `memory/bugs.md` L8 |
 | Teste de isolamento roda em PG16, produção é PG15 | Aproximação | `memory/bugs.md` L7 |
-| Sem teste de componente (só de função pura) | Regressão de UI não é detectada automaticamente | Aqui |
 | Sem teste de integração das Edge Functions | Exigiria mock da Asaas ou sandbox no CI | Aqui |
 | CSP com `unsafe-inline` em `style-src` | Necessário para as variáveis CSS de tema em runtime | `docs/11_SEGURANCA` |
+| `npm run telas` não roda no CI | Depende de um Chromium que o runner pode não ter; hoje é gate manual | Aqui |
 
 ## Ideias sem prioridade
 

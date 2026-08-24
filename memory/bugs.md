@@ -129,6 +129,14 @@ A tela `/w/:slug/arquivadas` existe: lista, desarquiva e (com confirmação
 explícita) exclui em definitivo. O drawer ainda confirma antes de arquivar —
 agora por cortesia, não por falta de caminho de volta.
 
+### L9 — `npm run telas` é gate manual, não roda no CI
+*baixo · aceito*
+
+A verificação de transbordo horizontal e a captura das telas precisam de um
+Chromium e de um servidor de desenvolvimento no ar. Rodar isso no CI exigiria
+baixar o navegador a cada execução. Fica como gate manual antes de mexer em
+layout — `npm run telas:mobile`.
+
 ### L3 — Drag-and-drop não funciona por teclado
 *médio · por desenho*
 
