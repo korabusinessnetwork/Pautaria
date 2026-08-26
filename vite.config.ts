@@ -32,7 +32,8 @@ function exigirAmbiente(): Plugin {
       if (faltando.length > 0) {
         throw new Error(
           `Build de produção abortado: falta ${faltando.join(' e ')}.\n` +
-            'Defina as variáveis no ambiente de build (Vercel → Environment Variables) ' +
+            'Defina as variáveis no ambiente de build do host ' +
+            '(Cloudflare: Settings → Build → Variables and Secrets) ' +
             'ou em .env.production.local. Veja INSTALACAO.md.',
         );
       }

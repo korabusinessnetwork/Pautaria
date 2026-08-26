@@ -1,8 +1,15 @@
 # ─────────────────────────────────────────────────────────────────────────────
 # Cabeçalhos de segurança. Porte fiel do vercel.json, no formato que Cloudflare
-# Pages e Netlify entendem. Mantenha os dois arquivos em sincronia: enquanto o
-# projeto puder ir para qualquer um dos hosts, divergência aqui é uma proteção
+# (Workers e Pages) e Netlify entendem. Mantenha em sincronia com o vercel.json:
+# enquanto o projeto puder ir para qualquer host, divergência aqui é uma proteção
 # que existe num deploy e some no outro.
+#
+# A reescrita de SPA NÃO mora aqui num arquivo `_redirects`, e isso é
+# deliberado: em Cloudflare Workers os redirecionamentos são seguidos mesmo
+# quando o caminho casa com um arquivo existente, então a regra `/* /index.html
+# 200` faria `/assets/index-*.js` responder HTML e o site subiria em branco. O
+# equivalente correto é `not_found_handling` no wrangler.jsonc. Se um dia este
+# projeto for para Netlify, o `_redirects` volta a ser necessário lá.
 #
 # A indentação de dois espaços é sintaxe, não estilo — linha sem recuo é lida
 # como um novo padrão de caminho.

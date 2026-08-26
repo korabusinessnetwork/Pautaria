@@ -51,3 +51,6 @@ coverage/
 *.tsbuildinfo
 .turbo/
 .telas/
+
+# Cloudflare Workers, estado local do wrangler
+.wrangler/

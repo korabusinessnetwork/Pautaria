@@ -1,0 +1,41 @@
+{
+  // ───────────────────────────────────────────────────────────────────────────
+  // Deploy do front em Cloudflare Workers (static assets).
+  //
+  // Este arquivo existe para o build ser determinístico. Sem ele, o `wrangler
+  // deploy` cai no auto-config: ele adivinha as configurações, instala
+  // `@cloudflare/vite-plugin` como dependência, reescreve os scripts do
+  // package.json e mexe no .gitignore, tudo dentro do build. Uma esteira que
+  // altera o próprio projeto para funcionar não é reprodutível, e a versão que
+  // ela instala muda sem ninguém decidir nada.
+  //
+  // Não há `main`: o Pautaria é SPA estática, não roda código no servidor. Um
+  // Worker só de assets não precisa de script, e não ter um é a superfície de
+  // ataque menor. Lógica sensível vive em Edge Function do Supabase (CLAUDE.md).
+  // ───────────────────────────────────────────────────────────────────────────
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "pautaria",
+  "compatibility_date": "2026-08-26",
+
+  "assets": {
+    "directory": "./dist",
+
+    // Substitui o `public/_redirects` que este projeto tinha. No Cloudflare
+    // Workers, a documentação é explícita: "Redirects are always followed,
+    // regardless of whether or not an asset matches the incoming request".
+    // Ou seja, ao contrário do Pages e do Netlify, uma regra `/* /index.html
+    // 200` NÃO perde para o arquivo existente: ela sequestraria também
+    // `/assets/index-*.js`, que passaria a responder HTML. O bundle nunca
+    // carregaria e o site subiria em branco, com build verde, o pior modo de
+    // falhar.
+    //
+    // `single-page-application` faz a coisa certa por outro caminho: só o que
+    // não existe em disco recebe o index.html, com 200, preservando a URL para
+    // o React Router resolver a rota.
+    "not_found_handling": "single-page-application"
+  },
+
+  "observability": {
+    "enabled": true
+  }
+}

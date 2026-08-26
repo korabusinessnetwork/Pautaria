@@ -254,7 +254,44 @@ select cron.schedule(
 );
 ```
 
-### Vercel (front)
+### Cloudflare Workers (front)
+
+Host atual. O plano gratuito **permite uso comercial** e não tem teto de banda, ao
+contrário do Hobby da Vercel, que exige plano pago para monetizar.
+
+O deploy é pela integração com o GitHub: *Workers & Pages → Import a repository*, branch
+`main`, build `npm run build`, saída `dist`.
+
+Depois, em **Settings → Build → Variables and Secrets**, as duas variáveis:
+
+| Nome | Valor |
+| --- | --- |
+| `VITE_SUPABASE_URL` | `https://<ref>.supabase.co` |
+| `VITE_SUPABASE_ANON_KEY` | a chave `anon` do projeto |
+
+São variáveis de **build**, não de runtime do Worker: o Vite as substitui no bundle em
+tempo de compilação, então definí-las no lugar errado não tem efeito nenhum e o build
+continua abortando. Sem elas, o `exigirAmbiente` do `vite.config.ts` para o build de
+propósito, em vez de publicar um app que não conecta em lugar nenhum.
+
+Só essas duas variáveis. Se alguém propuser adicionar uma terceira, leia o alerta do
+passo 1 antes.
+
+#### O que o `wrangler.jsonc` resolve
+
+| Sem o arquivo | Consequência |
+| --- | --- |
+| `wrangler deploy` roda o auto-config | ele instala `@cloudflare/vite-plugin`, reescreve os scripts do `package.json` e mexe no `.gitignore` durante o build, com versões que mudam sem ninguém decidir |
+| a reescrita de SPA viria de `public/_redirects` | **quebra o site**: no Workers, "redirects are always followed, regardless of whether or not an asset matches", então `/* /index.html 200` faria `/assets/index-*.js` responder HTML e o app subiria em branco, com build verde |
+
+Por isso a reescrita mora em `assets.not_found_handling` do `wrangler.jsonc`, e não num
+`_redirects`. Os cabeçalhos de segurança continuam em `public/_headers`, que o Workers
+lê normalmente.
+
+### Vercel (front, alternativa paga)
+
+O `vercel.json` segue mantido e em sincronia com o `public/_headers`. Serve se um dia o
+projeto assinar o plano Pro, exigido para uso comercial.
 
 ```bash
 vercel link
@@ -262,9 +299,6 @@ vercel env add VITE_SUPABASE_URL production
 vercel env add VITE_SUPABASE_ANON_KEY production
 vercel --prod
 ```
-
-Só essas duas variáveis. Se alguém propuser adicionar uma terceira, leia o alerta do
-passo 1 antes.
 
 ---
 
