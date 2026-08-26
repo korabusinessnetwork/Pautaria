@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════════════════
-   Legal — Termos e Privacidade.
+   Legal, Termos e Privacidade.
 
    Duas decisões carregam esta tela:
 
@@ -9,7 +9,7 @@
 
    2. **Índice fixo à esquerda.** Ele é a única coisa que informa o tamanho do
       que vem pela frente e permite pular direto para "Cancelamento" ou "Seus
-      direitos" — as duas seções que as pessoas realmente vêm procurar.
+      direitos", as duas seções que as pessoas realmente vêm procurar.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .tela {
@@ -58,7 +58,7 @@
 
 /* Mesmo alternador da página de preços, valor por valor. É o mesmo gesto ("dois
    documentos irmãos, um ativo") e não pode ter dois desenhos no mesmo produto.
-   O 0.07 é a tinta com alfa, como manda o design system — não há token para
+   O 0.07 é a tinta com alfa, como manda o design system, não há token para
    este passo específico, e é o valor usado em `Precos.module.css`.            */
 .alternador {
   display: flex;
@@ -328,7 +328,7 @@
   color: var(--txt-suave);
 }
 
-/* Observação de contexto — explica o porquê de uma escolha, sem ter o peso
+/* Observação de contexto, explica o porquê de uma escolha, sem ter o peso
    normativo do parágrafo. Fica com a barra lateral e um tom mais baixo.       */
 .nota {
   padding-left: var(--esp-5);
@@ -478,7 +478,7 @@
 /* ── Impressão ──────────────────────────────────────────────────────────── */
 
 /* Documento legal é feito para ser arquivado. Quem imprime quer o texto, a
-   versão e a data — não o índice de navegação nem o botão que abriu o diálogo
+   versão e a data, não o índice de navegação nem o botão que abriu o diálogo
    de impressão.                                                               */
 @media print {
   .tela {

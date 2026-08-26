@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# banco-efemero.sh — sobe um Postgres descartável, aplica tudo e roda os testes
+# banco-efemero.sh, sobe um Postgres descartável, aplica tudo e roda os testes
 #
 # Existe para que o gate de segurança do banco possa rodar em qualquer lugar:
 # CI, contêiner sem Docker-in-Docker, máquina de quem não quer subir o stack

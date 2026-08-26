@@ -1,5 +1,5 @@
 /**
- * O card — a ficha alfinetada.
+ * O card, a ficha alfinetada.
  *
  * Detalhes do handoff que não são enfeite: o pino de 7px no topo (é o que faz a
  * metáfora de mural funcionar), a inclinação de -0.3° no hover (o card
@@ -8,7 +8,7 @@
  * Sobre acessibilidade do arrasto: `draggable` do HTML5 não funciona por
  * teclado, e nenhuma quantidade de `tabindex` conserta isso. Em vez de fingir
  * que conserta, o card é um `<button>` que abre o drawer, e o drawer tem as
- * pills de "MOVER PARA" — que já estavam no design. Quem usa mouse arrasta;
+ * pills de "MOVER PARA", que já estavam no design. Quem usa mouse arrasta;
  * quem usa teclado move pelo drawer; ninguém fica sem caminho.
  */
 

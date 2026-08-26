@@ -59,7 +59,7 @@ export function NovaSenha() {
         {!autenticado ? (
           <>
             <Aviso tom="atencao" titulo="Link inválido ou expirado">
-              Peça um novo link de recuperação — eles valem por uma hora.
+              Peça um novo link de recuperação, eles valem por uma hora.
             </Aviso>
             <p className={estilos.rodape}>
               <Link to="/recuperar-senha">Pedir novo link</Link>

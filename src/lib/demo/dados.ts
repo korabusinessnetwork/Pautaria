@@ -1,10 +1,10 @@
 /**
- * Modo demonstração — o banco de dados que mora na memória da aba.
+ * Modo demonstração, o banco de dados que mora na memória da aba.
  *
  * Este arquivo é o espelho de `supabase/seeds/0001_oficios.sql` e de
  * `supabase/migrations/0005_planos_assinaturas.sql`: os três ofícios do
  * sistema com suas etapas, templates e exemplos, e o catálogo de planos com
- * preço e limite. Quando o seed mudar, este arquivo muda junto — é a única
+ * preço e limite. Quando o seed mudar, este arquivo muda junto, é a única
  * duplicação aceita no projeto, e ela existe para que o front possa ser
  * construído e revisado antes de existir um banco.
  *
@@ -16,7 +16,7 @@
  * e criar uma pauta que some não são revisáveis. A revisão de uma interface de
  * quadro é a revisão do gesto, não do print. Então aqui o dado é um pequeno
  * banco em memória: as funções de escrita alteram os registros de verdade, e
- * a leitura seguinte enxerga a alteração — exatamente como o TanStack Query
+ * a leitura seguinte enxerga a alteração, exatamente como o TanStack Query
  * espera após invalidar a chave.
  *
  * O estado morre com a aba. Isso é intencional: recarregar a página é o botão
@@ -26,7 +26,7 @@
  * O QUE ESTE ARQUIVO NÃO FAZ
  *
  * Não valida entrada e não simula erro do servidor. Quem valida é a camada de
- * serviços, antes do desvio de demonstração — de propósito, para que a mesma
+ * serviços, antes do desvio de demonstração, de propósito, para que a mesma
  * mensagem de erro apareça com e sem backend. E não guarda nada em disco:
  * nenhum `localStorage`, nenhum token real, nenhuma credencial.
  */
@@ -70,7 +70,7 @@ import type {
  *
  * O formato importa: `zPauta` e companhia validam `.uuid()`, e um id como
  * `pauta-1` faria o schema recusar o dado da própria demonstração. A sequência
- * também importa — ids estáveis entre execuções tornam um bug reproduzível.
+ * também importa, ids estáveis entre execuções tornam um bug reproduzível.
  */
 let sequencia = 0;
 function novoId(): string {
@@ -100,7 +100,7 @@ function copia<T>(registro: T): T {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Semente — tradução literal de supabase/seeds/0001_oficios.sql
+// Semente, tradução literal de supabase/seeds/0001_oficios.sql
 // ─────────────────────────────────────────────────────────────────────────────
 
 interface ExemploSemente {
@@ -127,7 +127,7 @@ interface OficioSemente {
   etapas: string[];
   templates: string[];
   exemplos: ExemploSemente[];
-  /** Pautas que já nascem arquivadas — a tela de arquivadas precisa de conteúdo. */
+  /** Pautas que já nascem arquivadas, a tela de arquivadas precisa de conteúdo. */
   arquivadas: ExemploSemente[];
 }
 
@@ -146,18 +146,18 @@ const OFICIOS_SEMENTE: OficioSemente[] = [
     solo: false,
     ordem: 1,
     etapas: ['Ideias', 'Roteiro', 'Produção', 'Aprovação', 'Publicado'],
-    templates: ['Post carrossel', 'Reels — vídeo curto', 'Newsletter da semana'],
+    templates: ['Post carrossel', 'Reels, vídeo curto', 'Newsletter da semana'],
     exemplos: [
       { etapa: 0, titulo: 'Série: bastidores do estúdio', campo1: 'Instagram', campo2: 'Marca · mensal', prazoDias: 3 },
-      { etapa: 1, titulo: 'Reels — 3 erros de quem começa', campo1: 'Instagram', campo2: 'Aquisição', prazoDias: 4 },
-      { etapa: 2, titulo: 'Newsletter #42 — cases', campo1: 'E-mail', campo2: 'Retenção', prazoDias: 5 },
-      { etapa: 2, titulo: 'Vídeo — tour do produto', campo1: 'YouTube', campo2: 'Lançamento', prazoDias: 10 },
-      { etapa: 3, titulo: 'Carrossel — prova social', campo1: 'Instagram', campo2: 'Aquisição', prazoDias: 2 },
-      { etapa: 4, titulo: 'Post — vaga de designer', campo1: 'LinkedIn', campo2: 'Marca', prazoDias: -2 },
+      { etapa: 1, titulo: 'Reels, 3 erros de quem começa', campo1: 'Instagram', campo2: 'Aquisição', prazoDias: 4 },
+      { etapa: 2, titulo: 'Newsletter #42, cases', campo1: 'E-mail', campo2: 'Retenção', prazoDias: 5 },
+      { etapa: 2, titulo: 'Vídeo, tour do produto', campo1: 'YouTube', campo2: 'Lançamento', prazoDias: 10 },
+      { etapa: 3, titulo: 'Carrossel, prova social', campo1: 'Instagram', campo2: 'Aquisição', prazoDias: 2 },
+      { etapa: 4, titulo: 'Post, vaga de designer', campo1: 'LinkedIn', campo2: 'Marca', prazoDias: -2 },
     ],
     arquivadas: [
       { etapa: 4, titulo: 'Retrospectiva de junho', campo1: 'Blog', campo2: 'Marca', prazoDias: -21 },
-      { etapa: 4, titulo: 'Reels — bastidores do lançamento', campo1: 'Instagram', campo2: 'Lançamento', prazoDias: -14 },
+      { etapa: 4, titulo: 'Reels, bastidores do lançamento', campo1: 'Instagram', campo2: 'Lançamento', prazoDias: -14 },
     ],
   },
   {
@@ -205,7 +205,7 @@ const OFICIOS_SEMENTE: OficioSemente[] = [
       { etapa: 0, titulo: 'Marcar dentista', campo1: 'Rápida', campo2: 'Baixa', prazoDias: null },
       { etapa: 1, titulo: 'Treino de força', campo1: 'Saúde', campo2: 'Alta', prazoDias: 0 },
       { etapa: 1, titulo: 'Revisar orçamento do mês', campo1: 'Casa', campo2: 'Média', prazoDias: 0 },
-      { etapa: 2, titulo: 'Capítulo 4 — curso de UX', campo1: 'Estudo', campo2: 'Alta', prazoDias: 4 },
+      { etapa: 2, titulo: 'Capítulo 4, curso de UX', campo1: 'Estudo', campo2: 'Alta', prazoDias: 4 },
       { etapa: 3, titulo: 'Planejar viagem de setembro', campo1: 'Planejamento', campo2: null, prazoDias: -5 },
     ],
     arquivadas: [
@@ -214,7 +214,7 @@ const OFICIOS_SEMENTE: OficioSemente[] = [
   },
 ];
 
-/** Catálogo de planos — espelha o insert da migration 0005. */
+/** Catálogo de planos, espelha o insert da migration 0005. */
 const PLANOS_SEMENTE: PlanoCatalogo[] = [
   {
     chave: 'solo',
@@ -296,7 +296,7 @@ const PLANOS_SEMENTE: PlanoCatalogo[] = [
  * É Estúdio com três membros de propósito, e a combinação não é descuido: o
  * limite de membros do Estúdio é 1, então a tela de Equipe abre com a lista
  * cheia **e** com o botão de convidar desabilitado explicando o motivo. As duas
- * coisas que precisam ser revisadas — conteúdo e prevenção de erro — aparecem
+ * coisas que precisam ser revisadas, conteúdo e prevenção de erro, aparecem
  * na mesma tela. Trocar para 'time' aqui devolve o caminho feliz do convite.
  */
 const PLANO_DEMO: Plano = 'estudio';
@@ -523,7 +523,7 @@ function semear(): BancoDemo {
  * Uma sessão com a forma que o `supabase-js` devolveria.
  *
  * Os tokens são a string `demonstracao`, e isso é seguro por construção: em
- * modo demo nenhuma chamada sai da máquina — os serviços desviam antes de
+ * modo demo nenhuma chamada sai da máquina, os serviços desviam antes de
  * tocar no cliente. O `as unknown as Session` existe porque o tipo do SDK
  * carrega dezenas de campos que uma demonstração não tem como preencher com
  * honestidade; inventar valores para todos seria pior do que assumir o recorte.
@@ -727,7 +727,7 @@ export function renomearQuadro(id: string, titulo: string): void {
 }
 
 /**
- * Troca o ofício do quadro levando as pautas junto — "a pauta viaja junto".
+ * Troca o ofício do quadro levando as pautas junto, "a pauta viaja junto".
  * A etapa de destino é a de mesma ordem; quando o ofício novo tem menos
  * colunas, a pauta cai na última, que é onde um humano a procuraria.
  */

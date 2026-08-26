@@ -1,19 +1,19 @@
 /**
- * Sidebar — quadros, ofícios, modelos e o chip do usuário.
+ * Sidebar, quadros, ofícios, modelos e o chip do usuário.
  *
  * A ordem das seções segue a hierarquia real do produto: primeiro **qual
  * quadro**, depois **qual ofício** aquele quadro fala. Invertê-la sugeriria que
- * o ofício é uma preferência global, quando na verdade ele pertence ao quadro —
+ * o ofício é uma preferência global, quando na verdade ele pertence ao quadro,
  * dois quadros do mesmo workspace podem ter sotaques diferentes.
  *
  * O seletor de ofício é o coração da promessa "troque quando quiser". Clicar
  * num ofício diferente chama `trocar_oficio_quadro`, que remapeia as pautas
- * pela ordem das etapas dentro de uma transação — nada se perde, e a UI inteira
+ * pela ordem das etapas dentro de uma transação, nada se perde, e a UI inteira
  * se re-tematiza porque as variáveis CSS mudam na raiz.
  *
  * Repare no que **não** existe aqui: nenhum nome de ofício escrito no código,
  * nenhuma cor fixa, nenhum `if`. A lista vem do banco e o glifo de cada item é
- * pintado com o accent do próprio ofício, não com o do tema ativo — é o que
+ * pintado com o accent do próprio ofício, não com o do tema ativo, é o que
  * deixa a troca legível antes de acontecer.
  */
 
@@ -72,7 +72,7 @@ export function Sidebar({ aoUsarTemplate }: Props) {
   /**
    * O seletor pede o ofício de cada quadro para pintar o glifo com o accent
    * certo. O contexto entrega as duas listas separadas, então o casamento
-   * acontece aqui — e não dentro do seletor, que assim continua sendo um
+   * acontece aqui, e não dentro do seletor, que assim continua sendo um
    * componente de props puras, testável sem contexto.
    */
   const quadrosDoSeletor = useMemo<QuadroDoSeletor[]>(

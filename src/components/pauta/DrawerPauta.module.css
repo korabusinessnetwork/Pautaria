@@ -49,7 +49,7 @@
   color: var(--tinta);
 }
 
-/* O título é editável no lugar — clicar e digitar, sem modal de edição. */
+/* O título é editável no lugar, clicar e digitar, sem modal de edição. */
 .titulo {
   font-family: var(--fonte-display);
   font-weight: var(--peso-semi);

@@ -1,5 +1,5 @@
 /**
- * Faixa de configuração ausente — o aviso que não bloqueia.
+ * Faixa de configuração ausente, o aviso que não bloqueia.
  *
  * Substituiu uma tela cheia que tomava o app inteiro quando faltava `.env`. A
  * troca veio de um problema concreto: a landing é **pública**, e a tela cheia
@@ -8,7 +8,7 @@
  *
  * O raciocínio que sustenta o formato novo: em produção isto nunca aparece,
  * porque `vite.config.ts` recusa o build sem as variáveis. Logo, a tela de
- * configuração sempre foi um recurso de desenvolvimento — e um recurso de
+ * configuração sempre foi um recurso de desenvolvimento, e um recurso de
  * desenvolvimento não deveria impedir o desenvolvimento.
  *
  * Agora o app monta normalmente. As telas públicas funcionam; as que precisam
@@ -33,7 +33,7 @@ export function AvisoConfiguracao() {
     <div className={estilos.faixa} role="status">
       <span className={estilos.texto}>
         <strong>Sem configuração.</strong> Faltam <code>VITE_SUPABASE_URL</code> e{' '}
-        <code>VITE_SUPABASE_ANON_KEY</code> — as telas públicas funcionam, as que
+        <code>VITE_SUPABASE_ANON_KEY</code>, as telas públicas funcionam, as que
         precisam de banco não. Veja <strong>INSTALACAO.md</strong>.
       </span>
 
@@ -44,7 +44,7 @@ export function AvisoConfiguracao() {
           ativarDemo();
           // Recarrega em vez de re-renderizar: `configuracaoOk` e o cliente
           // Supabase são avaliados uma vez, no carregamento do módulo. Um
-          // recarregamento honesto é mais simples — e mais confiável — do que
+          // recarregamento honesto é mais simples, e mais confiável, do que
           // reconstruir esse estado em runtime.
           window.location.reload();
         }}

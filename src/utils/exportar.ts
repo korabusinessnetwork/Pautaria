@@ -2,7 +2,7 @@
  * Exportação de pautas para CSV.
  *
  * Função pura: entra dado de domínio, sai uma string. Quem transforma isso em
- * download (Blob, `URL.createObjectURL`, âncora clicada) é o componente — assim
+ * download (Blob, `URL.createObjectURL`, âncora clicada) é o componente, assim
  * o formato do arquivo pode ser testado sem DOM, e é onde mora a parte que
  * realmente pode dar errado.
  *
@@ -16,7 +16,7 @@
  *    executar comando no Windows via DDE. É vetor de ataque real e catalogado
  *    (OWASP "CSV Injection"), e o Pautaria é multi-tenant: o título vem de uma
  *    pessoa e o arquivo é aberto por outra. A defesa é prefixar com aspa
- *    simples — a planilha passa a tratar a célula como texto e não mostra a
+ *    simples, a planilha passa a tratar a célula como texto e não mostra a
  *    aspa. Aspas em volta do campo **não** resolvem: elas são sintaxe de CSV,
  *    consumida no parse, e a fórmula chega intacta na célula.
  *
@@ -27,7 +27,7 @@
  * 3. **Acentuação.** Sem BOM, o Excel no Windows lê o arquivo como Latin-1 e
  *    "Revisão" vira "RevisÃ£o". Três bytes no começo do arquivo resolvem.
  *
- * Os cabeçalhos vêm do **ofício** (`campo1Label`, `campo2Label`) — "Canal",
+ * Os cabeçalhos vêm do **ofício** (`campo1Label`, `campo2Label`), "Canal",
  * "Sprint", "Contexto". Nenhum rótulo fixo aqui dentro: um ofício novo é uma
  * linha em `oficios`, e a exportação acompanha sem tocar neste arquivo.
  */
@@ -66,13 +66,13 @@ export interface EntradaCsv {
   /**
    * Separador de campo. O padrão é a vírgula do RFC 4180, que é o que Sheets,
    * LibreOffice e Numbers abrem direto. O Excel em pt-BR usa ponto e vírgula
-   * como separador de lista e joga tudo numa coluna só — por isso o parâmetro
+   * como separador de lista e joga tudo numa coluna só, por isso o parâmetro
    * existe, para quando a UI quiser oferecer a escolha.
    */
   separador?: string;
 }
 
-/** Byte order mark — o que faz o Excel entender que o arquivo é UTF-8. */
+/** Byte order mark, o que faz o Excel entender que o arquivo é UTF-8. */
 const BOM = '\uFEFF';
 
 /** RFC 4180 pede CRLF entre registros, e é o que o Excel espera. */
@@ -80,7 +80,7 @@ const FIM_DE_LINHA = '\r\n';
 
 /**
  * Caracteres que abrem fórmula numa planilha. TAB e CR entram na lista porque
- * o Excel os descarta antes de avaliar a célula — `\t=1+1` é fórmula.
+ * o Excel os descarta antes de avaliar a célula, `\t=1+1` é fórmula.
  */
 const ABRE_FORMULA = /^[=+\-@\t\r]/;
 
@@ -91,7 +91,7 @@ const ABRE_FORMULA = /^[=+\-@\t\r]/;
  * para "isto é texto literal": ela é consumida na exibição, então "-3" continua
  * aparecendo como -3 na planilha. O preço é que a aspa **aparece** se o arquivo
  * for lido como texto puro. Trocamos essa estranheza por não executar código de
- * terceiro na máquina de quem abre o arquivo — não é um empate difícil.
+ * terceiro na máquina de quem abre o arquivo, não é um empate difícil.
  */
 function neutralizarFormula(valor: string): string {
   return ABRE_FORMULA.test(valor) ? `'${valor}` : valor;
@@ -119,7 +119,7 @@ function celula(valor: string | null | undefined): string {
  * Gera o CSV das pautas.
  *
  * As linhas saem na ordem das etapas do ofício (a mesma ordem das colunas do
- * quadro), preservando a ordem recebida dentro de cada etapa — quem exporta
+ * quadro), preservando a ordem recebida dentro de cada etapa, quem exporta
  * espera reencontrar o quadro na planilha, não uma lista embaralhada.
  */
 export function gerarCsvPautas({
@@ -131,7 +131,7 @@ export function gerarCsvPautas({
   const nomeDaEtapa = new Map(oficio.etapas.map((e) => [e.id, e.nome]));
   const nomeDaPessoa = new Map(membros.map((m) => [m.userId, m.nome]));
 
-  // Ofício solo esconde responsável por definição — a coluna não fica vazia,
+  // Ofício solo esconde responsável por definição, a coluna não fica vazia,
   // ela não existe. Mesma regra que a Topbar aplica aos avatares.
   const comResponsavel = !oficio.solo && membros.length > 0;
 

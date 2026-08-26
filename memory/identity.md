@@ -1,4 +1,4 @@
-# Identidade — Pautaria
+# Identidade, Pautaria
 
 ## Objetivo
 Ser a fonte oficial de verdade sobre **o que o Pautaria é**: propósito, público, promessa,
@@ -8,13 +8,13 @@ errada ou exige mudança deliberada dele (com ADR).
 ## Contexto
 Produto nasce de um handoff de design hi-fi, não de um documento de requisitos. Sem um
 registro explícito da identidade, cada feature nova tende a puxar o produto na direção de
-"mais um Trello com temas" — que é exatamente o que ele não é. Consultar antes de propor
+"mais um Trello com temas", que é exatamente o que ele não é. Consultar antes de propor
 qualquer feature, mudança de fluxo ou copy.
 
 ## Regras Gerais
 - Mudança de propósito, público-alvo ou promessa central exige ADR em `docs/08_DECISOES/`.
 - Ajuste de tom de voz e copy pode ser feito direto, com registro de data e autor.
-- Nenhuma entrada aqui descreve implementação — implementação mora em `docs/`.
+- Nenhuma entrada aqui descreve implementação, implementação mora em `docs/`.
 
 ## Validações
 - Toda alteração de posicionamento precisa citar o sinal que a motivou (conversa com
@@ -33,8 +33,8 @@ qualquer feature, mudança de fluxo ou copy.
 - Autor e data em cada alteração. Revisão recomendada a cada trimestre.
 
 ## Eventos
-- `identity.updated` — propósito, público ou promessa alterados
-- `identity.reviewed` — revisão periódica concluída sem mudança
+- `identity.updated`, propósito, público ou promessa alterados
+- `identity.reviewed`, revisão periódica concluída sem mudança
 
 ## Configurações Futuras
 - Integrar ao onboarding de novos colaboradores/agentes como primeira leitura obrigatória.
@@ -65,7 +65,7 @@ escolher o ofício **é** a configuração.
 > **Toda pauta tem um sotaque.**
 
 As etapas, os campos, a terminologia, a cor e os templates se ajustam a como a pessoa
-trabalha — não o contrário. E trocar de sotaque é livre: a pauta viaja junto.
+trabalha, não o contrário. E trocar de sotaque é livre: a pauta viaja junto.
 
 ## Público-alvo
 
@@ -73,9 +73,9 @@ Profissionais e times de 1 a 8 pessoas, em português, que trabalham por fluxo:
 
 | Persona | Contexto | Vocabulário | O que a faz ficar |
 |---|---|---|---|
-| **Rebeca** — social media | Agência de 4 pessoas, calendário editorial | canal, campanha, roteiro | Saber o que está em aprovação hoje, sem abrir planilha |
-| **Alan** — tech lead | Squad de 5, sem processo de Jira | sprint, estimativa, code review | Backlog → deploy num trilho só, sem cerimônia |
-| **Matheus** — autônomo | Trabalha sozinho | contexto, energia | A semana em quatro colunas honestas, sem responsável nem avatar |
+| **Rebeca**, social media | Agência de 4 pessoas, calendário editorial | canal, campanha, roteiro | Saber o que está em aprovação hoje, sem abrir planilha |
+| **Alan**, tech lead | Squad de 5, sem processo de Jira | sprint, estimativa, code review | Backlog → deploy num trilho só, sem cerimônia |
+| **Matheus**, autônomo | Trabalha sozinho | contexto, energia | A semana em quatro colunas honestas, sem responsável nem avatar |
 
 Fora do alvo hoje: empresas grandes com processo de compra, times que precisam de campos
 customizados arbitrários, quem quer substituir Jira ou Asana em escala.
@@ -85,14 +85,14 @@ customizados arbitrários, quem quer substituir Jira ou Asana em escala.
 1. **Zero configuração até o valor.** Escolher o ofício entrega quadro, colunas, campos e
    pautas de exemplo. Nenhuma tela de setup no caminho.
 2. **Vocabulário de quem usa.** O card de marketing diz "Canal"; o de dev diz "Sprint". A
-   diferença não é cosmética — é o que faz o quadro parecer construído para aquela pessoa.
+   diferença não é cosmética, é o que faz o quadro parecer construído para aquela pessoa.
 3. **Um ofício novo é uma linha no banco.** O produto escala em nichos sem escalar em
    código.
 
 ## Aha moments
 
 1. Escolher o ofício e cair num quadro **já povoado e já tematizado**.
-2. Trocar de ofício na sidebar e ver o workspace inteiro se re-tematizar — sem reload,
+2. Trocar de ofício na sidebar e ver o workspace inteiro se re-tematizar, sem reload,
    sem perder pauta.
 
 ## Tom de voz
@@ -131,7 +131,7 @@ processos). O Pautaria é a ferramenta que **já sabe** como o seu ofício traba
 ## Modelo de negócio
 
 Assinatura recorrente (Asaas), cobrada do **workspace** e não do usuário. `solo` gratuito
-como trial permanente — é o funil, não uma amostra temporal. `estudio` R$ 29/mês para quem
+como trial permanente, é o funil, não uma amostra temporal. `estudio` R$ 29/mês para quem
 vive de pauta; `time` R$ 79/mês quando entram outras pessoas.
 
 ## Roadmap

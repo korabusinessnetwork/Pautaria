@@ -3,7 +3,7 @@ import { accentDe, avatarDe, variaveisDeAccent } from './tema';
 
 describe('accentDe', () => {
   it('deriva as quatro variações do handoff', () => {
-    // Ofício de Marketing: hue 45, chroma .16 — os valores do protótipo.
+    // Ofício de Marketing: hue 45, chroma .16, os valores do protótipo.
     expect(accentDe(45, 0.16)).toEqual({
       ac: 'oklch(60% 0.16 45)',
       acSoft: 'oklch(60% 0.16 45 / .13)',

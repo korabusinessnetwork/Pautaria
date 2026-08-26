@@ -2,13 +2,13 @@
  * Aceitar convite.
  *
  * O token vem na querystring (`/convite?t=…`) e é trocado por um vínculo via
- * RPC. Aceita automaticamente ao abrir: a pessoa já clicou uma vez, no e-mail —
+ * RPC. Aceita automaticamente ao abrir: a pessoa já clicou uma vez, no e-mail,
  * pedir um segundo clique para confirmar o que ela acabou de decidir é atrito
  * sem função.
  *
  * A mensagem de erro é deliberadamente única para todos os casos (token
  * inexistente, expirado, já usado, e-mail diferente). Distinguir os casos
- * ensinaria a sondar tokens — e a RPC do banco já se comporta assim
+ * ensinaria a sondar tokens, e a RPC do banco já se comporta assim
  * (migration 0008).
  */
 

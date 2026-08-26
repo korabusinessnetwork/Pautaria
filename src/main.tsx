@@ -13,7 +13,7 @@ import './styles/base.css';
 
 /**
  * Cache do servidor. `staleTime` de 30 s porque um quadro de pautas não muda a
- * cada segundo, e o Realtime já invalida quando muda de verdade — refetch
+ * cada segundo, e o Realtime já invalida quando muda de verdade, refetch
  * agressivo aqui só gastaria banda para reconfirmar o que já sabemos.
  *
  * `retry: 1` e não 3: o que costuma falhar neste app é permissão ou limite de
@@ -39,8 +39,8 @@ if (!raiz) throw new Error('Elemento #root não encontrado.');
  * O app **sempre** monta.
  *
  * A versão anterior trocava a árvore inteira por uma tela de configuração
- * quando faltava `.env`. Isso escondia as telas públicas — inclusive a landing,
- * que não depende de backend nenhum — e impedia trabalhar no front sem subir o
+ * quando faltava `.env`. Isso escondia as telas públicas, inclusive a landing,
+ * que não depende de backend nenhum, e impedia trabalhar no front sem subir o
  * Supabase.
  *
  * Em produção a questão nem existe: `vite.config.ts` recusa o build sem as

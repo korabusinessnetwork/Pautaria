@@ -1,9 +1,9 @@
 /**
- * Topbar — título, contador, busca, alternador de visão e a nova pauta.
+ * Topbar, título, contador, busca, alternador de visão e a nova pauta.
  *
  * O título do quadro vem do ofício ("Pauta de conteúdo", "Pauta do time",
  * "Minha semana"), não de uma string no componente. Os avatares só aparecem
- * quando o ofício **não** é solo — o ofício de Produtividade esconde
+ * quando o ofício **não** é solo, o ofício de Produtividade esconde
  * responsável por definição, mesmo num workspace do plano Time. Essa é a
  * diferença entre configuração por tenant e configuração por contexto de uso, e
  * o produto precisa das duas.
@@ -44,7 +44,7 @@ export function Topbar({
   const { oficioAtivo, quadroAtivo } = useWorkspace();
   const limites = useLimites(pautasNoQuadro);
 
-  // Ofício solo esconde a equipe inteira — é uma escolha do ofício, não do plano.
+  // Ofício solo esconde a equipe inteira, é uma escolha do ofício, não do plano.
   const mostrarEquipe = !oficioAtivo?.solo && membros.length > 1;
 
   const visiveis = useMemo(() => membros.slice(0, 3), [membros]);

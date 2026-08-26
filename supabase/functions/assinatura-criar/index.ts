@@ -1,5 +1,5 @@
 /**
- * assinatura-criar — contrata um plano pago.
+ * assinatura-criar, contrata um plano pago.
  *
  * Só o dono do workspace chama. Devolve a URL da fatura hospedada pela Asaas,
  * para onde o front redireciona. O plano **não** é liberado aqui: quem libera é
@@ -7,14 +7,14 @@
  * o produto de graça a quem gera boleto e não paga.
  *
  * Ordem das operações e por quê:
- *   1. grava a assinatura local como `pendente` — ANTES de falar com a Asaas
+ *   1. grava a assinatura local como `pendente`, ANTES de falar com a Asaas
  *   2. cria cliente e assinatura na Asaas
  *   3. atualiza a linha local com os ids do provedor
  *
  * O passo 1 vir primeiro não é detalhe de estilo. O índice único parcial
  * `assinaturas_viva_por_workspace_idx` transforma esse INSERT numa trava: dois
  * cliques no botão, ou duas abas, produzem duas requisições simultâneas, e a
- * segunda bate no índice e para — antes de criar uma segunda assinatura na
+ * segunda bate no índice e para, antes de criar uma segunda assinatura na
  * Asaas e cobrar o cliente duas vezes. Se falássemos com a Asaas primeiro, a
  * trava chegaria tarde demais.
  */
@@ -112,7 +112,7 @@ Deno.serve(comEnvelope(async (req, origem) => {
   try {
     // ── Passo 2: cliente na Asaas ──────────────────────────────────────────
     // Reaproveitamos o cliente já vinculado ao workspace; se não houver,
-    // procuramos pelo documento antes de criar — a Asaas recusa CPF duplicado,
+    // procuramos pelo documento antes de criar, a Asaas recusa CPF duplicado,
     // e um usuário que troca de workspace usa o mesmo CPF.
     let customerId = workspace.asaas_customer_id;
 
@@ -164,7 +164,7 @@ Deno.serve(comEnvelope(async (req, origem) => {
     // ── Passo 4: a primeira fatura ─────────────────────────────────────────
     // A Asaas gera a cobrança de forma assíncrona. Se ela ainda não apareceu, o
     // webhook PAYMENT_CREATED grava depois e o usuário chega à fatura pelo
-    // portal — não é motivo para falhar o checkout inteiro.
+    // portal, não é motivo para falhar o checkout inteiro.
     const cobrancas = await asaas.cobrancasDaAssinatura(assinaturaAsaas.id);
     const primeira = cobrancas[0];
 
@@ -206,7 +206,7 @@ Deno.serve(comEnvelope(async (req, origem) => {
     }, origem);
   } catch (erro) {
     // A assinatura local só existe para travar o caminho concorrente. Se o
-    // provedor recusou, ela não pode sobreviver — senão o usuário fica travado
+    // provedor recusou, ela não pode sobreviver, senão o usuário fica travado
     // num `plano_ja_ativo` fantasma e sem como contratar.
     await desfazer();
     throw erro;

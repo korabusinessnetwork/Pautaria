@@ -1,5 +1,5 @@
 /**
- * Workspaces — o tenant.
+ * Workspaces, o tenant.
  *
  * Nenhuma função aqui escreve `plano`, `status` ou `plano_expira_em`: o grant
  * de coluna do banco não permite (migration 0002), e é assim de propósito. Se
@@ -57,7 +57,7 @@ export interface NovoWorkspace {
  *
  * Fazer isso em três chamadas do cliente pareceria mais simples e criaria um
  * caso ruim: falhar entre a segunda e a terceira deixa o usuário num workspace
- * com quadro vazio, sem saber o que aconteceu — e sem caminho de volta, porque
+ * com quadro vazio, sem saber o que aconteceu, e sem caminho de volta, porque
  * o limite do plano Solo já foi consumido pelo quadro que ele não pediu.
  */
 export async function criarWorkspace(entrada: NovoWorkspace): Promise<{
@@ -121,7 +121,7 @@ export async function salvarTema(
 }
 
 export async function excluirWorkspace(id: string): Promise<void> {
-  // Em demonstração não há o que excluir — o tenant é o próprio cenário. A
+  // Em demonstração não há o que excluir, o tenant é o próprio cenário. A
   // chamada devolve sucesso para que a tela de confirmação siga o fluxo dela.
   const d = import.meta.env.DEV ? await seDemo(() => true) : null;
   if (d) return;
@@ -131,7 +131,7 @@ export async function excluirWorkspace(id: string): Promise<void> {
 }
 
 /**
- * Uso vs. limites. É o que permite desabilitar o botão *antes* do clique —
+ * Uso vs. limites. É o que permite desabilitar o botão *antes* do clique,
  * prevenção de erro em vez de mensagem de erro (CLAUDE.md, princípio nº 1).
  * A view respeita RLS via `security_invoker` (migration 0007).
  */
@@ -150,7 +150,7 @@ export async function carregarUso(workspaceId: string): Promise<Uso | null> {
   return validarUm(zUso, data, 'v_uso_workspace');
 }
 
-/** Meu papel neste workspace — define o que a UI mostra e o que ela esconde. */
+/** Meu papel neste workspace, define o que a UI mostra e o que ela esconde. */
 export async function meuPapel(workspaceId: string): Promise<'owner' | 'admin' | 'membro' | null> {
   const d = import.meta.env.DEV ? await seDemo(() => ({ v: demo.papel() })) : null;
   if (d) return d.v;

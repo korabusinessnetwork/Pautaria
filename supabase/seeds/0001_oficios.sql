@@ -1,9 +1,9 @@
 -- ═══════════════════════════════════════════════════════════════════════════
--- Seed — os três ofícios do sistema
+-- Seed, os três ofícios do sistema
 --
 -- Esta é a tradução direta do bloco `NICHES` do protótipo de design para dados.
 -- É a prova do princípio central do Pautaria: o produto inteiro que o usuário
--- experimenta — colunas, rótulos, cores, templates, exemplos — cabe neste
+-- experimenta, colunas, rótulos, cores, templates, exemplos, cabe neste
 -- arquivo. Nenhum componente React precisa saber que "Marketing" existe.
 --
 -- Idempotente: `supabase db reset` roda de novo sem duplicar nem falhar.
@@ -30,7 +30,7 @@ on conflict do nothing;
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- Etapas — as colunas do quadro
+-- Etapas, as colunas do quadro
 -- ─────────────────────────────────────────────────────────────────────────────
 with dados(chave, nome, ordem) as (values
   ('mkt',  'Ideias',      0), ('mkt',  'Roteiro',     1), ('mkt',  'Produção',    2),
@@ -53,11 +53,11 @@ select o.id, d.nome, d.ordem::smallint
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- Templates — as pautas de um clique da sidebar
+-- Templates, as pautas de um clique da sidebar
 -- ─────────────────────────────────────────────────────────────────────────────
 with dados(chave, nome, ordem) as (values
   ('mkt',  'Post carrossel',        0),
-  ('mkt',  'Reels — vídeo curto',   1),
+  ('mkt',  'Reels, vídeo curto',   1),
   ('mkt',  'Newsletter da semana',  2),
 
   ('ti',   'Bugfix',                0),
@@ -79,21 +79,21 @@ select o.id, d.nome, d.ordem::smallint
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- Exemplos — as pautas que já estão no quadro quando ele abre
+-- Exemplos, as pautas que já estão no quadro quando ele abre
 --
 -- `prazo_dias` é relativo ao dia da criação do workspace. Negativo = já venceu
--- (a pauta publicada da semana passada, a tarefa que ficou para trás) — porque
+-- (a pauta publicada da semana passada, a tarefa que ficou para trás), porque
 -- um quadro real tem as duas coisas, e um quadro só com prazos futuros parece
 -- um catálogo, não um trabalho em andamento.
 -- ─────────────────────────────────────────────────────────────────────────────
 with dados(chave, etapa_ordem, titulo, campo1, campo2, prazo_dias, ordem) as (values
   -- Marketing
   ('mkt',  0, 'Série: bastidores do estúdio',    'Instagram', 'Marca · mensal',  3,   0),
-  ('mkt',  1, 'Reels — 3 erros de quem começa',  'Instagram', 'Aquisição',       4,   1),
-  ('mkt',  2, 'Newsletter #42 — cases',          'E-mail',    'Retenção',        5,   2),
-  ('mkt',  2, 'Vídeo — tour do produto',         'YouTube',   'Lançamento',      10,  3),
-  ('mkt',  3, 'Carrossel — prova social',        'Instagram', 'Aquisição',       2,   4),
-  ('mkt',  4, 'Post — vaga de designer',         'LinkedIn',  'Marca',           -2,  5),
+  ('mkt',  1, 'Reels, 3 erros de quem começa',  'Instagram', 'Aquisição',       4,   1),
+  ('mkt',  2, 'Newsletter #42, cases',          'E-mail',    'Retenção',        5,   2),
+  ('mkt',  2, 'Vídeo, tour do produto',         'YouTube',   'Lançamento',      10,  3),
+  ('mkt',  3, 'Carrossel, prova social',        'Instagram', 'Aquisição',       2,   4),
+  ('mkt',  4, 'Post, vaga de designer',         'LinkedIn',  'Marca',           -2,  5),
 
   -- TI · Dev
   ('ti',   0, 'Migrar fila para worker',         'Sprint 15', '8 pts',           15,  0),
@@ -106,7 +106,7 @@ with dados(chave, etapa_ordem, titulo, campo1, campo2, prazo_dias, ordem) as (va
   ('prod', 0, 'Marcar dentista',                 'Rápida',       'Baixa',        null, 0),
   ('prod', 1, 'Treino de força',                 'Saúde',        'Alta',         0,    1),
   ('prod', 1, 'Revisar orçamento do mês',        'Casa',         'Média',        0,    2),
-  ('prod', 2, 'Capítulo 4 — curso de UX',        'Estudo',       'Alta',         4,    3),
+  ('prod', 2, 'Capítulo 4, curso de UX',        'Estudo',       'Alta',         4,    3),
   ('prod', 3, 'Planejar viagem de setembro',     'Planejamento', null,           -5,   4)
 )
 insert into public.oficio_exemplos

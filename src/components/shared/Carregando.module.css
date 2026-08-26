@@ -15,7 +15,7 @@
   padding: var(--esp-7);
 }
 
-/* Três pinos pulsando — o mesmo pino de 7px que prende os cards no quadro.
+/* Três pinos pulsando, o mesmo pino de 7px que prende os cards no quadro.
    Um spinner genérico seria mais rápido de escrever e não pertenceria a este
    produto.                                                                   */
 .pinos {

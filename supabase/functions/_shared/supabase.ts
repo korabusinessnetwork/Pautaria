@@ -4,17 +4,17 @@
  * Dois clientes, dois propósitos, e a diferença entre eles é a linha mais
  * importante deste arquivo:
  *
- *   • `clienteDoUsuario(req)` — carrega o JWT de quem chamou e respeita a RLS.
+ *   • `clienteDoUsuario(req)`, carrega o JWT de quem chamou e respeita a RLS.
  *     Serve para responder "quem é você?".
  *
- *   • `clienteAdmin()` — usa a `service_role`, que **ignora toda a RLS**. Serve
+ *   • `clienteAdmin()`, usa a `service_role`, que **ignora toda a RLS**. Serve
  *     para escrever nas tabelas financeiras, que nenhum cliente pode tocar.
  *
  * Regra de uso: toda leitura de identidade vem do primeiro; toda escrita
  * privilegiada vem do segundo, e sempre **depois** de uma verificação explícita
  * de papel. O erro clássico é usar o admin para ler o `workspaceId` que veio no
  * corpo da requisição sem conferir se quem pediu tem algo a ver com aquele
- * workspace — e aí o service_role vira uma API pública de escrever no tenant
+ * workspace, e aí o service_role vira uma API pública de escrever no tenant
  * dos outros. Por isso `exigirDonoDoWorkspace` existe e é chamada em toda
  * função que escreve.
  */
@@ -49,7 +49,7 @@ export interface UsuarioAutenticado {
 
 /**
  * Resolve o usuário do JWT. As funções de assinatura sobem com
- * `verify_jwt = true`, então um token inválido nem chega aqui — mas confiar
+ * `verify_jwt = true`, então um token inválido nem chega aqui, mas confiar
  * nisso e seguir sem `getUser()` deixaria a função dependente de uma linha do
  * `config.toml` para não virar um endpoint anônimo. Verificamos de novo.
  */
@@ -81,8 +81,8 @@ export interface WorkspaceResumo {
  * A consulta usa o cliente admin de propósito: precisamos distinguir "não é
  * membro" de "workspace não existe" para escolher a mensagem, e com o cliente
  * do usuário os dois casos seriam indistinguíveis (a RLS esconde os dois do
- * mesmo jeito). A resposta ao cliente, porém, é a mesma nos dois casos —
- * `nao_encontrado` — para não transformar esta função num verificador de
+ * mesmo jeito). A resposta ao cliente, porém, é a mesma nos dois casos,
+ * `nao_encontrado`, para não transformar esta função num verificador de
  * existência de workspaces alheios.
  */
 export async function exigirPapelNoWorkspace(
@@ -130,7 +130,7 @@ export function exigirDonoDoWorkspace(
   return exigirPapelNoWorkspace(admin, workspaceId, userId, ['owner']);
 }
 
-/** Registro de auditoria — fire-and-forget, nunca derruba a operação. */
+/** Registro de auditoria, fire-and-forget, nunca derruba a operação. */
 export async function auditar(
   admin: ClienteAdmin,
   entrada: {
@@ -161,7 +161,7 @@ export async function auditar(
 
 /**
  * Recalcula o plano do workspace a partir das assinaturas gravadas. Ponto único
- * de decisão — nenhuma Edge Function escreve `workspaces.plano` diretamente.
+ * de decisão, nenhuma Edge Function escreve `workspaces.plano` diretamente.
  */
 export async function aplicarEstadoAssinatura(
   admin: ClienteAdmin,

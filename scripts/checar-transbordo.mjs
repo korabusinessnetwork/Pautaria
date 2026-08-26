@@ -1,5 +1,5 @@
 /**
- * checar-transbordo.mjs — encontra quem força rolagem horizontal
+ * checar-transbordo.mjs, encontra quem força rolagem horizontal
  *
  * O transbordo lateral é o defeito de mobile mais comum e o mais difícil de
  * diagnosticar olhando: um único elemento largo demais empurra a largura do
@@ -8,14 +8,14 @@
  *
  * Este script mede em vez de adivinhar. Abre cada rota na largura de um
  * telefone, percorre o DOM e reporta os elementos cuja borda direita passa da
- * largura da janela — ordenados pelo tanto que passam.
+ * largura da janela, ordenados pelo tanto que passam.
  *
  * Sem dependência nova: o Node 22 traz `WebSocket` nativo, então o protocolo do
  * Chrome DevTools é falado direto.
  *
  * Também captura a tela de cada rota, no mesmo viewport que mediu. As duas
  * coisas moram juntas de propósito: uma captura feita numa largura diferente da
- * medição é pior que nenhuma — foi assim que "defeitos de mobile" inexistentes
+ * medição é pior que nenhuma, foi assim que "defeitos de mobile" inexistentes
  * chegaram a ser diagnosticados aqui.
  *
  * Uso:  npm run dev            # em outro terminal
@@ -51,7 +51,7 @@ const ROTAS = [
  * Roda dentro da página. Devolve os elementos que ultrapassam a largura da
  * janela, com um seletor legível para cada um.
  *
- * Ignora `position: fixed` — um elemento fixo fora da tela não gera rolagem no
+ * Ignora `position: fixed`, um elemento fixo fora da tela não gera rolagem no
  * documento. E ignora quem está dentro de um contêiner com rolagem própria
  * (`overflow-x: auto|scroll`): o trilho do kanban é largo **de propósito**, e
  * acusá-lo seria ruído.
@@ -115,7 +115,8 @@ async function cdp(ws, id, method, params = {}) {
       const msg = JSON.parse(evento.data);
       if (msg.id !== id) return;
       ws.removeEventListener('message', aoResponder);
-      msg.error ? reject(new Error(msg.error.message)) : resolve(msg.result);
+      if (msg.error) reject(new Error(msg.error.message));
+      else resolve(msg.result);
     };
     ws.addEventListener('message', aoResponder);
     ws.send(JSON.stringify({ id, method, params }));
@@ -167,7 +168,7 @@ try {
 
     // `--window-size` NÃO produz o viewport pedido: o Chromium trava a janela
     // num mínimo de 500px de largura. Medir sem esta linha reporta 500px
-    // achando que são 390 — e foi exatamente o que aconteceu na primeira
+    // achando que são 390, e foi exatamente o que aconteceu na primeira
     // rodada, produzindo "defeitos de mobile" que eram artefato da ferramenta.
     // `setDeviceMetricsOverride` é o único jeito de obter a largura real.
     await cdp(ws, 100, 'Emulation.setDeviceMetricsOverride', {
@@ -181,7 +182,7 @@ try {
     // Espera por um SINAL, não por um relógio.
     //
     // A versão anterior dormia 2,2 s fixos. Na rota mais pesada o Vite ainda
-    // estava transformando módulos, a página era medida vazia — e uma página
+    // estava transformando módulos, a página era medida vazia, e uma página
     // vazia trivialmente "não transborda". O resultado era um ✓ que não
     // significava nada, e uma captura em branco.
     //

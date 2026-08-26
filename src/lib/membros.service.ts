@@ -1,7 +1,7 @@
 /**
  * Membros e convites (plano Time).
  *
- * O token do convite é gerado aqui, no browser, com `crypto.getRandomValues` —
+ * O token do convite é gerado aqui, no browser, com `crypto.getRandomValues`,
  * e só o **hash** dele viaja para o banco. Isso significa que nem um dump do
  * Postgres nem um administrador com acesso ao painel conseguem reconstruir um
  * link de convite em aberto. O token existe em dois lugares: nesta função, por
@@ -90,7 +90,7 @@ const DIAS_DE_VALIDADE = 7;
 
 export interface ConviteCriado {
   id: string;
-  /** O link completo. **Única** vez em que o token existe — mostre e esqueça. */
+  /** O link completo. **Única** vez em que o token existe, mostre e esqueça. */
   link: string;
 }
 
@@ -186,7 +186,7 @@ export async function mudarPapel(
 }
 
 /**
- * Remove um membro — ou sai do workspace, se for você mesmo. As duas ações
+ * Remove um membro, ou sai do workspace, se for você mesmo. As duas ações
  * batem na mesma política de RLS (migration 0002), e o trigger
  * `proteger_ultimo_owner` impede deixar o workspace sem dono.
  */

@@ -1,7 +1,7 @@
-# 04 — Modelagem
+# 04, Modelagem
 
 > Fonte de verdade executável: `supabase/migrations/`. Retrato consolidado e legível:
-> `supabase/schema.sql` (gerado por `scripts/gerar-schema.sh` — não editar à mão).
+> `supabase/schema.sql` (gerado por `scripts/gerar-schema.sh`, não editar à mão).
 
 ## Mapa
 
@@ -36,13 +36,13 @@ auth.users ──1:1── profiles
 
 ### `profiles`
 Espelho de exibição de `auth.users`. Nome, e-mail, iniciais e `avatar_hue` (derivada do id
-no cadastro — mesma pessoa, mesma cor, em qualquer workspace). **Sem credencial e sem
+no cadastro, mesma pessoa, mesma cor, em qualquer workspace). **Sem credencial e sem
 CPF**: documento fiscal só trafega para a Asaas, nunca repousa aqui.
 
 *Visibilidade:* o próprio + quem divide algum workspace (`app.compartilha_workspace`). Não
 existe diretório global de usuários.
 
-### `workspaces` — o tenant
+### `workspaces`, o tenant
 Identidade (`nome`, `slug`, `tema`) + estado de cobrança (`plano`, `status`,
 `asaas_customer_id`, `plano_expira_em`).
 
@@ -58,12 +58,12 @@ PK composta `(workspace_id, user_id)` + papel. Dois triggers a protegem:
 contando convites em aberto).
 
 ### `convites`
-Guarda `token_hash` (SHA-256), nunca o token. A coluna **não está no grant de SELECT** —
+Guarda `token_hash` (SHA-256), nunca o token. A coluna **não está no grant de SELECT**,
 nem o dono do workspace a lê pela API. Aceitar é RPC que compara hashes.
 
 ### `oficios` + `oficio_etapas` + `oficio_templates` + `oficio_exemplos`
 A configuração que vira produto. Identidade visual guardada como `(hue, chroma)` e não
-como quatro strings hexadecimais — o accent é derivado, então não existe combinação "quase
+como quatro strings hexadecimais, o accent é derivado, então não existe combinação "quase
 certa" (ver `docs/02_DESIGN_SYSTEM`).
 
 Dois índices únicos **parciais** garantem a chave por escopo:
@@ -74,8 +74,8 @@ unique (workspace_id, chave)  where workspace_id is not null  -- do tenant
 Um `unique (workspace_id, chave)` simples não serviria: `NULL` nunca conflita com `NULL` no
 Postgres, e nada impediria dois ofícios de sistema com a chave `mkt`.
 
-`oficio_exemplos.prazo_dias` é **relativo**, inclusive negativo. Data absoluta envelheceria
-— ninguém quer estrear o produto com cinco pautas vencidas.
+`oficio_exemplos.prazo_dias` é **relativo**, inclusive negativo. Data absoluta envelheceria,
+ninguém quer estrear o produto com cinco pautas vencidas.
 
 ### `quadros` e `pautas`
 
@@ -89,7 +89,7 @@ denormalizados, e três chaves estrangeiras **compostas**:
 ```
 
 **Por que FK e não trigger.** Trigger é código: tem bug, tem janela de corrida, pode ser
-desabilitado. A FK composta é uma promessa do Postgres — não existe caminho, nem via API
+desabilitado. A FK composta é uma promessa do Postgres, não existe caminho, nem via API
 nem via `psql` nem via `service_role` distraída, que crie uma pauta apontando para a etapa
 de outro ofício ou o quadro de outro tenant.
 
@@ -105,11 +105,11 @@ numa transação sem estado intermediário inválido.
 ### `planos`, `assinaturas`, `cobrancas`
 
 `planos` é catálogo: preço e `limites` como JSONB. Fonte única lida pelo front **e** pela
-Edge Function — a página de preços e a cobrança real não têm como divergir.
+Edge Function, a página de preços e a cobrança real não têm como divergir.
 
 `assinaturas.valor_centavos` é **congelado na contratação**: mudar a tabela amanhã não
 altera retroativamente um contrato vigente. Índice único parcial garante no máximo uma
-assinatura viva por workspace — e é ele que funciona como trava contra clique duplo no
+assinatura viva por workspace, e é ele que funciona como trava contra clique duplo no
 checkout.
 
 `cobrancas` guarda id, status, valor, vencimento e URL da fatura. **Não guarda** número de
@@ -121,17 +121,17 @@ regressão de segurança.
 
 ### `webhook_eventos`, `rate_limit`, `audit_log`
 
-As três de defesa. As duas primeiras têm RLS ligada e **zero políticas** — que no Postgres
+As três de defesa. As duas primeiras têm RLS ligada e **zero políticas**, que no Postgres
 significa "nega tudo". Só `service_role` alcança.
 
 `audit_log` é append-only pela **ausência deliberada** de políticas de UPDATE e DELETE. A
 coluna `origem` (`cliente` | `servidor`) fica fora do grant de INSERT do cliente: uma linha
-marcada `servidor` só pode ter vindo de Edge Function. Sem isso o log seria decorativo —
+marcada `servidor` só pode ter vindo de Edge Function. Sem isso o log seria decorativo,
 qualquer usuário forjaria `assinatura.ativada`.
 
 ## View
 
-`v_uso_workspace` — uso corrente vs. limites, para a UI desabilitar antes do clique.
+`v_uso_workspace`, uso corrente vs. limites, para a UI desabilitar antes do clique.
 Declarada com `security_invoker = true`: **sem isso ela rodaria com os privilégios de quem
 a criou e devolveria o uso de todos os tenants.** Testado no Bloco 3 de `isolamento.sql`.
 

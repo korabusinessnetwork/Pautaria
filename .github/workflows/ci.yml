@@ -42,7 +42,7 @@ jobs:
 
       - name: Build de produção
         # As variáveis são obrigatórias: o plugin `exigirAmbiente` aborta o build
-        # sem elas. São valores de verificação, não segredos — a chave `anon` é
+        # sem elas. São valores de verificação, não segredos, a chave `anon` é
         # pública por design e este projeto sequer é o alvo delas.
         env:
           VITE_SUPABASE_URL: https://ci.supabase.co
@@ -52,10 +52,10 @@ jobs:
       - name: O bundle contém a aplicação
         # Guarda contra a regressão do bug B1 (memory/bugs.md): um build verde
         # produzindo bundle vazio por eliminação de código morto. Verificar o
-        # código de saída não bastaria — ele era zero.
+        # código de saída não bastaria, ele era zero.
         run: |
           if ! grep -rq "sotaque" dist/assets/*.js; then
-            echo "✗ O bundle não contém a aplicação — provável eliminação de código morto."
+            echo "✗ O bundle não contém a aplicação, provável eliminação de código morto."
             ls -la dist/assets/
             exit 1
           fi
@@ -151,7 +151,7 @@ jobs:
 
       - name: schema.sql está em dia com as migrations
         # schema.sql é gerado. Se alguém adicionar migration e esquecer de
-        # regenerar, a "fonte de verdade legível" passa a mentir — que é pior do
+        # regenerar, a "fonte de verdade legível" passa a mentir, que é pior do
         # que não existir.
         run: |
           bash scripts/gerar-schema.sh

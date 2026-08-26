@@ -1,9 +1,9 @@
-/* Atividade — linha do tempo do workspace.
+/* Atividade, linha do tempo do workspace.
 
    A régua vertical e o pino de 7px são a mesma metáfora do quadro: cada
    registro é uma ficha alfinetada numa linha, não uma célula de tabela.
 
-   O estado do pino carrega informação, não decoração — cheio quando o servidor
+   O estado do pino carrega informação, não decoração, cheio quando o servidor
    confirmou o registro, vazado quando foi só o navegador que afirmou. É a
    distinção que esta tela existe para mostrar, e ela precisa sobreviver a uma
    leitura de relance, sem exigir que se leia o texto do selo.                */

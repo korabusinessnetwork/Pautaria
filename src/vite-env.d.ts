@@ -4,7 +4,7 @@
  * Tipagem das variáveis de ambiente do front.
  *
  * A interface é fechada de propósito: declarar só as duas variáveis legítimas
- * faz o TypeScript recusar qualquer outra — a chave da Asaas, por exemplo — na
+ * faz o TypeScript recusar qualquer outra, a chave da Asaas, por exemplo, na
  * hora de escrever, e não na revisão de código. É a regra de segurança do
  * CLAUDE.md transformada em erro de compilação.
  *

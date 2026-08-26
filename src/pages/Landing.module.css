@@ -1,4 +1,4 @@
-/* Landing — a porta do funil.
+/* Landing, a porta do funil.
    Mesma linguagem visual da Abertura e da página de Preços: papel quente, wash
    radial do accent no topo, Space Grotesk no display. Nada aqui é cor ou medida
    nova: tudo sai de src/styles/tokens.css.                                    */
@@ -96,7 +96,7 @@
 }
 
 /* O H1 do handoff é 56px. O `clamp` não reinterpreta o handoff: mantém o valor
-   final em tela larga e evita que ele estoure a viewport no celular — 56px em
+   final em tela larga e evita que ele estoure a viewport no celular, 56px em
    360px de largura quebraria "sotaque." no meio.                              */
 .titulo {
   font-family: var(--fonte-display);
@@ -244,7 +244,7 @@
 }
 
 /* O bloco nasce neutro. As variáveis --tile-* chegam do ofício pelo React e só
-   entram em jogo no hover, no foco e no bloco escolhido — é o "assume o accent
+   entram em jogo no hover, no foco e no bloco escolhido, é o "assume o accent
    daquele ofício" do handoff.                                                 */
 .tile,
 .tileAtivo {
@@ -358,7 +358,7 @@
   color: var(--tile-deep);
 }
 
-/* O campo é o vocabulário do ofício — "Canal", "Sprint", "Contexto". Ele ganha
+/* O campo é o vocabulário do ofício, "Canal", "Sprint", "Contexto". Ele ganha
    o mesmo peso visual do chip preenchido do card, porque é a mesma promessa. */
 .campoTag,
 .campoTagMono {
@@ -465,7 +465,7 @@
 }
 
 /* O pino: 7px de accent no topo central, meio para fora da borda. É um dos três
-   detalhes que carregam a metáfora inteira — não vire retângulo genérico.     */
+   detalhes que carregam a metáfora inteira, não vire retângulo genérico.     */
 .pino {
   position: absolute;
   top: -3px;

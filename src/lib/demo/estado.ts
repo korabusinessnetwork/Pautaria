@@ -1,5 +1,5 @@
 /**
- * Modo demonstração — o front rodando sem backend nenhum.
+ * Modo demonstração, o front rodando sem backend nenhum.
  *
  * Existe por uma razão prática: até aqui, `npm run dev` sem `.env` mostrava a
  * tela de configuração ausente e parava. Nenhuma tela autenticada podia ser
@@ -7,7 +7,7 @@
  * exigia um jeito de rodar o front sem back.
  *
  * A camada de serviços (`src/lib/*.service.ts`) já era a única fronteira com o
- * backend — decisão do ADR-001, tomada para permitir trocar de provedor. Aqui
+ * backend, decisão do ADR-001, tomada para permitir trocar de provedor. Aqui
  * ela paga um dividendo que não estava previsto: dá para não ter provedor
  * nenhum, e nenhum componente percebe a diferença.
  *
@@ -16,12 +16,12 @@
  *
  * O caminho óbvio seria uma variável do prefixo público. Ele esbarra em `memory/restrictions.md`
  * S1: só existem duas variáveis `VITE_*`, e uma terceira seria bug de segurança
- * por construção — o plugin `exigirAmbiente` aborta o build de produção se
+ * por construção, o plugin `exigirAmbiente` aborta o build de produção se
  * encontrar qualquer outra.
  *
  * `import.meta.env.DEV` não é variável de ambiente: é um literal que o Vite
  * substitui por `false` no build de produção, permitindo ao minificador remover
- * o código de demonstração do bundle publicado — o mesmo mecanismo de eliminação
+ * o código de demonstração do bundle publicado, o mesmo mecanismo de eliminação
  * de código morto que causou o bug B1 (`memory/learnings.md` A1), usado agora de
  * propósito e a nosso favor.
  *
@@ -58,7 +58,7 @@ export function estaEmDemo(): boolean {
     // `?demo=1` liga a demonstração já no primeiro carregamento, antes de
     // qualquer componente montar. Serve para compartilhar um link de
     // demonstração em desenvolvimento e para automação (captura de tela,
-    // teste de ponta a ponta) — que não teria como escrever no sessionStorage
+    // teste de ponta a ponta), que não teria como escrever no sessionStorage
     // antes de a página existir.
     if (new URLSearchParams(window.location.search).get('demo') === '1') {
       sessionStorage.setItem(CHAVE, '1');
@@ -91,7 +91,7 @@ export function desativarDemo(): void {
 /**
  * Simula a latência da rede.
  *
- * Sem isso, todo estado de carregamento passa batido em desenvolvimento — e
+ * Sem isso, todo estado de carregamento passa batido em desenvolvimento, e
  * estados de carregamento são requisito do princípio nº 1 (`CLAUDE.md`). Um
  * front que só é visto instantâneo é um front cujos spinners ninguém revisou.
  */
@@ -117,7 +117,7 @@ export function demora<T>(valor: T, ms = 180): Promise<T> {
  * grafo do bundler. Com ele, a expressão inteira vira `null` em tempo de build.
  * O CI reprova o build se encontrar vestígio de demonstração em `dist/`.
  *
- * Quando o retorno legítimo puder ser `null`, envolva numa caixa — `{ v }` —
+ * Quando o retorno legítimo puder ser `null`, envolva numa caixa, `{ v }`,
  * para que um nulo verdadeiro não seja confundido com "não está em demo".
  */
 export async function seDemo<T>(

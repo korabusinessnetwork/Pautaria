@@ -1,4 +1,4 @@
-# 02 — Design System
+# 02, Design System
 
 > Handoff **hi-fi**: cor, tipografia, espaçamento e microinteração são finais. Recriar
 > fielmente, não reinterpretar. Fonte: `design_handoff_pautaria/Pautaria.dc.html`.
@@ -21,7 +21,7 @@ de CSS:
 
 ## Cor
 
-### Base — nunca cinza neutro
+### Base, nunca cinza neutro
 
 ```
 fundo       #F2EFE7   papel
@@ -39,7 +39,7 @@ borda            rgba(31,27,22, .10 / .11 / .14 / .16)
 texto secundário rgba(31,27,22, .38 / .42 / .50 / .58 / .62 / .72)
 ```
 
-### Accent — derivado do ofício, em OKLCH
+### Accent, derivado do ofício, em OKLCH
 
 O accent **não é escolhido**: é calculado a partir de `(hue, chroma)` guardados na tabela
 `oficios`.
@@ -58,7 +58,7 @@ O accent **não é escolhido**: é calculado a partir de `(hue, chroma)` guardad
 | Produtividade | 265 | .13 |
 
 **Por que OKLCH e não HSL.** Em OKLCH, 60% de luminosidade é 60% em qualquer matiz. Em
-HSL, um amarelo a 60% é muito mais claro que um azul a 60% — o que faria cada ofício novo
+HSL, um amarelo a 60% é muito mais claro que um azul a 60%, o que faria cada ofício novo
 exigir ajuste manual para não ficar ilegível. Aqui um ofício novo é uma matiz, e as quatro
 variações saem corretas por construção. O `44%` do `--acDeep` é o que mantém contraste de
 texto sobre `--acSoft` em todo o círculo cromático.
@@ -66,7 +66,7 @@ texto sobre `--acSoft` em todo o círculo cromático.
 Implementação: `src/utils/tema.ts` (`accentDe`, `aplicarAccentGlobal`), testado em
 `tema.test.ts`.
 
-### Semânticos — fora do accent
+### Semânticos, fora do accent
 
 Perigo e atraso têm cor própria, porque uma ação destrutiva precisa ler como destrutiva
 mesmo num ofício de matiz avermelhada.
@@ -121,7 +121,7 @@ cada `22px`.
 
 ## Sombra
 
-Deslocamento negativo grande e opacidade baixa — o card levanta do papel sem ganhar
+Deslocamento negativo grande e opacidade baixa, o card levanta do papel sem ganhar
 contorno escuro.
 
 ```
@@ -157,7 +157,7 @@ Todo componente que carrega dado tem os quatro. Ausência de qualquer um é bug 
 | Erro | mensagem humana + próxima ação | "Seu plano atingiu o limite. **Ver planos →**" |
 | Sucesso | feedback visível | "Copiado ✓" |
 
-O indicador de carregamento são **três pinos pulsando** — o mesmo pino de 7px do card. Um
+O indicador de carregamento são **três pinos pulsando**, o mesmo pino de 7px do card. Um
 spinner genérico seria mais rápido de escrever e não pertenceria a este produto.
 
 ## Foco
@@ -179,4 +179,4 @@ O design system é **único**; o que varia por tenant é o preenchimento dos tok
 - `workspaces.tema.nomeExibicao` substitui o wordmark da sidebar.
 - `workspaces.tema.logoUrl` reservado para a Fase 3.
 
-Nenhum componente lê "Pautaria" de uma constante — lê do tenant, com reserva.
+Nenhum componente lê "Pautaria" de uma constante, lê do tenant, com reserva.

@@ -1,10 +1,10 @@
 /**
- * Assinaturas — leitura direta, escrita só por Edge Function.
+ * Assinaturas, leitura direta, escrita só por Edge Function.
  *
  * A assimetria deste arquivo é o desenho de segurança do produto inteiro:
  * `carregar*` fala com o banco (a RLS deixa dono e admin lerem); `contratar`,
  * `cancelar` e `abrirFatura` chamam Edge Functions. Não existe caminho do
- * browser até uma escrita em `assinaturas` — o banco recusaria de qualquer
+ * browser até uma escrita em `assinaturas`, o banco recusaria de qualquer
  * forma, mas a camada de serviços deixa isso explícito para quem lê o código.
  */
 
@@ -25,7 +25,7 @@ import { validarLista, validarUm } from './validar';
 // Leitura
 // ─────────────────────────────────────────────────────────────────────────────
 
-/** Catálogo público — a página de preços funciona sem login. */
+/** Catálogo público, a página de preços funciona sem login. */
 export async function listarPlanos(): Promise<PlanoCatalogo[]> {
   const d = import.meta.env.DEV ? await seDemo(() => demo.planos()) : null;
   if (d) return d;
@@ -40,7 +40,7 @@ export async function listarPlanos(): Promise<PlanoCatalogo[]> {
 }
 
 export async function carregarAssinatura(workspaceId: string): Promise<Assinatura | null> {
-  // `{ v }` porque `null` é resposta válida — workspace sem assinatura viva.
+  // `{ v }` porque `null` é resposta válida, workspace sem assinatura viva.
   // Sem a caixa, esse nulo cairia no caminho real e chamaria o Supabase.
   const d = import.meta.env.DEV ? await seDemo(() => ({ v: demo.assinatura() })) : null;
   if (d) return d.v;
@@ -94,7 +94,7 @@ export async function listarCobrancas(workspaceId: string): Promise<LinhaCobranc
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Escrita — sempre via Edge Function
+// Escrita, sempre via Edge Function
 // ─────────────────────────────────────────────────────────────────────────────
 
 export interface DadosContratacao {

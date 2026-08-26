@@ -6,7 +6,7 @@
  * número de cartão, CVV ou token de cartão entra na nossa infraestrutura, em
  * momento algum.
  *
- * Isso custa uma navegação a mais no fluxo e nos mantém no SAQ-A do PCI-DSS —
+ * Isso custa uma navegação a mais no fluxo e nos mantém no SAQ-A do PCI-DSS,
  * o escopo mais raso que existe. Um checkout próprio economizaria esse clique e
  * traria junto: campo de cartão sob nossa responsabilidade, auditoria de PCI,
  * e o pior tipo de incidente possível para um SaaS pequeno. O clique é barato.
@@ -22,7 +22,7 @@ const BASES: Record<string, string> = {
   producao: 'https://api.asaas.com/v3',
 };
 
-/** Estoura se a Asaas demorar demais — não penduramos o usuário indefinidamente. */
+/** Estoura se a Asaas demorar demais, não penduramos o usuário indefinidamente. */
 const TIMEOUT_MS = 15_000;
 
 interface RespostaErroAsaas {

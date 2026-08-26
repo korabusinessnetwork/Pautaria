@@ -1,4 +1,4 @@
-/* Abertura — recriação fiel do handoff hi-fi.
+/* Abertura, recriação fiel do handoff hi-fi.
    Medidas, pesos e ângulos vêm do protótipo e são finais.                    */
 
 .tela {
@@ -84,7 +84,7 @@
   transition: all var(--transicao);
 }
 
-/* A inclinação alterna de sentido entre os tiles — no protótipo o terceiro
+/* A inclinação alterna de sentido entre os tiles, no protótipo o terceiro
    gira para o outro lado. É o que impede a fileira de parecer um carrossel de
    cartões idênticos.                                                         */
 .tile:hover:not(:disabled) {

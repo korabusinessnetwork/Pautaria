@@ -1,10 +1,10 @@
 -- ═══════════════════════════════════════════════════════════════════════════
--- 0006 — Segurança operacional: auditoria, idempotência de webhook, rate limit
+-- 0006, Segurança operacional: auditoria, idempotência de webhook, rate limit
 --
 -- Três tabelas que não pertencem ao domínio do produto, e sim à sua defesa:
---   • audit_log        — o que aconteceu, quem fez, quando (append-only)
---   • webhook_eventos  — a trava de idempotência da Asaas
---   • rate_limit       — o balde que segura abuso nas Edge Functions
+--   • audit_log, o que aconteceu, quem fez, quando (append-only)
+--   • webhook_eventos, a trava de idempotência da Asaas
+--   • rate_limit, o balde que segura abuso nas Edge Functions
 --
 -- Nenhuma das três é escrita livremente pelo cliente. `webhook_eventos` e
 -- `rate_limit` sequer são legíveis: têm RLS ligada e **zero políticas**, que no
@@ -14,7 +14,7 @@
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- audit_log — append-only
+-- audit_log, append-only
 --
 -- `origem` separa o que o servidor afirma do que o cliente afirma. O cliente
 -- não recebe grant na coluna `origem`, então todo INSERT vindo do browser cai
@@ -50,7 +50,7 @@ create table public.audit_log (
 );
 
 comment on table public.audit_log is
-  'Registro append-only. Sem UPDATE e sem DELETE para ninguém — nem para o dono.';
+  'Registro append-only. Sem UPDATE e sem DELETE para ninguém, nem para o dono.';
 comment on column public.audit_log.origem is
   'servidor = escrito por Edge Function. cliente = afirmado pelo browser (não confiável).';
 comment on column public.audit_log.ip_hash is
@@ -62,7 +62,7 @@ create index audit_log_ator_idx on public.audit_log (ator_id, criado_em desc);
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- webhook_eventos — idempotência e perícia
+-- webhook_eventos, idempotência e perícia
 --
 -- A Asaas reentrega eventos: por retentativa após timeout, por reprocessamento
 -- manual no painel, por instabilidade de rede. Sem esta tabela, uma reentrega
@@ -70,7 +70,7 @@ create index audit_log_ator_idx on public.audit_log (ator_id, criado_em desc);
 --
 -- O UNIQUE em (provedor, evento_externo_id) é a trava: a Edge Function tenta
 -- inserir antes de processar; violação de unicidade significa "já vi este
--- evento" e a função responde 200 sem efeito colateral. O 200 é intencional —
+-- evento" e a função responde 200 sem efeito colateral. O 200 é intencional,
 -- devolver erro faria a Asaas insistir para sempre num evento já resolvido.
 -- ─────────────────────────────────────────────────────────────────────────────
 create table public.webhook_eventos (
@@ -100,11 +100,11 @@ create index webhook_eventos_pendentes_idx
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- rate_limit — balde de janela fixa
+-- rate_limit, balde de janela fixa
 --
 -- Simples de propósito: janela fixa em vez de sliding window ou token bucket.
 -- A imprecisão nas bordas da janela é irrelevante para o que precisamos
--- (impedir enumeração e flood), e a implementação cabe em um UPSERT — sem
+-- (impedir enumeração e flood), e a implementação cabe em um UPSERT, sem
 -- Redis, sem serviço pago, dentro do tier gratuito.
 -- ─────────────────────────────────────────────────────────────────────────────
 create table public.rate_limit (
@@ -168,7 +168,7 @@ end;
 $$;
 
 comment on function app.consumir_rate_limit(text, integer, integer) is
-  'Consome 1 do balde de janela fixa. Atômica — segura contra invocações simultâneas.';
+  'Consome 1 do balde de janela fixa. Atômica, segura contra invocações simultâneas.';
 
 
 -- Faxina dos baldes vencidos. Chamada pela reconciliação diária; sem ela a
@@ -267,7 +267,7 @@ create policy "auditoria: membro registra o que ele mesmo fez"
   );
 
 -- Sem política de UPDATE e sem política de DELETE. Append-only não é convenção
--- documentada — é a ausência deliberada dessas duas políticas. Um log que o
+-- documentada, é a ausência deliberada dessas duas políticas. Um log que o
 -- próprio suspeito pode editar não é log.
 
 -- ── webhook_eventos e rate_limit ────────────────────────────────────────────

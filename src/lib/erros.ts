@@ -1,5 +1,5 @@
 /**
- * Erros — códigos estáveis e mensagens humanas.
+ * Erros, códigos estáveis e mensagens humanas.
  *
  * O front nunca decide comportamento lendo texto de erro. Texto muda numa
  * revisão de copy; código não. Toda falha que atravessa a camada de serviços
@@ -8,7 +8,7 @@
  * A tradução dos erros do Postgres merece explicação: o banco é a autoridade
  * sobre limite de plano e permissão (ver migrations 0007 e 0002), e ele fala em
  * SQLSTATE. Traduzir aqui, num lugar só, evita que cada tela invente o seu
- * jeito de interpretar um `42501` — e evita mostrar "new row violates
+ * jeito de interpretar um `42501`, e evita mostrar "new row violates
  * row-level security policy" para alguém que só queria criar um card.
  */
 
@@ -67,14 +67,14 @@ const MENSAGENS: Record<CodigoErro, string> = {
  * Converte um erro do PostgREST/Postgres em `ErroApp`.
  *
  * Os SQLSTATE que importam aqui:
- *   42501 — permissão negada. Vem do GRANT de coluna (tentou escrever `plano`)
+ *   42501, permissão negada. Vem do GRANT de coluna (tentou escrever `plano`)
  *           ou de uma política de RLS que recusou o WITH CHECK.
- *   23505 — violação de unicidade. Em `assinaturas`, é o índice parcial que
- *           impede duas assinaturas vivas — logo, "já tem plano".
- *   23503 — FK violada. Em `pautas`, é a FK composta pegando etapa de outro
+ *   23505, violação de unicidade. Em `assinaturas`, é o índice parcial que
+ *           impede duas assinaturas vivas, logo, "já tem plano".
+ *   23503, FK violada. Em `pautas`, é a FK composta pegando etapa de outro
  *           ofício: dado corrompido, não erro do usuário.
- *   P0001 — RAISE nosso. O `hint` carrega o código estável (ver 0007).
- *   PGRST116 — o PostgREST não achou linha em `.single()`.
+ *   P0001, RAISE nosso. O `hint` carrega o código estável (ver 0007).
+ *   PGRST116, o PostgREST não achou linha em `.single()`.
  */
 export function deErroPostgrest(erro: PostgrestError | null): ErroApp | null {
   if (!erro) return null;

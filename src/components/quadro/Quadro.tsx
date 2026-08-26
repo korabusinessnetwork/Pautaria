@@ -1,10 +1,10 @@
 /**
  * O quadro kanban.
  *
- * Arrasto com a API nativa de HTML5 — sem biblioteca. A decisão vale ser
+ * Arrasto com a API nativa de HTML5, sem biblioteca. A decisão vale ser
  * registrada: `dnd-kit` e companhia adicionam ~40 kB e uma camada de conceitos
  * (sensors, collision detection, modifiers) para resolver um problema que aqui
- * é simples — mover um card entre listas, com o índice de destino calculado
+ * é simples, mover um card entre listas, com o índice de destino calculado
  * pela posição do ponteiro. O que essas bibliotecas realmente entregam a mais é
  * acessibilidade de teclado, e isso o drawer já cobre (ver `PautaCard`).
  *
@@ -162,7 +162,7 @@ export function Quadro({
                   <div className={estilos.marcador} />
                 ) : null}
 
-                {/* Coluna vazia nunca fica muda — o handoff é explícito. */}
+                {/* Coluna vazia nunca fica muda, o handoff é explícito. */}
                 {coluna.pautas.length === 0 && !recebendo ? (
                   <div className={estilos.vazia}>solte uma pauta aqui</div>
                 ) : null}

@@ -1,10 +1,10 @@
 /**
- * CPF e CNPJ — validação de dígito verificador.
+ * CPF e CNPJ, validação de dígito verificador.
  *
  * A Asaas exige documento válido para emitir cobrança e responde com erro
  * genérico quando ele não bate. Validar aqui transforma "erro inesperado no
  * provedor" (que o usuário não sabe corrigir) em "confira o CPF" (que ele sabe)
- * — e evita uma ida à API para descobrir algo que dá para saber na hora.
+ *, e evita uma ida à API para descobrir algo que dá para saber na hora.
  *
  * É a aplicação do princípio nº 1 do CLAUDE.md na camada de cobrança:
  * prevenção de erro vale mais que mensagem de erro.
@@ -72,7 +72,7 @@ export function documentoValido(entrada: string): boolean {
 
 /**
  * Telefone brasileiro: 10 dígitos (fixo) ou 11 (celular, começando com 9).
- * Opcional na nossa API — a Asaas aceita cliente sem telefone.
+ * Opcional na nossa API, a Asaas aceita cliente sem telefone.
  */
 export function telefoneValido(entrada: string): boolean {
   const digitos = apenasDigitos(entrada);

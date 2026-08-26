@@ -28,7 +28,7 @@
 }
 
 /* Coluna recebendo o card: accent quase transparente + contorno tracejado.
-   O tracejado importa — ele diz "solte aqui" sem precisar de texto.          */
+   O tracejado importa, ele diz "solte aqui" sem precisar de texto.          */
 .colunaRecebendo {
   background: var(--acFaint);
   outline-color: var(--ac);

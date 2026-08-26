@@ -1,5 +1,5 @@
 /**
- * Controle visual do quadro — densidade dos cards e exportação.
+ * Controle visual do quadro, densidade dos cards e exportação.
  *
  * Componente de props puras: não consulta serviço, não conhece plano e não sabe
  * o que é um ofício. Recebe a densidade atual, avisa quando ela muda, chama
@@ -11,11 +11,11 @@
  *
  * A densidade é conveniência de quem está olhando: não é dado do workspace, não
  * pertence ao tenant e não vale uma ida ao banco a cada clique. Guardar no
- * navegador é o certo — mas `localStorage.setItem` é proibido pelo ESLint
+ * navegador é o certo, mas `localStorage.setItem` é proibido pelo ESLint
  * (`.eslintrc.cjs`), e a regra existe por causa de `docs/11_SEGURANCA`: nada
  * sensível em armazenamento persistente, e sessão é assunto do supabase-js.
  *
- * A regra é uma barreira grossa de propósito — ela não tenta julgar caso a caso
+ * A regra é uma barreira grossa de propósito, ela não tenta julgar caso a caso
  * se o valor é sensível, porque essa avaliação é exatamente onde se erra. E
  * aqui `sessionStorage` não é só o desvio permitido, é o comportamento melhor:
  * a preferência vale para a aba onde a pessoa está trabalhando e some quando o
@@ -95,7 +95,7 @@ export function ControleVisual({
 
   // O estado da densidade é do pai (o quadro precisa dele), mas a preferência é
   // deste controle. Restaurar, então, é avisar o pai uma única vez na montagem
-  // — daí em diante quem manda é o clique. O `ref` guarda esse "uma vez" sem
+  //, daí em diante quem manda é o clique. O `ref` guarda esse "uma vez" sem
   // precisar mentir sobre as dependências do efeito.
   useEffect(() => {
     if (restaurada.current) return;

@@ -1,5 +1,5 @@
 /**
- * Ambiente — leitura e validação dos segredos das Edge Functions.
+ * Ambiente, leitura e validação dos segredos das Edge Functions.
  *
  * Toda variável é lida por aqui, e o processo falha alto se faltar alguma. Uma
  * função que sobe com `ASAAS_API_KEY` indefinida não quebra na hora: ela quebra
@@ -27,7 +27,7 @@ function opcional(nome: string, padrao: string): string {
 
 export type Ambiente = 'sandbox' | 'producao';
 
-/** Injetadas pelo runtime do Supabase — nunca definidas à mão. */
+/** Injetadas pelo runtime do Supabase, nunca definidas à mão. */
 export const supabaseUrl = () => obrigatoria('SUPABASE_URL');
 export const supabaseServiceKey = () => obrigatoria('SUPABASE_SERVICE_ROLE_KEY');
 export const supabaseAnonKey = () => obrigatoria('SUPABASE_ANON_KEY');
@@ -38,7 +38,7 @@ export const asaasApiKey = () => obrigatoria('ASAAS_API_KEY');
 /**
  * Token combinado com a Asaas no cadastro do webhook. Ela o envia no cabeçalho
  * `asaas-access-token` a cada entrega, e é a única autenticação daquele
- * endpoint — por isso a comparação dele é feita em tempo constante.
+ * endpoint, por isso a comparação dele é feita em tempo constante.
  */
 export const asaasWebhookToken = () => obrigatoria('ASAAS_WEBHOOK_TOKEN');
 
@@ -57,7 +57,7 @@ export const appUrl = () => opcional('APP_URL', 'http://localhost:5173');
  * Sal do HMAC que pseudonimiza IPs no audit_log. Com um valor fixo por
  * ambiente, o mesmo IP gera sempre o mesmo hash (dá para correlacionar
  * tentativas) sem que o hash possa ser revertido para o IP (não dá para
- * localizar ninguém). Se não for configurado, deriva do service key — que já é
+ * localizar ninguém). Se não for configurado, deriva do service key, que já é
  * secreto e estável.
  */
 export const salIp = () => opcional('IP_HASH_SAL', supabaseServiceKey().slice(0, 32));

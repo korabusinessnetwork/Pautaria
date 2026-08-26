@@ -1,5 +1,5 @@
 /**
- * Chip — os dois campos livres da pauta.
+ * Chip, os dois campos livres da pauta.
  *
  * `preenchido` é o campo 1 (fundo accent suave), `contorno` é o campo 2 (só
  * borda). A hierarquia é intencional: o primeiro campo do ofício costuma ser o

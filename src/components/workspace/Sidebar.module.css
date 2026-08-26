@@ -215,7 +215,7 @@
 
    `nowrap` + `overflow-x: auto` mantém tudo alcançável num deslize lateral e
    devolve a altura ao conteúdo. Cada item vira `flex: none` para não ser
-   comprimido, e `.usuario` sai do fim do fluxo — no modo empilhado ele
+   comprimido, e `.usuario` sai do fim do fluxo, no modo empilhado ele
    flutuava por cima dos links de navegação. */
 @media (max-width: 900px) {
   .sidebar {
@@ -262,7 +262,7 @@
     display: none;
   }
 
-  /* O nome do plano dobraria a altura da barra por uma informação secundária —
+  /* O nome do plano dobraria a altura da barra por uma informação secundária,
      ela continua visível na tela de Plano e cobrança. */
   .usuarioPlano {
     display: none;

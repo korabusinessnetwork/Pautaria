@@ -1,7 +1,7 @@
 /**
  * Porta única do modo demonstração.
  *
- * A camada de serviços importa daqui e só daqui — `estado` (o interruptor e o
+ * A camada de serviços importa daqui e só daqui, `estado` (o interruptor e o
  * envelope `seDemo`) e `demo` (o banco em memória) chegam pelo mesmo caminho.
  * Um import só por serviço mantém o desvio de demonstração visível como uma
  * linha no topo de cada função, em vez de duas importações que alguém pode

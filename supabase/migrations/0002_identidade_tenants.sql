@@ -1,12 +1,12 @@
 -- ═══════════════════════════════════════════════════════════════════════════
--- 0002 — Identidade e tenants: profiles, workspaces, membros e convites
+-- 0002, Identidade e tenants: profiles, workspaces, membros e convites
 --
 -- O **workspace é o tenant**. Todo dado de negócio do Pautaria pendura em um
 -- workspace, e o isolamento entre workspaces é a fronteira de segurança mais
 -- importante do produto.
 --
 -- Modelo de privilégio deste projeto (vale para TODAS as migrations):
---   1. `revoke all` na tabela para anon/authenticated — nada é permitido por
+--   1. `revoke all` na tabela para anon/authenticated, nada é permitido por
 --      omissão.
 --   2. `grant` explícito, **coluna a coluna** onde a coluna é sensível. Isso é o
 --      que impede o browser de escrever `plano` ou `status` mesmo que uma
@@ -16,13 +16,13 @@
 --
 -- Recursão de RLS: as políticas de `workspace_members` não podem consultar
 -- `workspace_members` diretamente (laço infinito). Por isso toda checagem passa
--- pelas funções `app.*` marcadas SECURITY DEFINER — elas rodam como dono da
+-- pelas funções `app.*` marcadas SECURITY DEFINER, elas rodam como dono da
 -- tabela e portanto não reentram na política.
 -- ═══════════════════════════════════════════════════════════════════════════
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- profiles — espelho público de auth.users
+-- profiles, espelho público de auth.users
 -- Nunca guardamos senha nem token aqui; isso é responsabilidade do GoTrue.
 -- ─────────────────────────────────────────────────────────────────────────────
 create table public.profiles (
@@ -36,7 +36,7 @@ create table public.profiles (
 );
 
 comment on table public.profiles is
-  'Dados de exibição do usuário. Sem credencial, sem CPF — documento fiscal vive só na Asaas.';
+  'Dados de exibição do usuário. Sem credencial, sem CPF, documento fiscal vive só na Asaas.';
 comment on column public.profiles.iniciais is
   'Iniciais para o avatar (ex.: "MT"). Derivadas do nome no cadastro.';
 
@@ -48,7 +48,7 @@ create trigger profiles_atualizado_em
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- workspaces — o tenant
+-- workspaces, o tenant
 -- ─────────────────────────────────────────────────────────────────────────────
 create table public.workspaces (
   id                 uuid primary key default gen_random_uuid(),
@@ -91,7 +91,7 @@ create trigger workspaces_atualizado_em
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- workspace_members — vínculo usuário ↔ tenant ↔ papel
+-- workspace_members, vínculo usuário ↔ tenant ↔ papel
 -- ─────────────────────────────────────────────────────────────────────────────
 create table public.workspace_members (
   workspace_id  uuid not null references public.workspaces(id) on delete cascade,
@@ -108,7 +108,7 @@ create index workspace_members_user_idx on public.workspace_members (user_id);
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- convites — entrada de novos membros (plano Time)
+-- convites, entrada de novos membros (plano Time)
 --
 -- Guardamos o **hash** do token, nunca o token. Um dump do banco não vira
 -- acesso: quem tem o hash não consegue reconstruir o link do convite.
@@ -139,7 +139,7 @@ create index convites_email_idx on public.convites (email) where aceito_em is nu
 
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- Funções de autorização — a base de toda política de RLS do projeto
+-- Funções de autorização, a base de toda política de RLS do projeto
 --
 -- Todas são SECURITY DEFINER com `search_path = ''` e nomes totalmente
 -- qualificados. O search_path vazio é obrigatório: sem ele, um schema plantado
@@ -287,7 +287,7 @@ create trigger ao_criar_usuario
 
 
 -- Quem cria o workspace vira owner na mesma transação. Sem isso existiria uma
--- janela — mesmo que de milissegundos — com um workspace sem dono, e um
+-- janela, mesmo que de milissegundos, com um workspace sem dono, e um
 -- workspace sem dono é um workspace que ninguém consegue administrar nem
 -- excluir.
 create or replace function app.ao_criar_workspace()
@@ -387,7 +387,7 @@ create trigger limitar_workspaces_por_dono
 
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- Privilégios — nada por omissão
+-- Privilégios, nada por omissão
 -- ═══════════════════════════════════════════════════════════════════════════
 
 revoke all on public.profiles          from anon, authenticated;
@@ -420,7 +420,7 @@ grant execute on function app.compartilha_workspace(uuid) to authenticated;
 
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- RLS — ativada na mesma migration que cria a tabela (CLAUDE.md)
+-- RLS, ativada na mesma migration que cria a tabela (CLAUDE.md)
 -- ═══════════════════════════════════════════════════════════════════════════
 
 alter table public.profiles          enable row level security;
@@ -504,7 +504,7 @@ create policy "convites: dono e admin revogam"
   using (app.tem_papel(workspace_id, array['owner', 'admin']::public.papel[]));
 
 -- Colunas legíveis do convite. `token_hash` NÃO está na lista: nem o dono do
--- workspace consegue lê-lo pela API. Aceitar convite é RPC (0008) — o cliente
+-- workspace consegue lê-lo pela API. Aceitar convite é RPC (0008), o cliente
 -- envia o token que recebeu por e-mail e o servidor compara os hashes.
 grant select (id, workspace_id, email, papel, expira_em, aceito_em, aceito_por,
               criado_por, criado_em)

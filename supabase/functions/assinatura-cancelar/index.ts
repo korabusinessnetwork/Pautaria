@@ -1,5 +1,5 @@
 /**
- * assinatura-cancelar — encerra a recorrência.
+ * assinatura-cancelar, encerra a recorrência.
  *
  * Duas decisões de produto que o código precisa honrar:
  *
@@ -9,7 +9,7 @@
  *
  *   2. **O acesso vale até o fim do período pago.** Quem pagou o mês inteiro
  *      usa o mês inteiro. Cortar na hora do cancelamento seria ficar com
- *      dinheiro sem entregar o serviço — e o `fim_periodo` que já está gravado
+ *      dinheiro sem entregar o serviço, e o `fim_periodo` que já está gravado
  *      faz `aplicar_estado_assinatura` cuidar disso sozinha.
  *
  * Só o dono cancela. Admin administra o workspace, não o contrato.
@@ -60,7 +60,7 @@ Deno.serve(comEnvelope(async (req, origem) => {
 
   // Cancela primeiro na Asaas: se falhasse depois de marcarmos como cancelada,
   // a recorrência continuaria cobrando o cliente enquanto o nosso banco diz que
-  // acabou — o pior desencontro possível. Um 404 da Asaas (já cancelada por lá)
+  // acabou, o pior desencontro possível. Um 404 da Asaas (já cancelada por lá)
   // não impede o cancelamento local; o objetivo é o mesmo.
   if (assinatura.asaas_subscription_id) {
     try {
@@ -85,7 +85,7 @@ Deno.serve(comEnvelope(async (req, origem) => {
   if (error) throw new ErroApi('erro_interno', 'Falha ao cancelar a assinatura.', error);
 
   // `aplicar_estado_assinatura` não encontra mais assinatura viva, mas antes de
-  // rebaixar procura uma cancelada com `fim_periodo` no futuro — e mantém o
+  // rebaixar procura uma cancelada com `fim_periodo` no futuro, e mantém o
   // plano até lá. É onde a decisão nº 2 lá de cima vira comportamento real: o
   // usuário cancela agora e continua no Estúdio até o fim do mês que pagou.
   // A reconciliação diária faz a transição quando a data chegar.

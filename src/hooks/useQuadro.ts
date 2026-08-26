@@ -1,10 +1,10 @@
 /**
- * O quadro — pautas, colunas e as mutações que o kanban dispara.
+ * O quadro, pautas, colunas e as mutações que o kanban dispara.
  *
  * Mover um card usa **atualização otimista**: o React Query reescreve o cache
  * antes de a rede responder, e desfaz se der erro. Não é enfeite. Arrastar um
  * card e vê-lo voltar ao lugar original por 200 ms enquanto o servidor pensa
- * quebra a ilusão de manipulação direta — o gesto passa a parecer um pedido em
+ * quebra a ilusão de manipulação direta, o gesto passa a parecer um pedido em
  * vez de uma ação, e o quadro deixa de parecer seu.
  */
 
@@ -51,7 +51,7 @@ export function useQuadro(
   });
 
   // Realtime: quando outro membro move um card, o quadro se atualiza sozinho.
-  // Invalidamos em vez de aplicar o payload do evento — a consulta completa é
+  // Invalidamos em vez de aplicar o payload do evento, a consulta completa é
   // barata no volume de um quadro, e reconciliar delta a delta seria uma fonte
   // silenciosa de divergência entre abas.
   useEffect(() => {
@@ -149,7 +149,7 @@ export function useQuadro(
       return { anterior };
     },
 
-    // Rollback com o estado exato de antes. O usuário vê o card voltar — o que
+    // Rollback com o estado exato de antes. O usuário vê o card voltar, o que
     // é honesto: o movimento realmente não aconteceu.
     onError: (_erro, _entrada, contexto) => {
       if (contexto?.anterior) cliente.setQueryData(chave, contexto.anterior);

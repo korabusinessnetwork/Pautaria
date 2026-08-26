@@ -1,6 +1,6 @@
 // `defineConfig` vem de `vitest/config` e não de `vite`: é a versão que conhece
 // o bloco `test`. Importar de `vite` compila, mas o TypeScript recusa a
-// configuração de teste como propriedade desconhecida — e desligar o erro
+// configuração de teste como propriedade desconhecida, e desligar o erro
 // esconderia um `test` que o Vitest talvez nem estivesse lendo.
 import { defineConfig, type Plugin } from 'vitest/config';
 import react from '@vitejs/plugin-react';
@@ -11,7 +11,7 @@ import { fileURLToPath, URL } from 'node:url';
  * Recusa o build de produção sem as variáveis do Supabase.
  *
  * Sem este plugin, `npm run build` sem `.env` termina com sucesso e produz um
- * bundle que não funciona — o app depende de valores que o Vite substitui em
+ * bundle que não funciona, o app depende de valores que o Vite substitui em
  * tempo de build, e ausentes eles viram `undefined` no código publicado. Um
  * build verde que gera página branca é a pior combinação possível: ninguém vai
  * procurar o problema na esteira.

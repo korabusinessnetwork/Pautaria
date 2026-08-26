@@ -1,11 +1,11 @@
 /**
- * Rotas — um lugar só.
+ * Rotas, um lugar só.
  *
  * Existe por causa de um problema concreto que surgiu ao acrescentar a landing.
  * Antes, `/` era o app: `Entrar` e `CriarConta` mandavam para lá depois do
  * login, e `NaoEncontrado` oferecia "voltar para as minhas pautas" apontando
  * para `/`. Com a landing pública ocupando `/`, esses mesmos redirecionamentos
- * passariam a devolver o usuário autenticado para a página de vendas — e, no
+ * passariam a devolver o usuário autenticado para a página de vendas, e, no
  * caso de `Entrar`, para um laço: entra, volta para a landing, clica em entrar,
  * é redirecionado de novo.
  *
@@ -18,7 +18,7 @@
 export const ROTA_LANDING = '/';
 
 /**
- * Entrada do aplicativo. Não renderiza tela: `Destino` decide para onde ir —
+ * Entrada do aplicativo. Não renderiza tela: `Destino` decide para onde ir,
  * sem workspace vai para a abertura, com workspace vai para o quadro. É para
  * cá que todo fluxo autenticado aponta quando não tem um destino específico.
  */

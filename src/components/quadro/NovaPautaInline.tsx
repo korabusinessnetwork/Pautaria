@@ -1,5 +1,5 @@
 /**
- * Criação inline de pauta — Enter cria, Esc cancela.
+ * Criação inline de pauta, Enter cria, Esc cancela.
  *
  * O input não some depois de criar: ele limpa e continua focado, para quem
  * chegou com cinco ideias na cabeça despejar as cinco sem tocar no mouse.

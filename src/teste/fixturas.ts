@@ -1,7 +1,7 @@
 /**
  * Fixturas dos testes de componente.
  *
- * Espelham a forma que a camada de serviços entrega — já em camelCase, depois
+ * Espelham a forma que a camada de serviços entrega, já em camelCase, depois
  * do `transform` do Zod. Testar com o formato do banco (snake_case) passaria
  * verde enquanto o app real quebra, porque nenhum componente vê aquele formato.
  *
@@ -104,7 +104,7 @@ export function membro(sobrescrever: Partial<Membro> = {}): Membro {
   };
 }
 
-/** Data em ISO relativa a hoje — para testar prazo sem congelar o relógio. */
+/** Data em ISO relativa a hoje, para testar prazo sem congelar o relógio. */
 export function emDias(dias: number): string {
   const d = new Date();
   d.setDate(d.getDate() + dias);

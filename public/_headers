@@ -1,0 +1,42 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Cabeçalhos de segurança. Porte fiel do vercel.json, no formato que Cloudflare
+# Pages e Netlify entendem. Mantenha os dois arquivos em sincronia: enquanto o
+# projeto puder ir para qualquer um dos hosts, divergência aqui é uma proteção
+# que existe num deploy e some no outro.
+#
+# A indentação de dois espaços é sintaxe, não estilo — linha sem recuo é lida
+# como um novo padrão de caminho.
+# ─────────────────────────────────────────────────────────────────────────────
+
+/*
+  # connect-src fechado no projeto Supabase deste deploy, em vez do curinga
+  # https://*.supabase.co que o vercel.json usava. Com o curinga, qualquer
+  # projeto Supabase do mundo era destino autorizado para o front — o que
+  # transforma um XSS em exfiltração para um backend do atacante. O ref do
+  # projeto não é segredo (ele já vai no bundle via VITE_SUPABASE_URL); o valor
+  # de listá-lo aqui é negar todo o resto.
+  #
+  # ATENÇÃO ao trocar de projeto Supabase (por exemplo, ao criar o de produção):
+  # este host precisa mudar junto, senão o app sobe e todas as chamadas de API
+  # morrem bloqueadas pela CSP, com erro só no console — falha silenciosa e
+  # confusa. É o preço de fechar o curinga, e vale.
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://hsgpbsowzpaekpowvvfw.supabase.co wss://hsgpbsowzpaekpowvvfw.supabase.co; frame-ancestors 'none'; form-action 'self'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
+  X-DNS-Prefetch-Control: off
+
+# Os nomes em /assets/ carregam hash de conteúdo: mudou o arquivo, mudou o nome.
+# Por isso cache eterno é seguro aqui.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# O index.html não tem hash no nome — é a porta de entrada. Se ele ficar em
+# cache, o usuário continua baixando o HTML velho, que aponta para um bundle
+# que já não existe, e o app quebra em branco depois de cada deploy.
+/index.html
+  Cache-Control: no-cache, must-revalidate

@@ -1,5 +1,5 @@
 -- ═══════════════════════════════════════════════════════════════════════════
--- 0010 — Pontes de serviço
+-- 0010, Pontes de serviço
 --
 -- Tensão a resolver: as funções de defesa (`app.consumir_rate_limit`,
 -- `app.auditar`, `app.aplicar_estado_assinatura`) moram no schema `app`, que
@@ -8,13 +8,13 @@
 -- PostgREST só enxerga `public`.
 --
 -- A solução preguiçosa seria expor o schema `app` inteiro na API e confiar nos
--- grants. Isso publicaria uma rota para cada função interna — incluindo as que
+-- grants. Isso publicaria uma rota para cada função interna, incluindo as que
 -- vierem depois, escritas por alguém que não pensou em rota nenhuma. Superfície
 -- de ataque que cresce sozinha é a pior espécie.
 --
 -- Em vez disso: uma ponte nominal por função, em `public`, com
 -- `revoke all from public` + `grant execute to service_role`. `anon` e
--- `authenticated` recebem 403 do próprio Postgres — a rota existe, a permissão
+-- `authenticated` recebem 403 do próprio Postgres, a rota existe, a permissão
 -- não. Expor uma função nova passa a exigir escrever uma ponte nova, de
 -- propósito. É a mesma lógica de negar por omissão da migration 0009,
 -- aplicada a funções.
@@ -102,7 +102,7 @@ comment on function public.auditoria_rls() is
 
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- Privilégios — service_role e mais ninguém
+-- Privilégios, service_role e mais ninguém
 --
 -- `revoke from public` é obrigatório e vem primeiro: o Postgres concede EXECUTE
 -- a PUBLIC em toda função nova. Sem esta linha, `anon` chamaria

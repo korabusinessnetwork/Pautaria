@@ -1,5 +1,5 @@
 /**
- * asaas-webhook — a única porta pelo qual um plano é liberado.
+ * asaas-webhook, a única porta pelo qual um plano é liberado.
  *
  * É a função mais sensível do sistema: roda sem JWT (a Asaas não tem um) e
  * decide quem paga e quem não paga. Três defesas, nesta ordem:
@@ -7,18 +7,18 @@
  *   1. **Autenticação por token, em tempo constante.** A Asaas envia o
  *      cabeçalho `asaas-access-token` combinado no cadastro do webhook. A
  *      comparação byte a byte de tempo fixo impede descobrir o token medindo o
- *      tempo de resposta. Sem token válido, nada além de 401 acontece — nem
+ *      tempo de resposta. Sem token válido, nada além de 401 acontece, nem
  *      leitura de corpo, nem escrita.
  *
  *   2. **Idempotência por id de evento.** A Asaas reentrega: por timeout, por
  *      reprocessamento manual, por instabilidade. Sem trava, uma reentrega de
  *      PAYMENT_CONFIRMED estenderia o período pago de novo. O UNIQUE em
- *      `webhook_eventos` resolve — e distingue "já processado" (ignora) de
+ *      `webhook_eventos` resolve, e distingue "já processado" (ignora) de
  *      "recebido e falhou" (reprocessa).
  *
  *   3. **Semântica de retentativa correta.** Erro nosso responde 500 para a
  *      Asaas insistir. Evento já resolvido ou que não nos diz respeito responde
- *      200 — porque devolver erro faria a Asaas retentar para sempre um evento
+ *      200, porque devolver erro faria a Asaas retentar para sempre um evento
  *      que nunca vai mudar de estado.
  *
  * O que esta função nunca faz: confiar em valor vindo do payload para decidir
@@ -55,7 +55,7 @@ type StatusCobranca =
 
 /**
  * Mapa evento → efeito. Ter isso como dado, e não como uma escada de `if`,
- * deixa explícito o conjunto inteiro de eventos que o sistema entende — e
+ * deixa explícito o conjunto inteiro de eventos que o sistema entende, e
  * qualquer evento fora do mapa é ignorado com 200, sem tentativa de adivinhação.
  */
 const EFEITOS: Record<string, {
@@ -84,7 +84,7 @@ Deno.serve(comEnvelope(async (req, origem) => {
   const recebido = req.headers.get('asaas-access-token') ?? '';
   if (!iguaisEmTempoConstante(recebido, asaasWebhookToken())) {
     // Só quem erra o token gasta uma consulta ao banco. O tráfego legítimo da
-    // Asaas nunca toca o rate limit — e quem está tentando adivinhar esgota o
+    // Asaas nunca toca o rate limit, e quem está tentando adivinhar esgota o
     // balde depressa.
     await aplicarRateLimit(admin, ip ?? 'sem-ip', {
       escopo: 'webhook-negado',
@@ -204,7 +204,7 @@ async function processar(
   const pagamento = evento.payment;
 
   // Evento fora do mapa, ou cobrança avulsa sem assinatura: nada a fazer.
-  // 200 e segue — insistir num evento que não nos diz respeito só encheria a
+  // 200 e segue, insistir num evento que não nos diz respeito só encheria a
   // fila de retentativas da Asaas.
   if (!efeito || !pagamento) return { ignorado: 'evento_sem_efeito' };
   if (!pagamento.subscription) return { ignorado: 'cobranca_avulsa' };
@@ -236,7 +236,7 @@ async function processar(
 
     if (efeito.estendePeriodo && pagamento.dueDate) {
       // O período pago vai do vencimento desta cobrança até o vencimento da
-      // próxima. Derivado do payload, sem chamada extra à Asaas — e igual em
+      // próxima. Derivado do payload, sem chamada extra à Asaas, e igual em
       // toda reentrega, o que mantém o reprocessamento inofensivo.
       const inicio = new Date(`${pagamento.dueDate}T00:00:00Z`);
       const fim = avancarCiclo(inicio, assinatura.ciclo);

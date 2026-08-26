@@ -18,7 +18,7 @@
   cursor: grabbing;
 }
 
-/* Durante o arrasto o card fica fantasma no lugar de origem — assim a coluna
+/* Durante o arrasto o card fica fantasma no lugar de origem, assim a coluna
    não "pula" e o usuário mantém a referência de onde ele saiu.               */
 .arrastando {
   opacity: 0.4;

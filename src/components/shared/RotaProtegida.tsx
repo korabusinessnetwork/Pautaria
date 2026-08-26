@@ -1,5 +1,5 @@
 /**
- * Rota protegida — autenticação **antes** de renderizar.
+ * Rota protegida, autenticação **antes** de renderizar.
  *
  * A ordem importa e é regra do CLAUDE.md. O padrão comum (renderizar e
  * redirecionar num `useEffect`) monta a tela protegida por um frame antes de

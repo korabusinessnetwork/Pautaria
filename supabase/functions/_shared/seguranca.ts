@@ -1,5 +1,5 @@
 /**
- * Segurança — comparação em tempo constante, pseudonimização de IP e o balde
+ * Segurança, comparação em tempo constante, pseudonimização de IP e o balde
  * de rate limiting.
  */
 
@@ -12,7 +12,7 @@ import type { ClienteAdmin } from './supabase.ts';
  *
  * `a === b` em strings retorna assim que encontra o primeiro byte diferente.
  * Um atacante que mede o tempo de resposta consegue, com requisições
- * suficientes, descobrir o token byte a byte — o ataque clássico de timing.
+ * suficientes, descobrir o token byte a byte, o ataque clássico de timing.
  * Aqui percorremos o comprimento inteiro sempre, acumulando as diferenças em
  * XOR, e o tempo passa a ser função do tamanho, não do conteúdo.
  *
@@ -36,7 +36,7 @@ export function iguaisEmTempoConstante(a: string, b: string): boolean {
  * HMAC-SHA256 do IP, em hex.
  *
  * Guardar IP em claro num log de auditoria é coletar dado pessoal que quase
- * nunca precisamos ler — e que, num vazamento, entrega geolocalização
+ * nunca precisamos ler, e que, num vazamento, entrega geolocalização
  * aproximada de todos os usuários. Guardar o HMAC preserva o que realmente
  * usamos (duas tentativas vieram do mesmo lugar?) e descarta o que não usamos.
  * Precisa ser HMAC e não hash puro: o espaço de IPv4 tem 4 bilhões de valores,
@@ -82,7 +82,7 @@ export interface LimiteConfig {
  *
  * A contagem vive no Postgres (`app.consumir_rate_limit`), não na memória da
  * função: Edge Functions escalam para várias instâncias, e um contador em
- * memória seria N vezes mais permissivo do que o configurado — exatamente sob
+ * memória seria N vezes mais permissivo do que o configurado, exatamente sob
  * carga, que é quando ele importa.
  *
  * Falha aberta de propósito: se o banco estiver indisponível, a requisição

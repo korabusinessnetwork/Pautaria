@@ -1,8 +1,8 @@
 /**
- * Formatação — dinheiro, datas e prazos, em português do Brasil.
+ * Formatação, dinheiro, datas e prazos, em português do Brasil.
  *
  * O prazo é o campo com mais decisão de produto por linha de código. O
- * protótipo mostra "20 ago", "hoje", "sex" — não "2026-08-20". A diferença
+ * protótipo mostra "20 ago", "hoje", "sex", não "2026-08-20". A diferença
  * importa: alguém olhando um quadro quer saber se está atrasado, não qual é a
  * data. `formatarPrazo` responde a pergunta certa.
  */
@@ -51,13 +51,13 @@ export interface PrazoFormatado {
   texto: string;
   /** Venceu e não foi concluída. */
   atrasado: boolean;
-  /** Vence hoje ou amanhã — merece destaque na UI. */
+  /** Vence hoje ou amanhã, merece destaque na UI. */
   urgente: boolean;
 }
 
 /**
  * Prazo em linguagem de quadro: "hoje", "amanhã", "sex", "20 ago", "há 3 dias".
- * Sem prazo devolve string vazia — e o card simplesmente não renderiza a linha,
+ * Sem prazo devolve string vazia, e o card simplesmente não renderiza a linha,
  * como no protótipo.
  */
 export function formatarPrazo(iso: string | null, referencia = new Date()): PrazoFormatado {
@@ -104,7 +104,7 @@ export function formatarDataLonga(iso: string | null): string {
   return DATA_LONGA.format(data);
 }
 
-/** "17/08/2026" — para tabelas de cobrança, onde a coluna é estreita. */
+/** "17/08/2026", para tabelas de cobrança, onde a coluna é estreita. */
 export function formatarDataCurta(iso: string | null): string {
   if (!iso) return '—';
   const data = iso.length <= 10 ? dataLocal(iso) : new Date(iso);

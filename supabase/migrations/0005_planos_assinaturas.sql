@@ -1,5 +1,5 @@
 -- ═══════════════════════════════════════════════════════════════════════════
--- 0005 — Planos, assinaturas e cobranças
+-- 0005, Planos, assinaturas e cobranças
 --
 -- Regra que organiza esta migration inteira: **o cliente nunca escreve aqui.**
 -- Não há `grant insert/update/delete` para `authenticated` em `assinaturas` nem
@@ -10,7 +10,7 @@
 -- pede mudanças chamando função, nunca escrevendo tabela. Isso fecha a classe
 -- de ataque mais óbvia de um SaaS: o usuário se dar um plano melhor.
 --
--- Preço e limite vivem em `planos`, como dado — não como constante no código.
+-- Preço e limite vivem em `planos`, como dado, não como constante no código.
 -- Mudar preço é UPDATE; criar plano é INSERT. O front lê a mesma tabela que a
 -- Edge Function usa para calcular o valor enviado à Asaas, então a página de
 -- preços e a cobrança real não têm como divergir.
@@ -18,7 +18,7 @@
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- planos — catálogo comercial
+-- planos, catálogo comercial
 -- ─────────────────────────────────────────────────────────────────────────────
 create table public.planos (
   chave                  public.plano primary key,
@@ -41,7 +41,7 @@ create table public.planos (
 );
 
 comment on table public.planos is
-  'Catálogo de planos. Fonte única de preço e limite — front e Edge Function leem daqui.';
+  'Catálogo de planos. Fonte única de preço e limite, front e Edge Function leem daqui.';
 comment on column public.planos.limites is
   'Limites do plano. Chave ausente ou nula = ilimitado. Aplicados por trigger em 0007.';
 
@@ -112,7 +112,7 @@ alter table public.planos
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- assinaturas — espelho local da assinatura na Asaas
+-- assinaturas, espelho local da assinatura na Asaas
 -- ─────────────────────────────────────────────────────────────────────────────
 create table public.assinaturas (
   id                    uuid primary key default gen_random_uuid(),
@@ -161,7 +161,7 @@ create trigger assinaturas_atualizado_em
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- cobrancas — cada fatura gerada pela Asaas
+-- cobrancas, cada fatura gerada pela Asaas
 --
 -- O que NÃO existe nesta tabela, por decisão: número de cartão, bandeira,
 -- titular, CVV, linha digitável completa, QR de Pix. O usuário paga na página
@@ -188,7 +188,7 @@ create table public.cobrancas (
 );
 
 comment on table public.cobrancas is
-  'Faturas da assinatura. Sem nenhum dado de cartão — o pagamento acontece na Asaas.';
+  'Faturas da assinatura. Sem nenhum dado de cartão, o pagamento acontece na Asaas.';
 
 create index cobrancas_workspace_idx on public.cobrancas (workspace_id, vencimento desc);
 create index cobrancas_assinatura_idx on public.cobrancas (assinatura_id);
@@ -199,7 +199,7 @@ create trigger cobrancas_atualizado_em
 
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- Consulta de limite — usada pelos triggers de 0007 e pela UI
+-- Consulta de limite, usada pelos triggers de 0007 e pela UI
 -- ═══════════════════════════════════════════════════════════════════════════
 
 create or replace function app.limite_plano(p_workspace uuid, p_chave text)
@@ -237,7 +237,7 @@ comment on function app.recurso_liberado(uuid, text) is
 
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- Privilégios — leitura e nada mais
+-- Privilégios, leitura e nada mais
 -- ═══════════════════════════════════════════════════════════════════════════
 
 revoke all on public.planos      from anon, authenticated;
@@ -285,4 +285,4 @@ create policy "cobrança: dono e admin leem"
 
 -- Sem políticas de escrita, por decisão. `service_role` ignora RLS e é o único
 -- caminho de mutação. Se um dia aparecer aqui uma policy de INSERT para
--- `authenticated`, é regressão de segurança — não conveniência.
+-- `authenticated`, é regressão de segurança, não conveniência.

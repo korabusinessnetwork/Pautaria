@@ -1,5 +1,5 @@
 /**
- * Ofícios — a configuração que define o produto.
+ * Ofícios, a configuração que define o produto.
  *
  * Uma consulta traz o ofício com etapas e templates aninhados. Não é
  * otimização prematura: sem isso seriam três viagens ao servidor para montar a
@@ -22,7 +22,7 @@ const CAMPOS = `
 `;
 
 /**
- * Ofícios do sistema — os três da tela de abertura. Disponíveis a qualquer
+ * Ofícios do sistema, os três da tela de abertura. Disponíveis a qualquer
  * usuário autenticado, sem workspace ainda criado.
  */
 export async function listarOficiosDoSistema(): Promise<Oficio[]> {
@@ -92,7 +92,7 @@ export interface NovoOficio {
  * Cria um ofício próprio do workspace (planos Estúdio e Time).
  *
  * O trigger `limitar_oficios_personalizados` (migration 0007) recusa no plano
- * Solo — a UI já desabilita o caminho, mas a recusa que vale é a do banco.
+ * Solo, a UI já desabilita o caminho, mas a recusa que vale é a do banco.
  */
 export async function criarOficio(entrada: NovoOficio): Promise<Oficio> {
   const d = import.meta.env.DEV ? await seDemo(() => demo.criarOficio(entrada)) : null;

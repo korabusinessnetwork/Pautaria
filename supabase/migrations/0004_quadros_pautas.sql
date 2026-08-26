@@ -1,17 +1,17 @@
 -- ═══════════════════════════════════════════════════════════════════════════
--- 0004 — Quadros e pautas: o dado operacional
+-- 0004, Quadros e pautas: o dado operacional
 --
 -- Decisão de modelagem que merece atenção: a integridade "uma pauta pertence ao
 -- mesmo tenant e ao mesmo ofício do seu quadro, e sua etapa pertence a esse
 -- ofício" é garantida por **chaves estrangeiras compostas**, não por trigger.
 --
 -- Por quê: trigger é código, e código tem bug e tem janela de corrida. A FK
--- composta é uma promessa do Postgres — não existe caminho, nem via API nem via
+-- composta é uma promessa do Postgres, não existe caminho, nem via API nem via
 -- psql nem via service_role distraída, que crie uma pauta apontando para a
 -- etapa de outro ofício ou para o quadro de outro tenant. Custo: duas colunas
 -- denormalizadas (`workspace_id`, `oficio_id`) em `pautas`. Vale cada byte:
 -- `workspace_id` na própria linha também deixa a política de RLS ser um teste
--- direto, sem JOIN — o que importa numa tabela que será a mais consultada do
+-- direto, sem JOIN, o que importa numa tabela que será a mais consultada do
 -- sistema.
 -- ═══════════════════════════════════════════════════════════════════════════
 
@@ -47,7 +47,7 @@ create trigger quadros_atualizado_em
 
 
 -- O ofício de um quadro precisa ser do sistema ou do próprio tenant. Isto não
--- cabe em FK (a condição é uma disjunção), então é trigger — e é a única
+-- cabe em FK (a condição é uma disjunção), então é trigger, e é a única
 -- checagem cruzada desta migration que precisa ser.
 create or replace function app.validar_oficio_do_quadro()
 returns trigger
@@ -84,7 +84,7 @@ create trigger validar_oficio_do_quadro
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- pautas — o card
+-- pautas, o card
 -- ─────────────────────────────────────────────────────────────────────────────
 create table public.pautas (
   id             uuid primary key default gen_random_uuid(),
@@ -261,7 +261,7 @@ create policy "quadro: dono e admin excluem"
   using (app.tem_papel(workspace_id, array['owner', 'admin']::public.papel[]));
 
 -- ── pautas ──────────────────────────────────────────────────────────────────
--- O teste é direto em `workspace_id` — sem JOIN, sem subconsulta na tabela
+-- O teste é direto em `workspace_id`, sem JOIN, sem subconsulta na tabela
 -- quente. A FK composta acima é o que garante que essa coluna não mente.
 create policy "pauta: vejo as do meu workspace"
   on public.pautas for select to authenticated

@@ -1,4 +1,4 @@
-/* Configurações — mesma cadência de painéis de Equipe e Plano.
+/* Configurações, mesma cadência de painéis de Equipe e Plano.
 
    A tela não inventa layout próprio: quem chega aqui vindo de "Equipe" ou de
    "Plano e cobrança" encontra a mesma largura, o mesmo painel e o mesmo
@@ -179,7 +179,7 @@
 
 /* O seletor de matiz.
 
-   A faixa (`--faixa`) é injetada pelo componente a partir do croma do ofício —
+   A faixa (`--faixa`) é injetada pelo componente a partir do croma do ofício,
    o CSS não conhece cor nenhuma aqui, só a variável. É a mesma regra do resto
    do white-label: a folha de estilo descreve a forma, o tenant decide a cor.  */
 .faixa {

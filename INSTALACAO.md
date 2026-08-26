@@ -77,7 +77,7 @@ bash scripts/testar-isolamento.sh
 
 ---
 
-## 3. Asaas — conta sandbox
+## 3. Asaas, conta sandbox
 
 O Pautaria **não** processa cartão: o usuário paga numa página hospedada pela Asaas.
 Precisamos só de uma chave de API e de um token de webhook.
@@ -87,13 +87,19 @@ Precisamos só de uma chave de API e de um token de webhook.
    (`$aact_hmlg_...` no sandbox).
 3. **Configurações → Integrações → Webhooks** → novo webhook:
    - **URL:** `https://<SEU-PROJETO>.supabase.co/functions/v1/asaas-webhook`
-   - **Token de autenticação:** invente uma string longa e aleatória e guarde — é a
+   - **Token de autenticação:** invente uma string longa e aleatória e guarde, é a
      mesma que vai em `ASAAS_WEBHOOK_TOKEN`. A Asaas a envia no cabeçalho
      `asaas-access-token`, e a função rejeita qualquer requisição sem ela.
    - **Versão da API:** v3 · **Tipo de envio:** sequencial
    - **Eventos:** `PAYMENT_CREATED`, `PAYMENT_CONFIRMED`, `PAYMENT_RECEIVED`,
      `PAYMENT_OVERDUE`, `PAYMENT_REFUNDED`, `PAYMENT_DELETED`,
-     `PAYMENT_CHARGEBACK_REQUESTED`, `PAYMENT_UPDATED`
+     `PAYMENT_CHARGEBACK_REQUESTED`, `PAYMENT_UPDATED`,
+     **`SUBSCRIPTION_DELETED`**
+
+     > `SUBSCRIPTION_DELETED` faltava nesta lista e o webhook o trata desde sempre
+     > (`asaas-webhook/index.ts`). Sem ele, cancelamento feito pelo painel da Asaas
+     > nunca chega ao Pautaria e o workspace segue no plano pago indefinidamente.
+     > É o único evento cuja ausência custa dinheiro em vez de dar erro visível.
 
 Gere um token forte assim:
 
@@ -123,14 +129,14 @@ supabase secrets set ORIGENS_PERMITIDAS='https://app.pautaria.app'
 |---|---|---|
 | `ASAAS_API_KEY` | autenticar na API da Asaas | assinatura não é criada |
 | `ASAAS_AMBIENTE` | escolher sandbox × produção | assume `sandbox` |
-| `ASAAS_WEBHOOK_TOKEN` | **autenticar o webhook** — é a única defesa daquele endpoint | webhook responde 401 a tudo |
+| `ASAAS_WEBHOOK_TOKEN` | **autenticar o webhook**, é a única defesa daquele endpoint | webhook responde 401 a tudo |
 | `CRON_TOKEN` | autenticar o agendador da reconciliação | reconciliação responde 401 |
 | `APP_URL` | montar URLs de retorno e liberar CORS | assume `localhost:5173` |
 | `IP_HASH_SAL` | pseudonimizar IP no `audit_log` | deriva do service key |
 | `ORIGENS_PERMITIDAS` | origens extras de CORS | só `APP_URL` e localhost |
 
 `SUPABASE_URL`, `SUPABASE_ANON_KEY` e `SUPABASE_SERVICE_ROLE_KEY` são injetadas
-automaticamente pelo runtime — **não** as defina à mão.
+automaticamente pelo runtime, **não** as defina à mão.
 
 Para desenvolvimento local das funções, crie `supabase/.env` (já ignorado pelo git):
 
@@ -195,7 +201,7 @@ curl -X POST http://127.0.0.1:54321/functions/v1/asaas-webhook \
 ```
 
 Reenvie o **mesmo** `id` e confirme que a segunda chamada responde `duplicado: true` sem
-alterar nada — é a prova de que a idempotência está funcionando.
+alterar nada, é a prova de que a idempotência está funcionando.
 
 ---
 
@@ -206,12 +212,30 @@ alterar nada — é a prova de que a idempotência está funcionando.
 ```bash
 supabase link --project-ref <SEU-PROJECT-REF>
 supabase db push
+supabase config push        # aplica [auth] do config.toml: senha, sessão, redirect
 supabase functions deploy asaas-webhook --no-verify-jwt   # público: a Asaas não tem JWT
 supabase functions deploy assinatura-criar
 supabase functions deploy assinatura-portal
 supabase functions deploy assinatura-cancelar
 supabase functions deploy assinaturas-reconciliar --no-verify-jwt
 ```
+
+#### O que o ambiente hospedado faz diferente do local
+
+Quatro diferenças custaram tempo na primeira vez. Todas já estão resolvidas no
+repositório, mas o motivo precisa ficar registrado:
+
+| Diferença | Sintoma | Como está resolvido |
+|---|---|---|
+| `db push` **não roda seeds** | banco de pé e `oficios` vazio, o app abre sem nenhum ofício para escolher | aplique `supabase/seeds/0001_oficios.sql` pelo SQL Editor após o push |
+| `postgres` não é membro de `supabase_admin` | 0009 morre com `permission denied to change default privileges` (42501) | a migration testa `pg_has_role` além da existência do papel |
+| o bundler não acha o import map sozinho | deploy falha com `Relative import path "@supabase/supabase-js" not prefixed with...` | `import_map = "./functions/deno.json"` em cada `[functions.*]` do `config.toml` |
+| plano Free recusa template de e-mail e HIBP | `config push` inteiro falha com 400 ou 402 | as duas seções estão comentadas no `config.toml`, com o custo de reativar |
+
+> **Confira o resultado, não o exit code.** Um `config push` pode responder
+> `auth: updated` e mesmo assim não ter aplicado a política de senha, se a chave
+> estiver na seção errada — TOML aceita chave desconhecida sem reclamar. Leia o
+> estado de volta antes de dar por configurado. Ver `memory/learnings.md` A11.
 
 > `--no-verify-jwt` no webhook é **obrigatório e seguro**: quem chama é a Asaas, que não
 > possui JWT do Supabase. A autenticação dele é o `asaas-access-token`, verificado em

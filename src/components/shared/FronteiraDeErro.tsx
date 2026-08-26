@@ -3,7 +3,7 @@
  *
  * Um erro de renderização em React desmonta a árvore inteira e deixa a tela
  * branca. Tela branca é o pior estado possível: o usuário não sabe se travou,
- * se perdeu o trabalho, ou se a internet caiu — e não tem o que fazer.
+ * se perdeu o trabalho, ou se a internet caiu, e não tem o que fazer.
  *
  * Aqui ele vê o que aconteceu, tem um botão para tentar de novo e outro para
  * voltar ao começo. O detalhe técnico fica atrás de um `<details>`, disponível
@@ -44,7 +44,7 @@ export class FronteiraDeErro extends Component<Props, Estado> {
           <span className={estilos.marca}>PAUTARIA</span>
           <h1 className={estilos.titulo}>Algo quebrou por aqui.</h1>
           <p className={estilos.texto}>
-            Não é você — foi a gente. Suas pautas estão salvas; nada do que você
+            Não é você, foi a gente. Suas pautas estão salvas; nada do que você
             escreveu se perdeu.
           </p>
 

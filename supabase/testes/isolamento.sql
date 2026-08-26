@@ -11,7 +11,7 @@
 --  todos os caminhos que um cliente tem: ler, inserir, atualizar, apagar,
 --  escalar privilégio de plano e forjar auditoria.
 --
---  Tudo roda dentro de uma transação com ROLLBACK no fim — o banco fica como
+--  Tudo roda dentro de uma transação com ROLLBACK no fim, o banco fica como
 --  estava.
 -- ═══════════════════════════════════════════════════════════════════════════
 
@@ -82,7 +82,7 @@ $$;
 --
 -- A RLS tem dois modos de barrar, e a diferença importa: `WITH CHECK` levanta
 -- exceção (a linha que você quer gravar é inválida), enquanto `USING` apenas
--- torna a linha invisível — o comando "funciona" e afeta zero linhas. Um teste
+-- torna a linha invisível, o comando "funciona" e afeta zero linhas. Um teste
 -- que só procura exceção passaria batido pelo segundo caso e não teria provado
 -- nada sobre UPDATE e DELETE cruzando tenants.
 create or replace function pg_temp.linhas_afetadas(p_sql text)
@@ -95,16 +95,16 @@ begin
 exception when others then
   -- O motivo é impresso: quando um teste reprova, saber SE foi barrado não
   -- ajuda a corrigir; saber POR QUE, sim.
-  raise notice '    (barrado: % — %)', sqlstate, sqlerrm;
+  raise notice '    (barrado: %, %)', sqlstate, sqlerrm;
   return -1;
 end;
 $$;
 
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- BLOCO 1 — Cobertura de RLS
+-- BLOCO 1, Cobertura de RLS
 -- ═══════════════════════════════════════════════════════════════════════════
-\echo '▸ Bloco 1 — cobertura de RLS'
+\echo '▸ Bloco 1, cobertura de RLS'
 
 do $$
 declare
@@ -117,7 +117,7 @@ begin
   perform pg_temp.afirmar(
     v_faltando is null,
     coalesce('toda tabela de negócio tem RLS' ||
-             case when v_faltando is null then '' else ' — PENDENTE: ' || v_faltando end,
+             case when v_faltando is null then '' else ', PENDENTE: ' || v_faltando end,
              ''));
 end;
 $$;
@@ -180,10 +180,10 @@ $$;
 
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- BLOCO 2 — Cenário: dois tenants, dois donos
+-- BLOCO 2, Cenário: dois tenants, dois donos
 -- ═══════════════════════════════════════════════════════════════════════════
 \echo ''
-\echo '▸ Bloco 2 — montando dois tenants'
+\echo '▸ Bloco 2, montando dois tenants'
 
 -- IDs fixos para o teste ser legível na saída.
 \set uid_a 'aaaaaaaa-0000-4000-8000-000000000001'
@@ -218,7 +218,7 @@ select pg_temp.virar_postgres();
 -- o Bloco 4 um ataque de verdade: sem isso, Alice tentaria inserir usando um
 -- SELECT que a própria RLS esvazia, o INSERT afetaria zero linhas, e o teste
 -- passaria sem nunca ter encostado na fronteira. Um atacante real não descobre
--- ids por SELECT — descobre por vazamento, log, ou adivinhação. Damos os ids de
+-- ids por SELECT, descobre por vazamento, log, ou adivinhação. Damos os ids de
 -- graça a ela e exigimos que a barreira segure mesmo assim.
 select oficio_id as oficio_b from public.quadros where id = :'quadro_b'::uuid \gset
 select id as etapa_b0 from public.oficio_etapas
@@ -236,10 +236,10 @@ select pg_temp.afirmar(
 
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- BLOCO 3 — Leitura não atravessa a fronteira
+-- BLOCO 3, Leitura não atravessa a fronteira
 -- ═══════════════════════════════════════════════════════════════════════════
 \echo ''
-\echo '▸ Bloco 3 — leitura'
+\echo '▸ Bloco 3, leitura'
 
 select pg_temp.virar(:'uid_a'::uuid);
 
@@ -269,7 +269,7 @@ select pg_temp.afirmar(
 
 select pg_temp.afirmar(
   (select count(*) from public.profiles) = 1,
-  'Alice só enxerga o próprio perfil — não há diretório global de usuários');
+  'Alice só enxerga o próprio perfil, não há diretório global de usuários');
 
 select pg_temp.afirmar(
   (select count(*) from public.v_uso_workspace) = 1,
@@ -281,10 +281,10 @@ select pg_temp.afirmar(
 
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- BLOCO 4 — Escrita não atravessa a fronteira
+-- BLOCO 4, Escrita não atravessa a fronteira
 -- ═══════════════════════════════════════════════════════════════════════════
 \echo ''
-\echo '▸ Bloco 4 — escrita'
+\echo '▸ Bloco 4, escrita'
 
 -- Com todos os ids em mãos, a única coisa entre Alice e o quadro do Bruno é a
 -- política de RLS. É exatamente essa a afirmação que queremos provar.
@@ -336,7 +336,7 @@ select pg_temp.afirmar(
 select pg_temp.afirmar(
   pg_temp.linhas_afetadas(
     $q$ update public.pautas set titulo = titulo where true $q$) = 6,
-  'UPDATE sem WHERE de Alice atinge só as 6 pautas dela — a RLS é o WHERE implícito');
+  'UPDATE sem WHERE de Alice atinge só as 6 pautas dela, a RLS é o WHERE implícito');
 
 select pg_temp.afirmar(
   pg_temp.recusado(format(
@@ -346,13 +346,13 @@ select pg_temp.afirmar(
 
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- BLOCO 5 — Escalada de privilégio de plano
+-- BLOCO 5, Escalada de privilégio de plano
 --
 -- O ataque mais óbvio de um SaaS: o usuário se dar o plano pago. Precisa
 -- falhar por privilégio de COLUNA, antes de qualquer lógica de aplicação.
 -- ═══════════════════════════════════════════════════════════════════════════
 \echo ''
-\echo '▸ Bloco 5 — escalada de plano'
+\echo '▸ Bloco 5, escalada de plano'
 
 select pg_temp.afirmar(
   pg_temp.recusado(format(
@@ -379,10 +379,10 @@ select pg_temp.afirmar(
 
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- BLOCO 6 — Auditoria e tabelas de defesa
+-- BLOCO 6, Auditoria e tabelas de defesa
 -- ═══════════════════════════════════════════════════════════════════════════
 \echo ''
-\echo '▸ Bloco 6 — auditoria e defesa'
+\echo '▸ Bloco 6, auditoria e defesa'
 
 select pg_temp.afirmar(
   pg_temp.recusado(format(
@@ -436,10 +436,10 @@ select pg_temp.afirmar(
 
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- BLOCO 7 — Limites de plano são do banco, não da UI
+-- BLOCO 7, Limites de plano são do banco, não da UI
 -- ═══════════════════════════════════════════════════════════════════════════
 \echo ''
-\echo '▸ Bloco 7 — limites de plano'
+\echo '▸ Bloco 7, limites de plano'
 
 select pg_temp.afirmar(
   pg_temp.recusado(format(
@@ -458,7 +458,7 @@ select pg_temp.afirmar(
 
 -- O caminho feliz continua funcionando: limite não pode virar bloqueio geral.
 -- Um teste de segurança que só prova negativas esconde o pior tipo de
--- regressão — a que fecha o produto junto com a brecha.
+-- regressão, a que fecha o produto junto com a brecha.
 select pg_temp.afirmar(
   pg_temp.linhas_afetadas(format(
     $q$ insert into public.pautas
@@ -480,10 +480,10 @@ select pg_temp.afirmar(
 
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- BLOCO 8 — Integridade estrutural (FK composta)
+-- BLOCO 8, Integridade estrutural (FK composta)
 -- ═══════════════════════════════════════════════════════════════════════════
 \echo ''
-\echo '▸ Bloco 8 — integridade estrutural'
+\echo '▸ Bloco 8, integridade estrutural'
 
 select pg_temp.afirmar(
   pg_temp.recusado(format(
@@ -499,10 +499,10 @@ select pg_temp.afirmar(
 
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- BLOCO 9 — Perspectiva do Bruno (a fronteira vale nos dois sentidos)
+-- BLOCO 9, Perspectiva do Bruno (a fronteira vale nos dois sentidos)
 -- ═══════════════════════════════════════════════════════════════════════════
 \echo ''
-\echo '▸ Bloco 9 — do outro lado'
+\echo '▸ Bloco 9, do outro lado'
 
 select pg_temp.virar(:'uid_b'::uuid);
 
@@ -520,10 +520,10 @@ select pg_temp.afirmar(
 
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- BLOCO 10 — Usuário anônimo
+-- BLOCO 10, Usuário anônimo
 -- ═══════════════════════════════════════════════════════════════════════════
 \echo ''
-\echo '▸ Bloco 10 — anônimo'
+\echo '▸ Bloco 10, anônimo'
 
 select pg_temp.virar_anon();
 
@@ -549,18 +549,18 @@ select pg_temp.afirmar(
 
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- BLOCO 11 — "a pauta viaja junto": troca de ofício
+-- BLOCO 11, "a pauta viaja junto": troca de ofício
 --
 -- A promessa da tela de abertura, verificada em SQL. Alice troca o quadro de
 -- Marketing (5 etapas) para Produtividade (4 etapas). As pautas precisam
 -- sobreviver com o mesmo id, migrar para a etapa de ordem correspondente, e as
 -- que estavam na 5ª coluna precisam cair na última do novo ofício.
 --
--- Este bloco exercita o `set constraints all deferred` das FKs compostas —
+-- Este bloco exercita o `set constraints all deferred` das FKs compostas,
 -- justamente o trecho de 0008 que seria impossível de conferir por leitura.
 -- ═══════════════════════════════════════════════════════════════════════════
 \echo ''
-\echo '▸ Bloco 11 — troca de ofício'
+\echo '▸ Bloco 11, troca de ofício'
 
 select pg_temp.virar(:'uid_a'::uuid);
 
@@ -599,10 +599,10 @@ select pg_temp.afirmar(
 
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- BLOCO 12 — Convites
+-- BLOCO 12, Convites
 -- ═══════════════════════════════════════════════════════════════════════════
 \echo ''
-\echo '▸ Bloco 12 — convites'
+\echo '▸ Bloco 12, convites'
 
 select pg_temp.afirmar(
   pg_temp.recusado(format(
@@ -634,7 +634,7 @@ select pg_temp.afirmar(
 
 select pg_temp.afirmar(
   (select count(*) from public.pautas where workspace_id = :'ws_a'::uuid) = 7,
-  'e passa a enxergar as pautas da Alice — porque agora é membro, não por brecha');
+  'e passa a enxergar as pautas da Alice, porque agora é membro, não por brecha');
 
 select pg_temp.afirmar(
   (select count(*) from public.assinaturas where workspace_id = :'ws_a'::uuid) = 0
@@ -671,7 +671,7 @@ select pg_temp.afirmar(
 
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- BLOCO 13 — Máquina de estados da assinatura
+-- BLOCO 13, Máquina de estados da assinatura
 --
 -- `app.aplicar_estado_assinatura` é a única função do sistema que escreve
 -- `workspaces.plano`. Todo o resto (webhook, cancelamento, reconciliação) só
@@ -682,7 +682,7 @@ select pg_temp.afirmar(
 -- Roda como postgres porque é isso que a Edge Function é: service_role.
 -- ═══════════════════════════════════════════════════════════════════════════
 \echo ''
-\echo '▸ Bloco 13 — máquina de estados da assinatura'
+\echo '▸ Bloco 13, máquina de estados da assinatura'
 
 select pg_temp.virar_postgres();
 
@@ -699,7 +699,7 @@ values (:'ws_b'::uuid, 'estudio', 'mensal', 'pendente', 2900, 'cus_t', 'sub_t');
 
 select pg_temp.afirmar(
   (select plano from app.aplicar_estado_assinatura(:'ws_b'::uuid)) = 'solo',
-  'assinatura pendente NÃO libera o plano — boleto gerado não é boleto pago');
+  'assinatura pendente NÃO libera o plano, boleto gerado não é boleto pago');
 
 -- ── Ramo 2: pagamento confirmado ─────────────────────────────────────────────
 update public.assinaturas
@@ -720,7 +720,7 @@ update public.assinaturas
 
 select pg_temp.afirmar(
   (select plano from app.aplicar_estado_assinatura(:'ws_b'::uuid)) = 'estudio',
-  'atraso de 2 dias mantém o plano — tolerância existe para isso');
+  'atraso de 2 dias mantém o plano, tolerância existe para isso');
 
 select pg_temp.afirmar(
   (select status from public.workspaces where id = :'ws_b'::uuid) = 'inadimplente',
@@ -746,7 +746,7 @@ select pg_temp.afirmar(
 -- ── Ramo 5: o dado do usuário sobrevive ao rebaixamento ──────────────────────
 select pg_temp.afirmar(
   (select count(*) from public.pautas where workspace_id = :'ws_b'::uuid) = 5,
-  'rebaixar plano NÃO apaga pauta alguma — dado de usuário não é refém de cobrança');
+  'rebaixar plano NÃO apaga pauta alguma, dado de usuário não é refém de cobrança');
 
 -- ── Ramo 6: cancelou no meio do período pago ─────────────────────────────────
 update public.assinaturas
@@ -782,7 +782,7 @@ select pg_temp.afirmar(
     $q$ insert into public.assinaturas
           (workspace_id, plano, ciclo, status, valor_centavos, asaas_customer_id)
         values (%L::uuid, 'estudio', 'mensal', 'pendente', 2900, 'cus_t') $q$, :'ws_b')),
-  'índice único impede duas assinaturas vivas — a trava contra clique duplo');
+  'índice único impede duas assinaturas vivas, a trava contra clique duplo');
 
 -- ── Ramo 9: integridade de valores ───────────────────────────────────────────
 select pg_temp.afirmar(

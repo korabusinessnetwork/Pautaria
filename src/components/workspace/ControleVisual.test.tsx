@@ -1,12 +1,12 @@
 /**
- * Densidade e exportação — dois controles pequenos, duas regras reais.
+ * Densidade e exportação, dois controles pequenos, duas regras reais.
  *
  * A exportação é recurso de plano pago (`limites.exportar`). O botão precisa
  * nascer desabilitado com o motivo, não estourar erro depois do clique.
  *
  * A densidade é preferência de leitura por pessoa, guardada em `sessionStorage`.
  * O ESLint proíbe `localStorage.setItem` neste projeto (ver `.eslintrc.cjs`), e
- * `sessionStorage` aqui não é só o desvio permitido — é o comportamento melhor,
+ * `sessionStorage` aqui não é só o desvio permitido, é o comportamento melhor,
  * porque a preferência acompanha a sessão de trabalho e não persegue a pessoa.
  */
 
@@ -29,7 +29,7 @@ beforeEach(() => {
   sessionStorage.clear();
 });
 
-describe('ControleVisual — densidade', () => {
+describe('ControleVisual, densidade', () => {
   it('mostra qual densidade está ativa, para leitor de tela', () => {
     montar({ densidade: 'confortavel' });
 
@@ -60,7 +60,7 @@ describe('ControleVisual — densidade', () => {
   });
 });
 
-describe('ControleVisual — exportação', () => {
+describe('ControleVisual, exportação', () => {
   it('exporta quando o plano permite', async () => {
     const aoExportar = vi.fn();
     montar({ aoExportar });

@@ -16,7 +16,7 @@
     "jsx": "react-jsx",
     "types": ["vite/client", "node", "vitest/globals", "@testing-library/jest-dom"],
 
-    /* Rigor — o compilador é a primeira camada de segurança */
+    /* Rigor, o compilador é a primeira camada de segurança */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -25,7 +25,7 @@
     "exactOptionalPropertyTypes": false,
     "forceConsistentCasingInFileNames": true,
 
-    /* Aliases — importar por feature, nunca por caminho relativo profundo */
+    /* Aliases, importar por feature, nunca por caminho relativo profundo */
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]

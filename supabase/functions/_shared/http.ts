@@ -1,12 +1,12 @@
 /**
- * HTTP — envelope de resposta, CORS e leitura segura de corpo.
+ * HTTP, envelope de resposta, CORS e leitura segura de corpo.
  *
  * Todas as funções respondem no mesmo formato:
  *
  *     { "data": {...}, "error": null }
  *     { "data": null,  "error": { "codigo": "plano_ja_ativo", "mensagem": "…" } }
  *
- * O `codigo` é a parte estável do contrato — o front decide comportamento por
+ * O `codigo` é a parte estável do contrato, o front decide comportamento por
  * ele. A `mensagem` é para o humano e pode mudar sem quebrar nada. Casar erro
  * por texto é o tipo de acoplamento que quebra silenciosamente na primeira
  * revisão de copy.
@@ -64,7 +64,7 @@ export class ErroApi extends Error {
  * funções recebem o JWT do usuário no cabeçalho `Authorization`, e um curinga
  * autorizaria qualquer site a fazer o browser de alguém logado disparar
  * chamadas autenticadas. Origem desconhecida não recebe cabeçalho de CORS
- * algum — o browser corta antes da resposta chegar ao script.
+ * algum, o browser corta antes da resposta chegar ao script.
  */
 export function cabecalhosCors(origem: string | null): Record<string, string> {
   const permitidas = origensPermitidas();
@@ -122,7 +122,7 @@ export function responderPreflight(origem: string | null): Response {
  * Lê o corpo JSON com teto de tamanho.
  *
  * Sem o teto, um POST de 200 MB é aceito, bufferizado na memória da função e
- * cobrado como tempo de execução — negação de serviço barata contra um endpoint
+ * cobrado como tempo de execução, negação de serviço barata contra um endpoint
  * que precisa ficar público. 256 KB é folgado para qualquer payload nosso e
  * para os da Asaas.
  */

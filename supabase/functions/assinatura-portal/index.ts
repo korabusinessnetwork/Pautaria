@@ -1,8 +1,8 @@
 /**
- * assinatura-portal — leva o usuário de volta à fatura em aberto.
+ * assinatura-portal, leva o usuário de volta à fatura em aberto.
  *
  * O boleto venceu, o Pix expirou, a pessoa fechou a aba antes de pagar. Sem uma
- * porta de volta, o único caminho seria cancelar e contratar de novo — que
+ * porta de volta, o único caminho seria cancelar e contratar de novo, que
  * gera cobrança nova, número novo, e uma conversa com o suporte.
  *
  * A função consulta a Asaas ao vivo em vez de devolver a URL que guardamos:

@@ -1,32 +1,32 @@
 -- ═══════════════════════════════════════════════════════════════════════════
--- 0008 — RPCs da aplicação
+-- 0008, RPCs da aplicação
 --
 -- Uma operação vira RPC quando precisa ser **atômica** ou quando precisa de um
 -- privilégio que o chamador não tem. Fora esses dois casos, o cliente fala com
--- as tabelas via PostgREST e a RLS decide — inventar RPC para tudo só reconstrói
+-- as tabelas via PostgREST e a RLS decide, inventar RPC para tudo só reconstrói
 -- um backend sem os benefícios de ter um.
 --
 -- As três aqui:
---   • criar_workspace       — atomicidade: tenant + quadro + pautas de exemplo
+--   • criar_workspace, atomicidade: tenant + quadro + pautas de exemplo
 --                             nascem juntos ou não nascem
---   • aceitar_convite       — privilégio: quem aceita ainda não é membro e
+--   • aceitar_convite, privilégio: quem aceita ainda não é membro e
 --                             portanto não enxerga a linha do convite
---   • trocar_oficio_quadro  — atomicidade: remapear todas as pautas para as
+--   • trocar_oficio_quadro, atomicidade: remapear todas as pautas para as
 --                             etapas do novo ofício sem estado intermediário
 --                             inválido
 --
--- E uma quarta, interna, que não é RPC: `app.aplicar_estado_assinatura` — o
+-- E uma quarta, interna, que não é RPC: `app.aplicar_estado_assinatura`, o
 -- único lugar do sistema que decide qual plano um workspace tem.
 -- ═══════════════════════════════════════════════════════════════════════════
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- criar_workspace — o onboarding inteiro em uma transação
+-- criar_workspace, o onboarding inteiro em uma transação
 --
 -- SECURITY INVOKER de propósito. A função não precisa de privilégio extra: o
 -- trigger `ao_criar_workspace` (0002) cria o vínculo de dono assim que a linha
 -- entra, e a partir daí a própria RLS autoriza o resto. Rodar como invoker
--- mantém todas as políticas valendo — inclusive os limites de plano — em vez de
+-- mantém todas as políticas valendo, inclusive os limites de plano, em vez de
 -- abrir um buraco de privilégio por conveniência.
 -- ─────────────────────────────────────────────────────────────────────────────
 create or replace function public.criar_workspace(
@@ -87,7 +87,7 @@ begin
   -- `INSERT ... RETURNING` exige que a política de **SELECT** aprove a linha
   -- devolvida, e a política de SELECT de `workspaces` pede que o usuário já
   -- seja membro. Quem cria o vínculo é o trigger AFTER INSERT, que só dispara
-  -- no fim da instrução — depois do RETURNING. O resultado seria um erro de RLS
+  -- no fim da instrução, depois do RETURNING. O resultado seria um erro de RLS
   -- em pleno caminho feliz do onboarding. Gerar o uuid antes remove a
   -- dependência circular sem afrouxar política alguma.
   v_workspace := gen_random_uuid();
@@ -146,7 +146,7 @@ comment on function public.criar_workspace(text, text, boolean) is
 --
 -- SECURITY DEFINER porque quem aceita ainda não é membro e, pela RLS, não
 -- enxerga a linha do convite. Duas travas compensam o privilégio elevado:
---   1. comparação por hash — o token em claro nunca esteve no banco;
+--   1. comparação por hash, o token em claro nunca esteve no banco;
 --   2. o e-mail da conta autenticada precisa bater com o e-mail convidado, de
 --      modo que um link vazado não serve para uma conta qualquer.
 -- O limite de membros do plano continua valendo: o INSERT dispara o trigger de
@@ -191,7 +191,7 @@ begin
 
   -- `if not exists` em vez de `on conflict (workspace_id, user_id)`: a lista de
   -- inferência do ON CONFLICT é resolvida como referência de coluna nua, e
-  -- `workspace_id` também é o nome de um parâmetro OUT desta função — o
+  -- `workspace_id` também é o nome de um parâmetro OUT desta função, o
   -- plpgsql não sabe qual dos dois você quis e aborta com "ambiguous". Trocar
   -- por uma checagem explícita evita a colisão sem depender de
   -- `#variable_conflict`, que resolveria este caso e esconderia o próximo.
@@ -226,9 +226,9 @@ comment on function public.aceitar_convite(text) is
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- trocar_oficio_quadro — a troca de sotaque, com as pautas junto
+-- trocar_oficio_quadro, a troca de sotaque, com as pautas junto
 --
--- "Troque de ofício quando quiser — a pauta viaja junto." Traduzido em SQL: as
+-- "Troque de ofício quando quiser, a pauta viaja junto." Traduzido em SQL: as
 -- pautas mudam de etapa para a etapa de **mesma ordem** no novo ofício, e as
 -- que não têm correspondente (ofício novo com menos colunas) caem na última.
 --
@@ -236,12 +236,12 @@ comment on function public.aceitar_convite(text) is
 -- FKs compostas de 0004 são violadas no estado intermediário (pauta ainda
 -- apontando para etapa do ofício antigo enquanto o quadro já mudou), e só
 -- voltam a fechar no fim. Sem o deferimento, seria necessário destruir e
--- recriar as pautas — perdendo id, histórico e qualquer referência a elas.
+-- recriar as pautas, perdendo id, histórico e qualquer referência a elas.
 --
 -- SECURITY DEFINER, ao contrário de `criar_workspace`. O motivo é concreto:
 -- `pautas.oficio_id` está fora do `grant update` do cliente de propósito (0004),
 -- porque essa coluna carrega a integridade estrutural da linha e um cliente não
--- tem por que mexer nela avulsa. Esta operação precisa mexer — então ela sobe
+-- tem por que mexer nela avulsa. Esta operação precisa mexer, então ela sobe
 -- de privilégio e paga o preço: checa a autorização à mão, logo na entrada, em
 -- vez de herdá-la da RLS. Toda função DEFINER do projeto deve abrir com esse
 -- bloco de verificação; se não abrir, é bug de segurança.
@@ -340,7 +340,7 @@ comment on function public.trocar_oficio_quadro(uuid, uuid) is
 
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- app.aplicar_estado_assinatura — o único juiz do plano de um workspace
+-- app.aplicar_estado_assinatura, o único juiz do plano de um workspace
 --
 -- Existe exatamente uma função no sistema que escreve `workspaces.plano`. Tudo
 -- que acontece na cobrança (webhook, cancelamento, reconciliação diária) chama
@@ -349,7 +349,7 @@ comment on function public.trocar_oficio_quadro(uuid, uuid) is
 -- sequência de UPDATEs espalhados que podem discordar entre si.
 --
 -- Tolerância: 7 dias após o vencimento. O workspace segue gravável e o usuário
--- é avisado. Só depois disso vira somente-leitura — e nunca perde dado.
+-- é avisado. Só depois disso vira somente-leitura, e nunca perde dado.
 -- ═══════════════════════════════════════════════════════════════════════════
 create or replace function app.aplicar_estado_assinatura(p_workspace uuid)
 returns public.workspaces
@@ -381,7 +381,7 @@ begin
     -- Sem assinatura viva. Antes de cair para o Solo, honramos o período já
     -- pago de uma assinatura cancelada: quem pagou o mês inteiro usa o mês
     -- inteiro, mesmo tendo cancelado no dia 3. Cortar o acesso na hora do
-    -- cancelamento seria ficar com o dinheiro sem entregar o serviço — e é
+    -- cancelamento seria ficar com o dinheiro sem entregar o serviço, e é
     -- justamente o tipo de detalhe que faz alguém não voltar a assinar.
     select * into v_ass
       from public.assinaturas a

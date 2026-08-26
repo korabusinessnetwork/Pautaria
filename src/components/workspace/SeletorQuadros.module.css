@@ -2,7 +2,7 @@
 
    Cada `.linha` recebe as quatro variáveis de accent do ofício **daquele**
    quadro via `style` (é o único jeito de um valor vindo do banco virar token).
-   Daqui para baixo, tudo lê `var(--ac*)` normalmente — inclusive o anel de foco
+   Daqui para baixo, tudo lê `var(--ac*)` normalmente, inclusive o anel de foco
    global, que passa a acompanhar a cor do quadro sob o cursor. */
 
 .raiz {
@@ -12,7 +12,7 @@
 }
 
 /* Um quadro só não merece uma seção inteira da sidebar. Some o rótulo, some o
-   realce de "ativo" (não há de que se distinguir) e some o nome do ofício —
+   realce de "ativo" (não há de que se distinguir) e some o nome do ofício,
    ele já está logo abaixo, destacado na seção OFÍCIO. Sobra uma linha quieta e
    um convite discreto a criar o segundo quadro. */
 .discreto .itemAtivo {
@@ -80,7 +80,7 @@
   box-shadow: var(--sombra-ativo);
 }
 
-/* Durante uma edição os outros quadros ficam inertes — mas não apagados: eles
+/* Durante uma edição os outros quadros ficam inertes, mas não apagados: eles
    continuam sendo a informação que a pessoa está olhando enquanto digita. */
 .item:disabled,
 .itemAtivo:disabled {
@@ -257,7 +257,7 @@
   .rotuloSecao {
     display: none;
   }
-  /* Sem hover em toque, o botão de renomear precisa estar sempre visível — mas
+  /* Sem hover em toque, o botão de renomear precisa estar sempre visível, mas
      o subtítulo com o nome do ofício sai, para a barra não engordar. */
   .renomear {
     opacity: 1;

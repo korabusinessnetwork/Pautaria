@@ -1,10 +1,10 @@
 /**
- * Tabela — a mesma pauta, densa.
+ * Tabela, a mesma pauta, densa.
  *
  * O quadro responde "o que está em cada etapa?"; a tabela responde "o que
  * vence primeiro?". São perguntas diferentes sobre os mesmos dados, e por isso
  * a ordenação padrão aqui é por etapa e depois por prazo, não pela posição do
- * kanban — arrastar cards define ordem visual, não prioridade.
+ * kanban, arrastar cards define ordem visual, não prioridade.
  *
  * Os cabeçalhos das colunas de campo vêm do ofício: PAUTA / ETAPA / CANAL /
  * CAMPANHA para Marketing, PAUTA / ETAPA / SPRINT / ESTIMATIVA para TI. Nenhum

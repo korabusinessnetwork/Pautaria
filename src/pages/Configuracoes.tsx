@@ -1,12 +1,12 @@
 /**
- * Configurações — o workspace, a pessoa e a identidade visual do tenant.
+ * Configurações, o workspace, a pessoa e a identidade visual do tenant.
  *
  * Três coisas de escopos diferentes convivem nesta tela, e a separação em
  * painéis é o que impede a confusão mais cara aqui: **perfil é da pessoa,
  * identidade é do tenant**. Trocar o nome no painel do meio muda o avatar em
  * todos os workspaces em que ela entra; trocar a matiz no painel de baixo muda
  * a cor deste workspace para todo mundo que trabalha nele. Os textos dizem isso
- * antes do clique — descobrir depois seria descobrir errado.
+ * antes do clique, descobrir depois seria descobrir errado.
  *
  * O ofício continua sendo a configuração (CLAUDE.md, princípio nº 1): nada aqui
  * é obrigatório, e o workspace já chega funcionando sem que ninguém visite esta
@@ -15,7 +15,7 @@
  * A matiz do tenant é o gancho de white-label do ADR-002: `workspaces.tema` é
  * um JSONB que o dono do workspace escreve (o grant de coluna barra `plano` e
  * `status`, não `tema`), e o `WorkspaceContext` já dá precedência a
- * `tema.hue` sobre a matiz do ofício. Esta tela é só a alavanca — o mecanismo
+ * `tema.hue` sobre a matiz do ofício. Esta tela é só a alavanca, o mecanismo
  * já existia, e é por isso que salvar aqui re-tematiza o app inteiro sem
  * recarregar nada.
  */
@@ -50,7 +50,7 @@ export function Configuracoes() {
   );
 }
 
-/** Espelha o limite de `criarWorkspace` — o banco recusa acima disso. */
+/** Espelha o limite de `criarWorkspace`, o banco recusa acima disso. */
 const MAX_NOME = 60;
 
 /**
@@ -81,7 +81,7 @@ function Conteudo() {
   const idGrau = `${idMatiz}-grau`;
 
   // Rascunhos: `null` significa "ainda não editei", e a exibição cai no valor
-  // salvo. É o que evita um `useEffect` de sincronização — e, com ele, o
+  // salvo. É o que evita um `useEffect` de sincronização, e, com ele, o
   // pisca-pisca clássico de o campo voltar ao valor antigo enquanto a consulta
   // revalida depois de salvar.
   const [rascunhoNome, setRascunhoNome] = useState<string | null>(null);
@@ -198,7 +198,7 @@ function Conteudo() {
         </Link>
         <h1 className={estilos.titulo}>Configurações</h1>
         <p className={estilos.subtitulo}>
-          Nada aqui é obrigatório — seu quadro já funciona do jeito que está.
+          Nada aqui é obrigatório, seu quadro já funciona do jeito que está.
         </p>
       </header>
 
@@ -261,7 +261,7 @@ function Conteudo() {
       <section className={estilos.painel}>
         <h2 className={estilos.tituloSecao}>Seu perfil</h2>
         <p className={estilos.explicacao}>
-          Vale para você em todos os workspaces — é assim que o time te reconhece no
+          Vale para você em todos os workspaces, é assim que o time te reconhece no
           quadro.
         </p>
 
@@ -313,7 +313,7 @@ function Conteudo() {
                   nomePerfil.trim().length === 0
                     ? 'Informe como você quer ser chamado.'
                     : iniciais.trim().length === 0
-                      ? 'As iniciais alimentam seu avatar — informe pelo menos uma letra.'
+                      ? 'As iniciais alimentam seu avatar, informe pelo menos uma letra.'
                       : nomePerfil.trim() === perfil?.nome && iniciais.trim() === perfil?.iniciais
                         ? 'Nada mudou por aqui.'
                         : undefined
@@ -343,7 +343,7 @@ function Conteudo() {
 
         {!oficioBase ? (
           <Aviso tom="info" titulo="Ainda não há um ofício para colorir">
-            Crie um quadro primeiro — a cor da marca entra por cima da cor do ofício, e
+            Crie um quadro primeiro, a cor da marca entra por cima da cor do ofício, e
             por enquanto não há uma para substituir.
           </Aviso>
         ) : (

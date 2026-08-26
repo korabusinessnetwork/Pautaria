@@ -1,4 +1,4 @@
-# 03 — Regras de negócio
+# 03, Regras de negócio
 
 > Document-first: a regra existe aqui antes de existir no código. Cada regra aponta onde
 > está implementada, para que a divergência entre doc e código seja detectável.
@@ -22,7 +22,7 @@ menos colunas, as excedentes caem na última. Nenhuma pauta é criada, apagada o
 
 Só dono ou admin trocam, e só em workspace gravável.
 
-**Trocar nunca é paywall** — é o aha moment do produto (`memory/restrictions.md` P1).
+**Trocar nunca é paywall**, é o aha moment do produto (`memory/restrictions.md` P1).
 
 *Implementado em:* `public.trocar_oficio_quadro` (migration 0008), com `set constraints all
 deferred` para permitir o estado intermediário. Testado no Bloco 11 de
@@ -57,7 +57,7 @@ Regras estruturais:
 | `cancelado` | ✓ | ✗ | encerrado pelo dono |
 
 **`inadimplente` continua gravável de propósito.** Travar o trabalho de alguém por um
-atraso de dois dias é desproporcional. E nenhum estado apaga dado — suspenso é somente
+atraso de dois dias é desproporcional. E nenhum estado apaga dado, suspenso é somente
 leitura, nunca porta fechada.
 
 *Implementado em:* `app.workspace_gravavel` (migration 0002).
@@ -79,11 +79,11 @@ Regras de aplicação:
 1. **O limite é do banco.** Triggers de `INSERT` (migration 0007). A UI desabilita o botão
    para ser gentil; o banco recusa para ser correto.
 2. **A contagem é exata.** `pg_advisory_xact_lock` por workspace serializa inserções
-   concorrentes do mesmo tenant — sem isso, dois cliques simultâneos furam o teto.
+   concorrentes do mesmo tenant, sem isso, dois cliques simultâneos furam o teto.
 3. **Membros contam convites em aberto.** Senão o dono do Solo dispara oito convites e o
    limite vira decoração.
 4. **Rebaixar não apaga.** Os gatilhos são só de `INSERT`. Quem tinha 200 pautas e volta
-   ao Solo continua vendo, editando e apagando as 200 — só não cria a 201ª.
+   ao Solo continua vendo, editando e apagando as 200, só não cria a 201ª.
 5. **Preço e limite são dados** (`planos`), lidos pelo front e pela Edge Function. A página
    de preços e a cobrança real não têm como divergir.
 6. **Anual ≤ 12 × mensal**, garantido por CHECK.
@@ -93,7 +93,7 @@ Regras de aplicação:
 ## RN-06 · Assinatura
 
 **Contratação.** Só o dono. Requer nome e CPF/CNPJ válidos (a Asaas exige para emitir).
-O corpo da requisição informa **qual** plano, nunca **quanto** custa — o valor vem da
+O corpo da requisição informa **qual** plano, nunca **quanto** custa, o valor vem da
 tabela dentro da Edge Function.
 
 Ordem: grava a assinatura local como `pendente` (o índice único parcial funciona como
@@ -137,7 +137,7 @@ de evento.
 | `PAYMENT_DELETED` | removida | — | — |
 | `SUBSCRIPTION_DELETED` | — | cancelada | — |
 
-Semântica de resposta — importa mais do que parece:
+Semântica de resposta, importa mais do que parece:
 - **200** para evento já processado, desconhecido, ou de cobrança avulsa. Devolver erro
   faria a Asaas retentar para sempre algo que nunca vai mudar de estado.
 - **500** para falha nossa, para que a Asaas insista.
@@ -150,10 +150,10 @@ Semântica de resposta — importa mais do que parece:
 Webhook é entrega melhor-esforço. Uma vez por dia, a reconciliação varre assinaturas com
 período expirado e workspaces com `plano_expira_em` no passado, e manda o banco recalcular.
 
-Como `aplicar_estado_assinatura` é derivação pura, rodá-la sem necessidade não tem efeito
-— o que torna a reconciliação segura de repetir e dispensa coordená-la com o webhook.
+Como `aplicar_estado_assinatura` é derivação pura, rodá-la sem necessidade não tem efeito,
+o que torna a reconciliação segura de repetir e dispensa coordená-la com o webhook.
 
-Também: faxina dos baldes de rate limit e **sentinela de RLS** — se alguma tabela entrou em
+Também: faxina dos baldes de rate limit e **sentinela de RLS**, se alguma tabela entrou em
 produção sem RLS, o alerta sai aqui.
 
 *Implementado em:* `supabase/functions/assinaturas-reconciliar/`.
@@ -161,13 +161,13 @@ produção sem RLS, o alerta sai aqui.
 ## RN-09 · Pautas
 
 - Título obrigatório, 1 a 200 caracteres.
-- Campos livres opcionais, até 60 caracteres. **Vazio é `NULL`**, nunca o traço `—` — o
+- Campos livres opcionais, até 60 caracteres. **Vazio é `NULL`**, nunca o traço `—`, o
   traço é decisão de renderização e não pode virar conteúdo salvo.
 - Responsável precisa ser membro do workspace. Sair do workspace **não** apaga as pautas:
   elas ficam sem responsável.
 - Ordem por `posicao` fracionária; mover é UPDATE de uma linha.
 - Arquivar é `arquivada_em`, não `DELETE`. A pauta some do quadro e o dado continua.
-- A etapa sempre pertence ao ofício do quadro — garantido por FK composta, não por trigger.
+- A etapa sempre pertence ao ofício do quadro, garantido por FK composta, não por trigger.
 
 *Implementado em:* migration 0004 · `src/lib/pautas.service.ts`.
 
@@ -177,7 +177,7 @@ produção sem RLS, o alerta sai aqui.
 - Validade de 7 dias, um convite em aberto por e-mail e workspace.
 - **Guardamos o SHA-256 do token, nunca o token.** O link aparece uma vez na tela.
 - Aceitar exige que o e-mail da conta autenticada bata com o convidado.
-- Mensagem de erro única para inexistente, expirado, já usado ou e-mail diferente —
+- Mensagem de erro única para inexistente, expirado, já usado ou e-mail diferente,
   distinguir ensinaria a sondar tokens.
 - O limite de membros do plano continua valendo no aceite.
 

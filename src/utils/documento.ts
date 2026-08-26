@@ -1,11 +1,11 @@
 /**
- * CPF e CNPJ no front — a gentileza antes da garantia.
+ * CPF e CNPJ no front, a gentileza antes da garantia.
  *
  * Este arquivo é gêmeo de `supabase/functions/_shared/documento.ts`. A
  * duplicação é deliberada e vale a pena explicar, porque "não se repita" diria
  * o contrário: são dois ambientes de execução distintos (browser e Deno) sem
- * pacote compartilhado entre eles, e a alternativa — publicar um pacote npm
- * interno na fase bootstrap — custaria mais do que resolve.
+ * pacote compartilhado entre eles, e a alternativa, publicar um pacote npm
+ * interno na fase bootstrap, custaria mais do que resolve.
  *
  * A divisão de responsabilidade é clara: aqui o objetivo é **desabilitar o
  * botão** enquanto o CPF não fecha, para o usuário não descobrir o erro depois

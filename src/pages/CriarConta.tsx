@@ -2,8 +2,8 @@
  * Cadastro.
  *
  * Os requisitos de senha aparecem **antes** de errar, e cada um acende sozinho
- * conforme a pessoa digita. A alternativa comum — deixar enviar e devolver "a
- * senha não atende aos critérios" — obriga a adivinhar qual critério faltou.
+ * conforme a pessoa digita. A alternativa comum, deixar enviar e devolver "a
+ * senha não atende aos critérios", obriga a adivinhar qual critério faltou.
  * A lista espelha `auth.password` do `supabase/config.toml`; o servidor
  * continua sendo quem decide.
  */
@@ -67,7 +67,7 @@ export function CriarConta() {
             <h1 className={estilos.titulo}>Confira seu e-mail.</h1>
             <div className={estilos.sucesso}>
               Mandamos um link de confirmação para <strong>{email}</strong>. Abra o link e
-              volte aqui — seu quadro leva menos de um minuto para nascer.
+              volte aqui, seu quadro leva menos de um minuto para nascer.
             </div>
             <p className={estilos.rodape}>
               <Link to="/entrar">Voltar para a entrada</Link>

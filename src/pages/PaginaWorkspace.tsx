@@ -1,9 +1,9 @@
 /**
- * O workspace — sidebar, topbar e a área que alterna entre quadro e tabela.
+ * O workspace, sidebar, topbar e a área que alterna entre quadro e tabela.
  *
  * Esta página é o ponto de encontro de tudo: o contexto do tenant, o hook do
  * quadro, os limites de plano e a UI do handoff. Ela própria não sabe nada
- * sobre nenhum ofício em particular — recebe `oficioAtivo` e distribui.
+ * sobre nenhum ofício em particular, recebe `oficioAtivo` e distribui.
  *
  * Sobre o estado local `pautaAberta`: guardamos o **id**, não o objeto. Se
  * guardássemos o objeto, o drawer continuaria exibindo a versão antiga depois
@@ -76,7 +76,7 @@ function Conteudo() {
   /**
    * Baixa o CSV. `gerarCsvPautas` é função pura e testada (inclusive contra
    * injeção de fórmula em planilha); aqui fica só a parte que toca o navegador.
-   * O objeto URL é revogado logo depois — sem isso, cada exportação seguraria o
+   * O objeto URL é revogado logo depois, sem isso, cada exportação seguraria o
    * blob na memória da aba até o recarregamento.
    */
   function exportarCsv() {
@@ -107,7 +107,7 @@ function Conteudo() {
   }
   if (!workspace) return <NaoEncontrado />;
 
-  // Ofício solo esconde responsável e avatares — decisão do ofício, não do plano.
+  // Ofício solo esconde responsável e avatares, decisão do ofício, não do plano.
   const mostrarResponsavel = !oficioAtivo?.solo && membros.length > 1;
   const podeEditar = gravavel && limites.criarPauta.liberado;
 
@@ -147,7 +147,7 @@ function Conteudo() {
         />
 
         {/* Barra de ferramentas: densidade e exportação. Fora da Topbar de
-            propósito — ela já carrega título, contador, busca, alternador e a
+            propósito, ela já carrega título, contador, busca, alternador e a
             ação principal. Empilhar mais dois controles ali tornaria o alvo de
             clique da ação principal disputado. */}
         <div className={estilos.ferramentas}>

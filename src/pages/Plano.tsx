@@ -2,13 +2,13 @@
  * Plano e cobrança.
  *
  * Tudo o que acontece aqui atravessa uma Edge Function. O front **lê** o estado
- * (`assinaturas`, `cobrancas` — a RLS libera para dono e admin) e **pede**
+ * (`assinaturas`, `cobrancas`, a RLS libera para dono e admin) e **pede**
  * mudanças chamando função. Não existe caminho daqui até um UPDATE em
  * `workspaces.plano`: o grant de coluna do banco recusa (migration 0002), e o
  * teste de isolamento prova isso a cada build.
  *
  * O formulário de contratação pede nome e CPF/CNPJ porque a Asaas exige para
- * emitir a cobrança. Não pede nada de cartão — o pagamento acontece na página
+ * emitir a cobrança. Não pede nada de cartão, o pagamento acontece na página
  * hospedada pela Asaas, e é por isso que este arquivo não tem um único campo
  * sensível.
  */
@@ -205,7 +205,7 @@ function Conteudo() {
                   <p>
                     Você continua com o plano até{' '}
                     {formatarDataLonga(assinatura.fimPeriodo ?? workspace.planoExpiraEm)}. Nada
-                    é apagado quando o período acabar — o quadro volta ao plano Solo.
+                    é apagado quando o período acabar, o quadro volta ao plano Solo.
                   </p>
                   <div className={estilos.confirmacaoAcoes}>
                     <Botao
@@ -296,7 +296,7 @@ function Conteudo() {
             <form className={estilos.formulario} onSubmit={enviarContratacao}>
               <p className={estilos.explicacao}>
                 Precisamos destes dados para emitir a cobrança. O pagamento acontece na
-                página da Asaas — o Pautaria não recebe nem armazena dados do seu cartão.
+                página da Asaas, o Pautaria não recebe nem armazena dados do seu cartão.
               </p>
 
               <Campo
@@ -316,7 +316,7 @@ function Conteudo() {
                 inputMode="numeric"
                 erro={
                   documento.length > 0 && !documentoOk
-                    ? 'Confira os dígitos — o número não fecha.'
+                    ? 'Confira os dígitos, o número não fecha.'
                     : null
                 }
               />

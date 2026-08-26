@@ -1,11 +1,11 @@
 /**
- * Equipe — membros e convites.
+ * Equipe, membros e convites.
  *
  * O link do convite aparece **uma vez**, logo depois de criado, com um aviso
  * explícito. Não é limitação técnica disfarçada de feature: guardamos apenas o
  * SHA-256 do token (ver `membros.service.ts`), então o link realmente deixa de
  * existir quando esta tela é fechada. É a mesma escolha que qualquer gerenciador
- * de segredos faz, e pelo mesmo motivo — um convite recuperável a qualquer
+ * de segredos faz, e pelo mesmo motivo, um convite recuperável a qualquer
  * momento é um convite que vaza junto com o banco.
  */
 
@@ -206,7 +206,7 @@ function Conteudo() {
           {linkGerado ? (
             <div className={estilos.linkCaixa}>
               <p className={estilos.linkAviso}>
-                <strong>Copie agora.</strong> Guardamos só o hash deste token — se você
+                <strong>Copie agora.</strong> Guardamos só o hash deste token, se você
                 fechar esta tela, o link não pode ser recuperado, só revogado e recriado.
               </p>
               <div className={estilos.linkLinha}>
@@ -242,8 +242,8 @@ function Conteudo() {
                   value={papel}
                   onChange={(e) => setPapel(e.target.value as 'admin' | 'membro')}
                 >
-                  <option value="membro">Membro — cria e move pautas</option>
-                  <option value="admin">Admin — também gerencia equipe e ofícios</option>
+                  <option value="membro">Membro, cria e move pautas</option>
+                  <option value="admin">Admin, também gerencia equipe e ofícios</option>
                 </select>
               </label>
 

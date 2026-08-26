@@ -1,5 +1,5 @@
 /**
- * Abertura — a escolha do ofício.
+ * Abertura, a escolha do ofício.
  *
  * É a tela que define o produto. O usuário chega, escolhe entre três ofícios e
  * cai direto num quadro já tematizado e já povoado. Nada de "dê um nome ao seu
@@ -8,7 +8,7 @@
  *
  * O nome do workspace é derivado do nome da pessoa em vez de perguntado. Uma
  * pergunta a mais aqui é uma pergunta a mais antes do valor, e o usuário pode
- * renomear depois em dois cliques — a assimetria de custo é evidente.
+ * renomear depois em dois cliques, a assimetria de custo é evidente.
  */
 
 import { useState } from 'react';
@@ -64,7 +64,7 @@ export function Abertura() {
         </h1>
         <p className={estilos.subtitulo}>
           Escolha o seu ofício. As etapas, os campos e o ritmo do quadro se ajustam a
-          como você trabalha — não o contrário.
+          como você trabalha, não o contrário.
         </p>
       </header>
 
@@ -120,7 +120,7 @@ export function Abertura() {
       </div>
 
       <p className={estilos.rodape}>
-        Troque de ofício quando quiser — a pauta viaja junto.
+        Troque de ofício quando quiser, a pauta viaja junto.
       </p>
     </div>
   );

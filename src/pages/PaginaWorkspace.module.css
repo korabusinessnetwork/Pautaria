@@ -42,7 +42,7 @@
 
 /* Barra de ferramentas sob a topbar: densidade e exportação.
    Alinhada à direita para não competir com o título do quadro, e sem borda
-   própria — ela pertence visualmente ao cabeçalho, não ao conteúdo. */
+   própria, ela pertence visualmente ao cabeçalho, não ao conteúdo. */
 .ferramentas {
   display: flex;
   justify-content: flex-end;

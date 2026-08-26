@@ -1,10 +1,10 @@
 /**
- * Workspace — o tenant ativo, seu papel, seu uso e seus ofícios.
+ * Workspace, o tenant ativo, seu papel, seu uso e seus ofícios.
  *
  * Este contexto é onde o white-label deixa de ser conceito e vira
  * comportamento. Nenhum componente abaixo dele sabe o nome de um ofício ou uma
  * cor: eles leem `oficioAtivo` e renderizam o que estiver ali. Trocar de ofício
- * é trocar um id — a UI inteira se re-tematiza porque as variáveis CSS mudam na
+ * é trocar um id, a UI inteira se re-tematiza porque as variáveis CSS mudam na
  * raiz do documento.
  */
 
@@ -36,9 +36,9 @@ interface ValorWorkspace {
   carregando: boolean;
   erro: Error | null;
 
-  /** `true` para dono e admin — quem pode mexer em configuração. */
+  /** `true` para dono e admin, quem pode mexer em configuração. */
   podeAdministrar: boolean;
-  /** `true` só para o dono — quem mexe em cobrança. */
+  /** `true` só para o dono, quem mexe em cobrança. */
   ehDono: boolean;
   /** `false` em workspace suspenso ou cancelado: a UI vira somente leitura. */
   gravavel: boolean;
@@ -106,7 +106,7 @@ export function ProvedorWorkspace({
   }, [oficios, quadroAtivo]);
 
   // O tema segue o ofício do quadro ativo, com a matiz do tenant tendo
-  // precedência quando ela existir: é o gancho de white-label — um cliente com
+  // precedência quando ela existir: é o gancho de white-label, um cliente com
   // marca própria mantém a cor dele mesmo trocando de ofício.
   useEffect(() => {
     if (!oficioAtivo) return;

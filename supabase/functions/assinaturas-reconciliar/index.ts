@@ -1,16 +1,16 @@
 /**
- * assinaturas-reconciliar — a rede de segurança diária.
+ * assinaturas-reconciliar, a rede de segurança diária.
  *
  * Webhook é entrega **melhor-esforço**. A Asaas pode ter uma janela de
  * instabilidade, a função pode ter estourado o tempo num pico, o token pode ter
  * sido trocado sem atualizar dos dois lados. Se o único caminho para mudar o
  * plano fosse o webhook, cada evento perdido viraria um cliente pagante em
- * plano solo — ou, pior, um cliente que parou de pagar mantendo o plano Time.
+ * plano solo, ou, pior, um cliente que parou de pagar mantendo o plano Time.
  *
  * Esta função roda uma vez por dia e reconcilia por estado, não por evento:
  * varre as assinaturas cujo período expirou e manda o banco recalcular. Como
  * `aplicar_estado_assinatura` é uma derivação pura, rodá-la sem necessidade não
- * causa efeito nenhum — o que torna a reconciliação segura de repetir e
+ * causa efeito nenhum, o que torna a reconciliação segura de repetir e
  * dispensável de coordenar com o webhook.
  *
  * Sem JWT: quem chama é o agendador. A autenticação é o `x-cron-token`,

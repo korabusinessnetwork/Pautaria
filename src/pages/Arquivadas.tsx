@@ -1,10 +1,10 @@
 /**
- * Arquivadas — o arquivo do quadro, e o caminho de volta.
+ * Arquivadas, o arquivo do quadro, e o caminho de volta.
  *
  * Esta tela existe para desfazer uma mentira da UI. No banco, arquivar sempre
  * foi reversível: `pautas.arquivada_em` volta a `null` e a pauta reaparece no
  * quadro. Mas enquanto não havia tela para ver o que estava arquivado, o drawer
- * tratava a ação como irreversível e pedia confirmação (`memory/bugs.md` L2) —
+ * tratava a ação como irreversível e pedia confirmação (`memory/bugs.md` L2),
  * porque uma pauta que some sem lugar para reencontrá-la é, na prática, uma
  * pauta perdida. Com o arquivo à vista, arquivar volta a ser o que o banco
  * sempre disse que era.
@@ -13,10 +13,10 @@
  *
  * - **Desarquivar** é reversível (basta arquivar de novo) e por isso é um
  *   clique só, sem confirmação. Mas *recria uma pauta ativa*, então respeita o
- *   teto do plano — e nasce desabilitado com o motivo à vista quando não cabe.
+ *   teto do plano, e nasce desabilitado com o motivo à vista quando não cabe.
  * - **Excluir definitivamente** é a única ação desta tela sem volta: não há
  *   lixeira depois dela. Essa sim confirma, e o texto da confirmação diz
- *   exatamente isso, com o título da pauta escrito por extenso — para que o
+ *   exatamente isso, com o título da pauta escrito por extenso, para que o
  *   segundo clique seja sobre uma pauta específica, não sobre "aquele botão
  *   vermelho".
  */
@@ -89,7 +89,7 @@ function Conteudo() {
   });
 
   // As ativas não são exibidas: elas contam. O teto do plano é por quadro, e
-  // desarquivar cria uma pauta ativa — sem esse número, o botão não sabe se
+  // desarquivar cria uma pauta ativa, sem esse número, o botão não sabe se
   // pode ser oferecido. A chave é a mesma do quadro, então o cache é o mesmo.
   const consultaAtivas = useQuery({
     queryKey: ['pautas', quadroAtivo?.id],
@@ -134,7 +134,7 @@ function Conteudo() {
 
   const motivoSomenteLeitura = gravavel
     ? undefined
-    : 'Este workspace está em modo somente leitura — nada pode ser alterado agora.';
+    : 'Este workspace está em modo somente leitura, nada pode ser alterado agora.';
 
   // Desarquivar recria uma pauta ativa: o veredito de criar pauta é o mesmo, e
   // a frase ganha o contexto que faltava para o motivo fazer sentido aqui.
@@ -228,7 +228,7 @@ function Conteudo() {
             <p className={estilos.vazioTitulo}>Nada arquivado.</p>
             <p className={estilos.vazioTexto}>
               Pautas arquivadas somem do quadro e ficam guardadas aqui. Para arquivar uma,
-              abra a pauta no quadro e use <strong>Arquivar pauta</strong> — dá para trazer
+              abra a pauta no quadro e use <strong>Arquivar pauta</strong>, dá para trazer
               de volta a qualquer momento.
             </p>
             <Link to={linkDoQuadro} className={estilos.vazioAcao}>
@@ -273,7 +273,7 @@ function Conteudo() {
                     ) : null}
 
                     <span className={estilos.meta}>
-                      {/* A etapa de origem é para onde ela volta — por isso está
+                      {/* A etapa de origem é para onde ela volta, por isso está
                           escrita, e não deduzida na hora de desarquivar. */}
                       <Etiqueta reta>{etapa?.nome ?? 'etapa removida'}</Etiqueta>
                       <span
@@ -289,7 +289,7 @@ function Conteudo() {
                     <div className={estilos.confirmacao}>
                       <p className={estilos.confirmacaoTexto}>
                         Excluir <strong>{pauta.titulo}</strong> apaga a pauta para sempre.
-                        Não há lixeira depois desta tela e não dá para desfazer — se você
+                        Não há lixeira depois desta tela e não dá para desfazer, se você
                         só quer tirá-la da frente, ela já está arquivada.
                       </p>
                       <div className={estilos.confirmacaoAcoes}>

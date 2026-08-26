@@ -3,7 +3,7 @@
  *
  * `CLAUDE.md` diz: *"Botão que estouraria o limite do plano nasce desabilitado
  * com o motivo à vista; não deixe o usuário clicar para receber um não."*
- * Desabilitar sem explicar é uma parede — e é o padrão para o qual o código
+ * Desabilitar sem explicar é uma parede, e é o padrão para o qual o código
  * escorrega sozinho, porque `disabled` é uma prop e explicar dá trabalho.
  *
  * Estes testes existem para que essa regra não se perca numa refatoração.
@@ -28,7 +28,7 @@ describe('Botao', () => {
     expect(screen.getByRole('button', { name: /novo quadro/i })).toBeDisabled();
   });
 
-  it('o motivo chega a quem usa mouse — via title', () => {
+  it('o motivo chega a quem usa mouse, via title', () => {
     render(<Botao motivoDesabilitado="Seu plano permite 1 quadro.">Novo quadro</Botao>);
     expect(screen.getByRole('button', { name: /novo quadro/i })).toHaveAttribute(
       'title',
@@ -36,7 +36,7 @@ describe('Botao', () => {
     );
   });
 
-  it('e a quem usa leitor de tela — via aria-describedby', () => {
+  it('e a quem usa leitor de tela, via aria-describedby', () => {
     render(<Botao motivoDesabilitado="Seu plano permite 1 quadro.">Novo quadro</Botao>);
 
     const botao = screen.getByRole('button', { name: /novo quadro/i });
@@ -83,7 +83,7 @@ describe('Botao', () => {
     expect(aoClicar).not.toHaveBeenCalled();
   });
 
-  it('nasce type="button" — um submit acidental dentro de form é bug clássico', () => {
+  it('nasce type="button", um submit acidental dentro de form é bug clássico', () => {
     render(<Botao>Qualquer</Botao>);
     expect(screen.getByRole('button')).toHaveAttribute('type', 'button');
   });

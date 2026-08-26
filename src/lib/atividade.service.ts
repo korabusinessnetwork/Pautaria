@@ -1,5 +1,5 @@
 /**
- * Atividade — a leitura do `audit_log`.
+ * Atividade, a leitura do `audit_log`.
  *
  * O banco já escrevia neste log desde a migration 0006 e ninguém lia. Um log
  * que só é escrito é custo de armazenamento com aparência de segurança: ele só
@@ -12,7 +12,7 @@
  * A migration 0006 dá ao papel `authenticated` um grant de SELECT **por
  * coluna**: id, workspace_id, ator_id, evento, recurso, recurso_id, meta,
  * origem, criado_em. `ip_hash` ficou deliberadamente fora. Pedi-lo faria o
- * PostgREST devolver 42501 e derrubar a tela inteira — então a lista de campos
+ * PostgREST devolver 42501 e derrubar a tela inteira, então a lista de campos
  * abaixo é explícita e final. Também não existe `select *`: além de estourar no
  * grant, `audit_log` é tabela sensível pelo CLAUDE.md, e `*` é como uma coluna
  * nova vaza para o cliente no dia em que alguém a adiciona.
@@ -26,13 +26,13 @@
  * Function. Isso significa que as duas metades do feed têm valor probatório
  * diferente: `'cliente'` é o que o navegador *afirma* ter feito, `'servidor'` é
  * o que o sistema *constatou*. Numa investigação de cobrança, misturar as duas
- * sem distinção transformaria o log em decoração — qualquer usuário poderia
+ * sem distinção transformaria o log em decoração, qualquer usuário poderia
  * forjar `assinatura.ativada`. Por isso `origem` sobe até a UI em vez de ficar
  * no banco: a tela precisa poder mostrar a diferença.
  *
  * Quem pode ler é decidido pela RLS (dono e admin do workspace). Um membro
  * comum não recebe erro: recebe **zero linhas**. Isso é correto para o banco e
- * péssimo para a pessoa — uma lista vazia parece defeito. Cabe à tela explicar
+ * péssimo para a pessoa, uma lista vazia parece defeito. Cabe à tela explicar
  * o motivo antes de consultar, e é o que `Atividade.tsx` faz.
  */
 
@@ -56,7 +56,7 @@ export type OrigemAtividade = z.infer<typeof zOrigemAtividade>;
  *
  * `id` chega como número: a coluna é `bigint generated always as identity` e o
  * PostgREST serializa bigint como número JSON. Guardamos como string porque o
- * único uso dele na UI é chave de lista — e uma chave numérica que o JavaScript
+ * único uso dele na UI é chave de lista, e uma chave numérica que o JavaScript
  * poderia arredondar no futuro é um bug esperando a tabela crescer.
  */
 const zAtividade = z
@@ -93,14 +93,14 @@ export type Atividade = z.infer<typeof zAtividade>;
 /**
  * Rótulos que `src/constants/eventos.ts` ainda não cobre.
  *
- * `ROTULO_EVENTO` é `Partial` de propósito — nasceu cobrindo os eventos que já
+ * `ROTULO_EVENTO` é `Partial` de propósito, nasceu cobrindo os eventos que já
  * apareciam em tela. Este mapa é o complemento, e a fusão abaixo dá precedência
  * ao arquivo de constantes: quando um rótulo migrar para lá, ele passa a valer e
  * a linha correspondente aqui pode ser removida sem mudar nada visível.
  *
  * Prefiro esta duplicação temporária a um fallback que invente frase a partir da
  * string do evento. "membro · papel alterado" no meio de "moveu uma pauta" lê
- * como vazamento de nome de banco na interface — exatamente o que o princípio nº
+ * como vazamento de nome de banco na interface, exatamente o que o princípio nº
  * 1 do CLAUDE.md proíbe.
  */
 const COMPLEMENTO_ROTULO: Partial<Record<Evento, string>> = {
@@ -123,8 +123,8 @@ const COMPLEMENTO_ROTULO: Partial<Record<Evento, string>> = {
  * texto é pior que um texto genérico, porque parece linha corrompida.
  *
  * O parâmetro é `string` e não `Evento` de propósito: o evento vem do banco, e um
- * registro gravado por uma versão mais nova do app — ou por uma Edge Function que
- * ninguém lembrou de mapear — precisa aparecer no feed em vez de sumir dele.
+ * registro gravado por uma versão mais nova do app, ou por uma Edge Function que
+ * ninguém lembrou de mapear, precisa aparecer no feed em vez de sumir dele.
  */
 export function descreverEvento(evento: string): string {
   const conhecido =
@@ -132,7 +132,7 @@ export function descreverEvento(evento: string): string {
   return conhecido ?? 'registrou uma ação';
 }
 
-/** `true` quando o registro foi escrito pelo servidor — o log confiável. */
+/** `true` quando o registro foi escrito pelo servidor, o log confiável. */
 export function confirmadoPeloServidor(item: Atividade): boolean {
   return item.origem === 'servidor';
 }
@@ -150,7 +150,7 @@ export const LIMITE_PADRAO = 60;
  * a única tabela do sistema sem DELETE. Sem teto, o "carregar mais" de um
  * workspace de um ano acabaria pedindo dezenas de milhares de linhas numa
  * requisição, e o navegador que travaria seria o de quem está investigando um
- * incidente — o pior momento possível.
+ * incidente, o pior momento possível.
  */
 export const LIMITE_MAXIMO = 300;
 
@@ -163,7 +163,7 @@ export function limiteValido(limite: number): number {
 /**
  * Últimos registros do workspace, do mais recente para o mais antigo.
  *
- * Devolve `[]` — e não erro — para quem não é dono nem admin: a RLS filtra as
+ * Devolve `[]`, e não erro, para quem não é dono nem admin: a RLS filtra as
  * linhas em vez de recusar a consulta. Quem chama precisa saber a diferença
  * entre "não há atividade" e "você não pode ver a atividade", porque só a UI
  * tem contexto para explicar a segunda.
@@ -202,7 +202,7 @@ export async function listarAtividade(
  * Vive aqui, e não em `src/lib/demo/dados.ts`, porque `audit_log` não é estado
  * do produto: nada nesta tela escreve, então não há interação para simular
  * contra um banco em memória. Uma lista derivada dos membros já semeados
- * entrega o que a demonstração precisa entregar — nomes e cores reais de avatar,
+ * entrega o que a demonstração precisa entregar, nomes e cores reais de avatar,
  * e a mistura de `cliente` e `servidor` que é o ponto da tela.
  *
  * A composição é deliberada: os eventos de cobrança são os de origem

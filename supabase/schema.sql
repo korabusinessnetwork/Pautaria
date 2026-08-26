@@ -1,5 +1,5 @@
 -- ═══════════════════════════════════════════════════════════════════════════
---  P A U T A R I A  —  S C H E M A  D O  B A N C O
+--  P A U T A R I A, S C H E M A  D O  B A N C O
 --
 --  ⚠️  ARQUIVO GERADO. Não edite aqui.
 --
@@ -23,14 +23,14 @@
 -- ╚══════════════════════════════════════════════════════════════════════════╝
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- 0001 — Fundação: schema privado, tipos de domínio e utilitários
+-- 0001, Fundação: schema privado, tipos de domínio e utilitários
 --
 -- Nada aqui cria tabela. Este arquivo estabelece o vocabulário do banco (enums)
 -- e a caixa de ferramentas (`app`) usada pelas políticas de RLS das migrations
 -- seguintes.
 --
 -- Convenção do projeto: o schema `app` guarda funções internas de autorização e
--- regra. Ele NÃO é exposto na API do PostgREST — só o `public` é. Isso significa
+-- regra. Ele NÃO é exposto na API do PostgREST, só o `public` é. Isso significa
 -- que essas funções não podem ser chamadas diretamente do browser; existem
 -- apenas para serem invocadas de dentro de políticas e triggers.
 -- ═══════════════════════════════════════════════════════════════════════════
@@ -41,14 +41,14 @@ comment on schema app is
   'Funções internas de autorização e regra de negócio. Não exposto via PostgREST.';
 
 -- `usage` no schema é necessário: as políticas de RLS chamam `app.e_membro()` e
--- companhia, e uma política é avaliada com os privilégios de quem consulta —
+-- companhia, e uma política é avaliada com os privilégios de quem consulta,
 -- sem `usage`, toda query autenticada morreria com "permission denied for
 -- schema app".
 --
 -- Isso NÃO expõe nada: `usage` num schema não dá direito a executar função
 -- alguma; cada `grant execute` é concedido individualmente, junto da função
 -- que o justifica. E o schema `app` fica fora de `config.toml → api.schemas`,
--- então o PostgREST sequer publica uma rota para ele — não há como chamar
+-- então o PostgREST sequer publica uma rota para ele, não há como chamar
 -- `app.*` a partir do browser, com ou sem privilégio.
 revoke all on schema app from public;
 grant usage on schema app to anon, authenticated, service_role;
@@ -65,17 +65,17 @@ grant usage on schema app to anon, authenticated, service_role;
 create type public.plano as enum ('solo', 'estudio', 'time');
 
 -- Papel de um usuário dentro de um workspace.
---   owner  — dono; único que assina, cancela e exclui o workspace. Sempre ≥ 1.
---   admin  — gerencia membros, ofícios e quadros; não mexe em assinatura.
---   membro — cria e move pautas.
+--   owner, dono; único que assina, cancela e exclui o workspace. Sempre ≥ 1.
+--   admin, gerencia membros, ofícios e quadros; não mexe em assinatura.
+--   membro, cria e move pautas.
 create type public.papel as enum ('owner', 'admin', 'membro');
 
 -- Estado do tenant.
---   ativo         — tudo liberado
---   inadimplente  — pagamento atrasado, ainda dentro do período de tolerância:
+--   ativo, tudo liberado
+--   inadimplente, pagamento atrasado, ainda dentro do período de tolerância:
 --                   continua gravável (não punimos o usuário antes da hora)
---   suspenso      — tolerância esgotada: somente leitura, dados preservados
---   cancelado     — encerrado pelo dono: somente leitura até a purga
+--   suspenso, tolerância esgotada: somente leitura, dados preservados
+--   cancelado, encerrado pelo dono: somente leitura até a purga
 create type public.status_workspace as enum
   ('ativo', 'inadimplente', 'suspenso', 'cancelado');
 
@@ -139,7 +139,7 @@ comment on function app.gerar_slug(text) is
 
 -- Hash de token de uso único (convites). Guardamos o hash, nunca o token: se o
 -- banco vazar, os convites em aberto não viram acesso.
--- `sha256` é nativa do Postgres desde a 11 — sem dependência de extensão.
+-- `sha256` é nativa do Postgres desde a 11, sem dependência de extensão.
 create or replace function app.hash_token(p_token text)
 returns text
 language sql
@@ -158,7 +158,7 @@ comment on function app.hash_token(text) is
 -- `gerar_slug` é chamada de dentro de `public.criar_workspace`, que roda como
 -- SECURITY INVOKER de propósito (para manter a RLS valendo no onboarding).
 -- Logo, quem chama precisa poder executá-la. É pura transformação de texto,
--- sem acesso a dado — conceder é inofensivo.
+-- sem acesso a dado, conceder é inofensivo.
 --
 -- `hash_token` NÃO é concedida: ela só é chamada de dentro de
 -- `public.aceitar_convite`, que é SECURITY DEFINER. Dar acesso a ela ao cliente
@@ -175,14 +175,14 @@ grant execute on function app.gerar_slug(text) to authenticated;
 -- ╚══════════════════════════════════════════════════════════════════════════╝
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- 0002 — Identidade e tenants: profiles, workspaces, membros e convites
+-- 0002, Identidade e tenants: profiles, workspaces, membros e convites
 --
 -- O **workspace é o tenant**. Todo dado de negócio do Pautaria pendura em um
 -- workspace, e o isolamento entre workspaces é a fronteira de segurança mais
 -- importante do produto.
 --
 -- Modelo de privilégio deste projeto (vale para TODAS as migrations):
---   1. `revoke all` na tabela para anon/authenticated — nada é permitido por
+--   1. `revoke all` na tabela para anon/authenticated, nada é permitido por
 --      omissão.
 --   2. `grant` explícito, **coluna a coluna** onde a coluna é sensível. Isso é o
 --      que impede o browser de escrever `plano` ou `status` mesmo que uma
@@ -192,13 +192,13 @@ grant execute on function app.gerar_slug(text) to authenticated;
 --
 -- Recursão de RLS: as políticas de `workspace_members` não podem consultar
 -- `workspace_members` diretamente (laço infinito). Por isso toda checagem passa
--- pelas funções `app.*` marcadas SECURITY DEFINER — elas rodam como dono da
+-- pelas funções `app.*` marcadas SECURITY DEFINER, elas rodam como dono da
 -- tabela e portanto não reentram na política.
 -- ═══════════════════════════════════════════════════════════════════════════
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- profiles — espelho público de auth.users
+-- profiles, espelho público de auth.users
 -- Nunca guardamos senha nem token aqui; isso é responsabilidade do GoTrue.
 -- ─────────────────────────────────────────────────────────────────────────────
 create table public.profiles (
@@ -212,7 +212,7 @@ create table public.profiles (
 );
 
 comment on table public.profiles is
-  'Dados de exibição do usuário. Sem credencial, sem CPF — documento fiscal vive só na Asaas.';
+  'Dados de exibição do usuário. Sem credencial, sem CPF, documento fiscal vive só na Asaas.';
 comment on column public.profiles.iniciais is
   'Iniciais para o avatar (ex.: "MT"). Derivadas do nome no cadastro.';
 
@@ -224,7 +224,7 @@ create trigger profiles_atualizado_em
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- workspaces — o tenant
+-- workspaces, o tenant
 -- ─────────────────────────────────────────────────────────────────────────────
 create table public.workspaces (
   id                 uuid primary key default gen_random_uuid(),
@@ -267,7 +267,7 @@ create trigger workspaces_atualizado_em
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- workspace_members — vínculo usuário ↔ tenant ↔ papel
+-- workspace_members, vínculo usuário ↔ tenant ↔ papel
 -- ─────────────────────────────────────────────────────────────────────────────
 create table public.workspace_members (
   workspace_id  uuid not null references public.workspaces(id) on delete cascade,
@@ -284,7 +284,7 @@ create index workspace_members_user_idx on public.workspace_members (user_id);
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- convites — entrada de novos membros (plano Time)
+-- convites, entrada de novos membros (plano Time)
 --
 -- Guardamos o **hash** do token, nunca o token. Um dump do banco não vira
 -- acesso: quem tem o hash não consegue reconstruir o link do convite.
@@ -315,7 +315,7 @@ create index convites_email_idx on public.convites (email) where aceito_em is nu
 
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- Funções de autorização — a base de toda política de RLS do projeto
+-- Funções de autorização, a base de toda política de RLS do projeto
 --
 -- Todas são SECURITY DEFINER com `search_path = ''` e nomes totalmente
 -- qualificados. O search_path vazio é obrigatório: sem ele, um schema plantado
@@ -463,7 +463,7 @@ create trigger ao_criar_usuario
 
 
 -- Quem cria o workspace vira owner na mesma transação. Sem isso existiria uma
--- janela — mesmo que de milissegundos — com um workspace sem dono, e um
+-- janela, mesmo que de milissegundos, com um workspace sem dono, e um
 -- workspace sem dono é um workspace que ninguém consegue administrar nem
 -- excluir.
 create or replace function app.ao_criar_workspace()
@@ -563,7 +563,7 @@ create trigger limitar_workspaces_por_dono
 
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- Privilégios — nada por omissão
+-- Privilégios, nada por omissão
 -- ═══════════════════════════════════════════════════════════════════════════
 
 revoke all on public.profiles          from anon, authenticated;
@@ -596,7 +596,7 @@ grant execute on function app.compartilha_workspace(uuid) to authenticated;
 
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- RLS — ativada na mesma migration que cria a tabela (CLAUDE.md)
+-- RLS, ativada na mesma migration que cria a tabela (CLAUDE.md)
 -- ═══════════════════════════════════════════════════════════════════════════
 
 alter table public.profiles          enable row level security;
@@ -680,7 +680,7 @@ create policy "convites: dono e admin revogam"
   using (app.tem_papel(workspace_id, array['owner', 'admin']::public.papel[]));
 
 -- Colunas legíveis do convite. `token_hash` NÃO está na lista: nem o dono do
--- workspace consegue lê-lo pela API. Aceitar convite é RPC (0008) — o cliente
+-- workspace consegue lê-lo pela API. Aceitar convite é RPC (0008), o cliente
 -- envia o token que recebeu por e-mail e o servidor compara os hashes.
 grant select (id, workspace_id, email, papel, expira_em, aceito_em, aceito_por,
               criado_por, criado_em)
@@ -692,11 +692,11 @@ grant select (id, workspace_id, email, papel, expira_em, aceito_em, aceito_por,
 -- ╚══════════════════════════════════════════════════════════════════════════╝
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- 0003 — Ofícios: a configuração que vira produto
+-- 0003, Ofícios: a configuração que vira produto
 --
 -- Esta é a migration mais importante do ponto de vista de **produto**. Tudo que
--- o usuário percebe como "o sistema se adaptou a mim" — as colunas do quadro, o
--- rótulo dos campos, o título, a cor, os templates, a fonte dos chips — está
+-- o usuário percebe como "o sistema se adaptou a mim", as colunas do quadro, o
+-- rótulo dos campos, o título, a cor, os templates, a fonte dos chips, está
 -- aqui, como dado.
 --
 -- A consequência prática: **um ofício novo é um INSERT, não um deploy.** Nenhum
@@ -743,7 +743,7 @@ create table public.oficios (
 
   -- ── Modos ────────────────────────────────────────────────────────────────
   -- mono: chips e etiquetas em fonte monoespaçada (identidade de TI/Dev)
-  -- solo: quadro de uma pessoa só — esconde responsável e avatares
+  -- solo: quadro de uma pessoa só, esconde responsável e avatares
   mono           boolean not null default false,
   solo           boolean not null default false,
 
@@ -760,7 +760,7 @@ comment on column public.oficios.solo is
   'Quadro individual: some com responsável e avatares mesmo no plano Time.';
 
 -- Chave única por escopo. Dois índices parciais em vez de um `unique
--- (workspace_id, chave)` porque NULL nunca conflita com NULL no Postgres — sem
+-- (workspace_id, chave)` porque NULL nunca conflita com NULL no Postgres, sem
 -- isto, nada impediria dois ofícios de sistema com a chave 'mkt'.
 create unique index oficios_sistema_chave_idx
   on public.oficios (chave) where workspace_id is null;
@@ -775,7 +775,7 @@ create trigger oficios_atualizado_em
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- oficio_etapas — as colunas do kanban
+-- oficio_etapas, as colunas do kanban
 -- ─────────────────────────────────────────────────────────────────────────────
 create table public.oficio_etapas (
   id         uuid primary key default gen_random_uuid(),
@@ -801,7 +801,7 @@ create index oficio_etapas_oficio_idx on public.oficio_etapas (oficio_id, ordem)
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- oficio_templates — pautas de um clique
+-- oficio_templates, pautas de um clique
 -- ─────────────────────────────────────────────────────────────────────────────
 create table public.oficio_templates (
   id         uuid primary key default gen_random_uuid(),
@@ -843,7 +843,7 @@ comment on function app.oficio_visivel(uuid) is
 
 
 -- Editável: só ofício próprio do tenant, e só por dono/admin. Ofício do sistema
--- é imutável pela API — mudá-lo é migration, não clique.
+-- é imutável pela API, mudá-lo é migration, não clique.
 create or replace function app.oficio_editavel(p_oficio uuid)
 returns boolean
 language sql
@@ -961,7 +961,7 @@ create policy "templates: removo só de ofício próprio"
 
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- oficio_exemplos — o quadro que já nasce cheio
+-- oficio_exemplos, o quadro que já nasce cheio
 --
 -- O aha moment do Pautaria é cair num quadro **populado**, não num quadro
 -- vazio com as colunas certas. Um kanban zerado ainda é uma tela em branco:
@@ -1009,19 +1009,19 @@ create policy "exemplos: vejo os dos ofícios que enxergo"
 -- ╚══════════════════════════════════════════════════════════════════════════╝
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- 0004 — Quadros e pautas: o dado operacional
+-- 0004, Quadros e pautas: o dado operacional
 --
 -- Decisão de modelagem que merece atenção: a integridade "uma pauta pertence ao
 -- mesmo tenant e ao mesmo ofício do seu quadro, e sua etapa pertence a esse
 -- ofício" é garantida por **chaves estrangeiras compostas**, não por trigger.
 --
 -- Por quê: trigger é código, e código tem bug e tem janela de corrida. A FK
--- composta é uma promessa do Postgres — não existe caminho, nem via API nem via
+-- composta é uma promessa do Postgres, não existe caminho, nem via API nem via
 -- psql nem via service_role distraída, que crie uma pauta apontando para a
 -- etapa de outro ofício ou para o quadro de outro tenant. Custo: duas colunas
 -- denormalizadas (`workspace_id`, `oficio_id`) em `pautas`. Vale cada byte:
 -- `workspace_id` na própria linha também deixa a política de RLS ser um teste
--- direto, sem JOIN — o que importa numa tabela que será a mais consultada do
+-- direto, sem JOIN, o que importa numa tabela que será a mais consultada do
 -- sistema.
 -- ═══════════════════════════════════════════════════════════════════════════
 
@@ -1057,7 +1057,7 @@ create trigger quadros_atualizado_em
 
 
 -- O ofício de um quadro precisa ser do sistema ou do próprio tenant. Isto não
--- cabe em FK (a condição é uma disjunção), então é trigger — e é a única
+-- cabe em FK (a condição é uma disjunção), então é trigger, e é a única
 -- checagem cruzada desta migration que precisa ser.
 create or replace function app.validar_oficio_do_quadro()
 returns trigger
@@ -1094,7 +1094,7 @@ create trigger validar_oficio_do_quadro
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- pautas — o card
+-- pautas, o card
 -- ─────────────────────────────────────────────────────────────────────────────
 create table public.pautas (
   id             uuid primary key default gen_random_uuid(),
@@ -1271,7 +1271,7 @@ create policy "quadro: dono e admin excluem"
   using (app.tem_papel(workspace_id, array['owner', 'admin']::public.papel[]));
 
 -- ── pautas ──────────────────────────────────────────────────────────────────
--- O teste é direto em `workspace_id` — sem JOIN, sem subconsulta na tabela
+-- O teste é direto em `workspace_id`, sem JOIN, sem subconsulta na tabela
 -- quente. A FK composta acima é o que garante que essa coluna não mente.
 create policy "pauta: vejo as do meu workspace"
   on public.pautas for select to authenticated
@@ -1296,7 +1296,7 @@ create policy "pauta: membro exclui"
 -- ╚══════════════════════════════════════════════════════════════════════════╝
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- 0005 — Planos, assinaturas e cobranças
+-- 0005, Planos, assinaturas e cobranças
 --
 -- Regra que organiza esta migration inteira: **o cliente nunca escreve aqui.**
 -- Não há `grant insert/update/delete` para `authenticated` em `assinaturas` nem
@@ -1307,7 +1307,7 @@ create policy "pauta: membro exclui"
 -- pede mudanças chamando função, nunca escrevendo tabela. Isso fecha a classe
 -- de ataque mais óbvia de um SaaS: o usuário se dar um plano melhor.
 --
--- Preço e limite vivem em `planos`, como dado — não como constante no código.
+-- Preço e limite vivem em `planos`, como dado, não como constante no código.
 -- Mudar preço é UPDATE; criar plano é INSERT. O front lê a mesma tabela que a
 -- Edge Function usa para calcular o valor enviado à Asaas, então a página de
 -- preços e a cobrança real não têm como divergir.
@@ -1315,7 +1315,7 @@ create policy "pauta: membro exclui"
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- planos — catálogo comercial
+-- planos, catálogo comercial
 -- ─────────────────────────────────────────────────────────────────────────────
 create table public.planos (
   chave                  public.plano primary key,
@@ -1338,7 +1338,7 @@ create table public.planos (
 );
 
 comment on table public.planos is
-  'Catálogo de planos. Fonte única de preço e limite — front e Edge Function leem daqui.';
+  'Catálogo de planos. Fonte única de preço e limite, front e Edge Function leem daqui.';
 comment on column public.planos.limites is
   'Limites do plano. Chave ausente ou nula = ilimitado. Aplicados por trigger em 0007.';
 
@@ -1409,7 +1409,7 @@ alter table public.planos
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- assinaturas — espelho local da assinatura na Asaas
+-- assinaturas, espelho local da assinatura na Asaas
 -- ─────────────────────────────────────────────────────────────────────────────
 create table public.assinaturas (
   id                    uuid primary key default gen_random_uuid(),
@@ -1458,7 +1458,7 @@ create trigger assinaturas_atualizado_em
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- cobrancas — cada fatura gerada pela Asaas
+-- cobrancas, cada fatura gerada pela Asaas
 --
 -- O que NÃO existe nesta tabela, por decisão: número de cartão, bandeira,
 -- titular, CVV, linha digitável completa, QR de Pix. O usuário paga na página
@@ -1485,7 +1485,7 @@ create table public.cobrancas (
 );
 
 comment on table public.cobrancas is
-  'Faturas da assinatura. Sem nenhum dado de cartão — o pagamento acontece na Asaas.';
+  'Faturas da assinatura. Sem nenhum dado de cartão, o pagamento acontece na Asaas.';
 
 create index cobrancas_workspace_idx on public.cobrancas (workspace_id, vencimento desc);
 create index cobrancas_assinatura_idx on public.cobrancas (assinatura_id);
@@ -1496,7 +1496,7 @@ create trigger cobrancas_atualizado_em
 
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- Consulta de limite — usada pelos triggers de 0007 e pela UI
+-- Consulta de limite, usada pelos triggers de 0007 e pela UI
 -- ═══════════════════════════════════════════════════════════════════════════
 
 create or replace function app.limite_plano(p_workspace uuid, p_chave text)
@@ -1534,7 +1534,7 @@ comment on function app.recurso_liberado(uuid, text) is
 
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- Privilégios — leitura e nada mais
+-- Privilégios, leitura e nada mais
 -- ═══════════════════════════════════════════════════════════════════════════
 
 revoke all on public.planos      from anon, authenticated;
@@ -1582,7 +1582,7 @@ create policy "cobrança: dono e admin leem"
 
 -- Sem políticas de escrita, por decisão. `service_role` ignora RLS e é o único
 -- caminho de mutação. Se um dia aparecer aqui uma policy de INSERT para
--- `authenticated`, é regressão de segurança — não conveniência.
+-- `authenticated`, é regressão de segurança, não conveniência.
 
 
 -- ╔══════════════════════════════════════════════════════════════════════════╗
@@ -1590,12 +1590,12 @@ create policy "cobrança: dono e admin leem"
 -- ╚══════════════════════════════════════════════════════════════════════════╝
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- 0006 — Segurança operacional: auditoria, idempotência de webhook, rate limit
+-- 0006, Segurança operacional: auditoria, idempotência de webhook, rate limit
 --
 -- Três tabelas que não pertencem ao domínio do produto, e sim à sua defesa:
---   • audit_log        — o que aconteceu, quem fez, quando (append-only)
---   • webhook_eventos  — a trava de idempotência da Asaas
---   • rate_limit       — o balde que segura abuso nas Edge Functions
+--   • audit_log, o que aconteceu, quem fez, quando (append-only)
+--   • webhook_eventos, a trava de idempotência da Asaas
+--   • rate_limit, o balde que segura abuso nas Edge Functions
 --
 -- Nenhuma das três é escrita livremente pelo cliente. `webhook_eventos` e
 -- `rate_limit` sequer são legíveis: têm RLS ligada e **zero políticas**, que no
@@ -1605,7 +1605,7 @@ create policy "cobrança: dono e admin leem"
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- audit_log — append-only
+-- audit_log, append-only
 --
 -- `origem` separa o que o servidor afirma do que o cliente afirma. O cliente
 -- não recebe grant na coluna `origem`, então todo INSERT vindo do browser cai
@@ -1641,7 +1641,7 @@ create table public.audit_log (
 );
 
 comment on table public.audit_log is
-  'Registro append-only. Sem UPDATE e sem DELETE para ninguém — nem para o dono.';
+  'Registro append-only. Sem UPDATE e sem DELETE para ninguém, nem para o dono.';
 comment on column public.audit_log.origem is
   'servidor = escrito por Edge Function. cliente = afirmado pelo browser (não confiável).';
 comment on column public.audit_log.ip_hash is
@@ -1653,7 +1653,7 @@ create index audit_log_ator_idx on public.audit_log (ator_id, criado_em desc);
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- webhook_eventos — idempotência e perícia
+-- webhook_eventos, idempotência e perícia
 --
 -- A Asaas reentrega eventos: por retentativa após timeout, por reprocessamento
 -- manual no painel, por instabilidade de rede. Sem esta tabela, uma reentrega
@@ -1661,7 +1661,7 @@ create index audit_log_ator_idx on public.audit_log (ator_id, criado_em desc);
 --
 -- O UNIQUE em (provedor, evento_externo_id) é a trava: a Edge Function tenta
 -- inserir antes de processar; violação de unicidade significa "já vi este
--- evento" e a função responde 200 sem efeito colateral. O 200 é intencional —
+-- evento" e a função responde 200 sem efeito colateral. O 200 é intencional,
 -- devolver erro faria a Asaas insistir para sempre num evento já resolvido.
 -- ─────────────────────────────────────────────────────────────────────────────
 create table public.webhook_eventos (
@@ -1691,11 +1691,11 @@ create index webhook_eventos_pendentes_idx
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- rate_limit — balde de janela fixa
+-- rate_limit, balde de janela fixa
 --
 -- Simples de propósito: janela fixa em vez de sliding window ou token bucket.
 -- A imprecisão nas bordas da janela é irrelevante para o que precisamos
--- (impedir enumeração e flood), e a implementação cabe em um UPSERT — sem
+-- (impedir enumeração e flood), e a implementação cabe em um UPSERT, sem
 -- Redis, sem serviço pago, dentro do tier gratuito.
 -- ─────────────────────────────────────────────────────────────────────────────
 create table public.rate_limit (
@@ -1759,7 +1759,7 @@ end;
 $$;
 
 comment on function app.consumir_rate_limit(text, integer, integer) is
-  'Consome 1 do balde de janela fixa. Atômica — segura contra invocações simultâneas.';
+  'Consome 1 do balde de janela fixa. Atômica, segura contra invocações simultâneas.';
 
 
 -- Faxina dos baldes vencidos. Chamada pela reconciliação diária; sem ela a
@@ -1858,7 +1858,7 @@ create policy "auditoria: membro registra o que ele mesmo fez"
   );
 
 -- Sem política de UPDATE e sem política de DELETE. Append-only não é convenção
--- documentada — é a ausência deliberada dessas duas políticas. Um log que o
+-- documentada, é a ausência deliberada dessas duas políticas. Um log que o
 -- próprio suspeito pode editar não é log.
 
 -- ── webhook_eventos e rate_limit ────────────────────────────────────────────
@@ -1871,7 +1871,7 @@ create policy "auditoria: membro registra o que ele mesmo fez"
 -- ╚══════════════════════════════════════════════════════════════════════════╝
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- 0007 — Limites de plano, aplicados pelo banco
+-- 0007, Limites de plano, aplicados pelo banco
 --
 -- A UI desabilita o botão para ser gentil. O banco recusa a linha para ser
 -- correto. São camadas diferentes com propósitos diferentes, e só a segunda é
@@ -1882,7 +1882,7 @@ create policy "auditoria: membro registra o que ele mesmo fez"
 -- Detalhe que costuma passar batido: `count(*)` seguido de `if` tem corrida.
 -- Duas requisições simultâneas contam 39 pautas cada, ambas passam, e o
 -- workspace termina com 41 num plano de 40. O `pg_advisory_xact_lock` por
--- workspace serializa apenas as inserções concorrentes do MESMO tenant — o
+-- workspace serializa apenas as inserções concorrentes do MESMO tenant, o
 -- custo é nulo no caso normal (ninguém cria duas pautas no mesmo milissegundo)
 -- e a contagem passa a ser exata.
 --
@@ -1909,7 +1909,7 @@ comment on function app.travar_workspace(uuid) is
 
 
 -- Mensagem de erro padronizada. Errcode P0001 com um `hint` que a camada de
--- serviços traduz em `plano_limite_atingido` — o front recebe um código
+-- serviços traduz em `plano_limite_atingido`, o front recebe um código
 -- estável, não uma string para casar com regex.
 create or replace function app.erro_limite(p_mensagem text)
 returns void
@@ -2082,7 +2082,7 @@ create trigger limitar_oficios_personalizados
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- Visão de uso — alimenta a UI para desabilitar botão ANTES do clique
+-- Visão de uso, alimenta a UI para desabilitar botão ANTES do clique
 --
 -- `security_invoker = true` é essencial: sem isso a view rodaria com os
 -- privilégios de quem a criou e devolveria o uso de todos os tenants. Com ele,
@@ -2122,34 +2122,34 @@ grant select on public.v_uso_workspace to authenticated;
 -- ╚══════════════════════════════════════════════════════════════════════════╝
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- 0008 — RPCs da aplicação
+-- 0008, RPCs da aplicação
 --
 -- Uma operação vira RPC quando precisa ser **atômica** ou quando precisa de um
 -- privilégio que o chamador não tem. Fora esses dois casos, o cliente fala com
--- as tabelas via PostgREST e a RLS decide — inventar RPC para tudo só reconstrói
+-- as tabelas via PostgREST e a RLS decide, inventar RPC para tudo só reconstrói
 -- um backend sem os benefícios de ter um.
 --
 -- As três aqui:
---   • criar_workspace       — atomicidade: tenant + quadro + pautas de exemplo
+--   • criar_workspace, atomicidade: tenant + quadro + pautas de exemplo
 --                             nascem juntos ou não nascem
---   • aceitar_convite       — privilégio: quem aceita ainda não é membro e
+--   • aceitar_convite, privilégio: quem aceita ainda não é membro e
 --                             portanto não enxerga a linha do convite
---   • trocar_oficio_quadro  — atomicidade: remapear todas as pautas para as
+--   • trocar_oficio_quadro, atomicidade: remapear todas as pautas para as
 --                             etapas do novo ofício sem estado intermediário
 --                             inválido
 --
--- E uma quarta, interna, que não é RPC: `app.aplicar_estado_assinatura` — o
+-- E uma quarta, interna, que não é RPC: `app.aplicar_estado_assinatura`, o
 -- único lugar do sistema que decide qual plano um workspace tem.
 -- ═══════════════════════════════════════════════════════════════════════════
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- criar_workspace — o onboarding inteiro em uma transação
+-- criar_workspace, o onboarding inteiro em uma transação
 --
 -- SECURITY INVOKER de propósito. A função não precisa de privilégio extra: o
 -- trigger `ao_criar_workspace` (0002) cria o vínculo de dono assim que a linha
 -- entra, e a partir daí a própria RLS autoriza o resto. Rodar como invoker
--- mantém todas as políticas valendo — inclusive os limites de plano — em vez de
+-- mantém todas as políticas valendo, inclusive os limites de plano, em vez de
 -- abrir um buraco de privilégio por conveniência.
 -- ─────────────────────────────────────────────────────────────────────────────
 create or replace function public.criar_workspace(
@@ -2210,7 +2210,7 @@ begin
   -- `INSERT ... RETURNING` exige que a política de **SELECT** aprove a linha
   -- devolvida, e a política de SELECT de `workspaces` pede que o usuário já
   -- seja membro. Quem cria o vínculo é o trigger AFTER INSERT, que só dispara
-  -- no fim da instrução — depois do RETURNING. O resultado seria um erro de RLS
+  -- no fim da instrução, depois do RETURNING. O resultado seria um erro de RLS
   -- em pleno caminho feliz do onboarding. Gerar o uuid antes remove a
   -- dependência circular sem afrouxar política alguma.
   v_workspace := gen_random_uuid();
@@ -2269,7 +2269,7 @@ comment on function public.criar_workspace(text, text, boolean) is
 --
 -- SECURITY DEFINER porque quem aceita ainda não é membro e, pela RLS, não
 -- enxerga a linha do convite. Duas travas compensam o privilégio elevado:
---   1. comparação por hash — o token em claro nunca esteve no banco;
+--   1. comparação por hash, o token em claro nunca esteve no banco;
 --   2. o e-mail da conta autenticada precisa bater com o e-mail convidado, de
 --      modo que um link vazado não serve para uma conta qualquer.
 -- O limite de membros do plano continua valendo: o INSERT dispara o trigger de
@@ -2314,7 +2314,7 @@ begin
 
   -- `if not exists` em vez de `on conflict (workspace_id, user_id)`: a lista de
   -- inferência do ON CONFLICT é resolvida como referência de coluna nua, e
-  -- `workspace_id` também é o nome de um parâmetro OUT desta função — o
+  -- `workspace_id` também é o nome de um parâmetro OUT desta função, o
   -- plpgsql não sabe qual dos dois você quis e aborta com "ambiguous". Trocar
   -- por uma checagem explícita evita a colisão sem depender de
   -- `#variable_conflict`, que resolveria este caso e esconderia o próximo.
@@ -2349,9 +2349,9 @@ comment on function public.aceitar_convite(text) is
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- trocar_oficio_quadro — a troca de sotaque, com as pautas junto
+-- trocar_oficio_quadro, a troca de sotaque, com as pautas junto
 --
--- "Troque de ofício quando quiser — a pauta viaja junto." Traduzido em SQL: as
+-- "Troque de ofício quando quiser, a pauta viaja junto." Traduzido em SQL: as
 -- pautas mudam de etapa para a etapa de **mesma ordem** no novo ofício, e as
 -- que não têm correspondente (ofício novo com menos colunas) caem na última.
 --
@@ -2359,12 +2359,12 @@ comment on function public.aceitar_convite(text) is
 -- FKs compostas de 0004 são violadas no estado intermediário (pauta ainda
 -- apontando para etapa do ofício antigo enquanto o quadro já mudou), e só
 -- voltam a fechar no fim. Sem o deferimento, seria necessário destruir e
--- recriar as pautas — perdendo id, histórico e qualquer referência a elas.
+-- recriar as pautas, perdendo id, histórico e qualquer referência a elas.
 --
 -- SECURITY DEFINER, ao contrário de `criar_workspace`. O motivo é concreto:
 -- `pautas.oficio_id` está fora do `grant update` do cliente de propósito (0004),
 -- porque essa coluna carrega a integridade estrutural da linha e um cliente não
--- tem por que mexer nela avulsa. Esta operação precisa mexer — então ela sobe
+-- tem por que mexer nela avulsa. Esta operação precisa mexer, então ela sobe
 -- de privilégio e paga o preço: checa a autorização à mão, logo na entrada, em
 -- vez de herdá-la da RLS. Toda função DEFINER do projeto deve abrir com esse
 -- bloco de verificação; se não abrir, é bug de segurança.
@@ -2463,7 +2463,7 @@ comment on function public.trocar_oficio_quadro(uuid, uuid) is
 
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- app.aplicar_estado_assinatura — o único juiz do plano de um workspace
+-- app.aplicar_estado_assinatura, o único juiz do plano de um workspace
 --
 -- Existe exatamente uma função no sistema que escreve `workspaces.plano`. Tudo
 -- que acontece na cobrança (webhook, cancelamento, reconciliação diária) chama
@@ -2472,7 +2472,7 @@ comment on function public.trocar_oficio_quadro(uuid, uuid) is
 -- sequência de UPDATEs espalhados que podem discordar entre si.
 --
 -- Tolerância: 7 dias após o vencimento. O workspace segue gravável e o usuário
--- é avisado. Só depois disso vira somente-leitura — e nunca perde dado.
+-- é avisado. Só depois disso vira somente-leitura, e nunca perde dado.
 -- ═══════════════════════════════════════════════════════════════════════════
 create or replace function app.aplicar_estado_assinatura(p_workspace uuid)
 returns public.workspaces
@@ -2504,7 +2504,7 @@ begin
     -- Sem assinatura viva. Antes de cair para o Solo, honramos o período já
     -- pago de uma assinatura cancelada: quem pagou o mês inteiro usa o mês
     -- inteiro, mesmo tendo cancelado no dia 3. Cortar o acesso na hora do
-    -- cancelamento seria ficar com o dinheiro sem entregar o serviço — e é
+    -- cancelamento seria ficar com o dinheiro sem entregar o serviço, e é
     -- justamente o tipo de detalhe que faz alguém não voltar a assinar.
     select * into v_ass
       from public.assinaturas a
@@ -2584,10 +2584,10 @@ grant execute on function app.aplicar_estado_assinatura(uuid) to service_role;
 -- ╚══════════════════════════════════════════════════════════════════════════╝
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- 0009 — Endurecimento do schema e realtime
+-- 0009, Endurecimento do schema e realtime
 --
 -- As migrations anteriores protegeram as tabelas que existem. Esta protege as
--- que **ainda não existem** — que é onde brechas costumam nascer.
+-- que **ainda não existem**, que é onde brechas costumam nascer.
 --
 -- O Postgres, e o Supabase por cima dele, são generosos por padrão: uma tabela
 -- nova em `public` já sai com privilégio para `anon` e `authenticated`, e uma
@@ -2610,7 +2610,18 @@ declare
   v_role text;
 begin
   foreach v_role in array array['postgres', 'supabase_admin'] loop
-    if exists (select 1 from pg_roles where rolname = v_role) then
+    -- Duas condicoes, nao uma. O papel precisa existir E o usuario corrente
+    -- precisa ser membro dele: `alter default privileges for role X` exige
+    -- filiacao a X. Localmente o `postgres` e superusuario e passa nos dois
+    -- papeis; no Supabase hospedado ele NAO e membro de `supabase_admin`, e
+    -- checar so a existencia derrubava a migration inteira com
+    -- "permission denied to change default privileges" (SQLSTATE 42501).
+    --
+    -- Pular `supabase_admin` no ambiente hospedado nao abre brecha: quem cria
+    -- tabela em `public` ali e o `postgres` (via migration), e os privilegios
+    -- padrao dele estao cobertos pela primeira volta do laco.
+    if exists (select 1 from pg_roles where rolname = v_role)
+       and pg_has_role(current_user, v_role, 'USAGE') then
       execute format(
         'alter default privileges for role %I in schema public
            revoke all on tables from anon, authenticated', v_role);
@@ -2634,7 +2645,7 @@ revoke create on schema public from public, anon, authenticated;
 --
 -- Esta função é o gate automatizado: `scripts/testar-isolamento.sh` falha o
 -- build se ela devolver qualquer linha. Uma tabela de negócio sem RLS não é um
--- aviso a ser triado depois — é um build quebrado.
+-- aviso a ser triado depois, é um build quebrado.
 -- ─────────────────────────────────────────────────────────────────────────────
 create or replace function app.tabelas_sem_rls()
 returns table (tabela text, motivo text)
@@ -2679,7 +2690,7 @@ grant execute on function app.tabelas_sem_rls() to service_role;
 --
 -- Só o que a UI realmente precisa acompanhar ao vivo: uma pauta que outro
 -- membro moveu, e o quadro que mudou de ofício. `assinaturas`, `cobrancas`,
--- `audit_log` e `profiles` ficam de fora — assinar tabela financeira via
+-- `audit_log` e `profiles` ficam de fora, assinar tabela financeira via
 -- websocket é ampliar superfície sem ganho de produto.
 --
 -- O Realtime do Supabase aplica RLS na entrega: um membro do workspace A não
@@ -2696,7 +2707,7 @@ $$;
 
 -- REPLICA IDENTITY FULL faz o payload do evento carregar os valores antigos da
 -- linha. É o que permite à UI saber de qual etapa a pauta saiu e animar o
--- movimento — sem isso, um UPDATE chega só com a chave primária.
+-- movimento, sem isso, um UPDATE chega só com a chave primária.
 alter table public.pautas  replica identity full;
 alter table public.quadros replica identity full;
 
@@ -2705,7 +2716,7 @@ alter table public.quadros replica identity full;
 -- Rastro de versão do schema
 -- ─────────────────────────────────────────────────────────────────────────────
 comment on schema public is
-  'Pautaria — schema de aplicação. Toda tabela aqui tem RLS. Ver docs/11_SEGURANCA.';
+  'Pautaria, schema de aplicação. Toda tabela aqui tem RLS. Ver docs/11_SEGURANCA.';
 
 
 -- ╔══════════════════════════════════════════════════════════════════════════╗
@@ -2713,7 +2724,7 @@ comment on schema public is
 -- ╚══════════════════════════════════════════════════════════════════════════╝
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- 0010 — Pontes de serviço
+-- 0010, Pontes de serviço
 --
 -- Tensão a resolver: as funções de defesa (`app.consumir_rate_limit`,
 -- `app.auditar`, `app.aplicar_estado_assinatura`) moram no schema `app`, que
@@ -2722,13 +2733,13 @@ comment on schema public is
 -- PostgREST só enxerga `public`.
 --
 -- A solução preguiçosa seria expor o schema `app` inteiro na API e confiar nos
--- grants. Isso publicaria uma rota para cada função interna — incluindo as que
+-- grants. Isso publicaria uma rota para cada função interna, incluindo as que
 -- vierem depois, escritas por alguém que não pensou em rota nenhuma. Superfície
 -- de ataque que cresce sozinha é a pior espécie.
 --
 -- Em vez disso: uma ponte nominal por função, em `public`, com
 -- `revoke all from public` + `grant execute to service_role`. `anon` e
--- `authenticated` recebem 403 do próprio Postgres — a rota existe, a permissão
+-- `authenticated` recebem 403 do próprio Postgres, a rota existe, a permissão
 -- não. Expor uma função nova passa a exigir escrever uma ponte nova, de
 -- propósito. É a mesma lógica de negar por omissão da migration 0009,
 -- aplicada a funções.
@@ -2816,7 +2827,7 @@ comment on function public.auditoria_rls() is
 
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- Privilégios — service_role e mais ninguém
+-- Privilégios, service_role e mais ninguém
 --
 -- `revoke from public` é obrigatório e vem primeiro: o Postgres concede EXECUTE
 -- a PUBLIC em toda função nova. Sem esta linha, `anon` chamaria
@@ -2837,3 +2848,148 @@ grant execute on function public.registrar_auditoria(uuid, uuid, text, text, tex
 grant execute on function public.aplicar_estado_assinatura(uuid) to service_role;
 grant execute on function public.faxina_operacional() to service_role;
 grant execute on function public.auditoria_rls() to service_role;
+
+
+-- ╔══════════════════════════════════════════════════════════════════════════╗
+-- ║ 0011_fechar_rpc_anon.sql                                                 ║
+-- ╚══════════════════════════════════════════════════════════════════════════╝
+
+-- ═══════════════════════════════════════════════════════════════════════════
+-- 0011, fechar as RPCs da 0008 para o papel `anon`
+--
+-- ── O que estava errado ────────────────────────────────────────────────────
+--
+-- A 0008 termina com o par correto:
+--
+--     revoke all on function public.criar_workspace(...) from public;
+--     grant execute on function public.criar_workspace(...) to authenticated;
+--
+-- e mesmo assim, no projeto hospedado, `anon` continuava com EXECUTE nas três.
+-- Dois fatos se somam para produzir isso:
+--
+--   1. `public` e `anon` são coisas diferentes. `public` é o pseudo-papel que
+--      representa "todo mundo, por omissão"; `anon` é um papel nominal de
+--      verdade, o que o PostgREST assume quando a requisição chega sem JWT.
+--      Revogar de `public` não toca uma concessão feita nominalmente a `anon`.
+--
+--   2. Todo projeto Supabase nasce com um `alter default privileges ... grant
+--      execute on functions to anon, authenticated, service_role`. Então cada
+--      função criada em `public` já surge com a concessão nominal a `anon` —
+--      antes de a 0008 chegar na sua linha de `revoke`, que mira o alvo errado.
+--
+-- ── Por que a 0009 não cobriu ──────────────────────────────────────────────
+--
+-- A 0009 inverte exatamente esse padrão e o faz certo. Mas `alter default
+-- privileges` vale só para objetos criados **depois** dela, e ela é a nona.
+-- É por isso que as funções da 0010 (`consumir_rate_limit`,
+-- `registrar_auditoria`) estão fechadas e as da 0008 não: as da 0010 nasceram
+-- do lado protegido da linha do tempo.
+--
+-- ── Qual era o risco real ──────────────────────────────────────────────────
+--
+-- Nenhuma exploração direta: as três funções começam com
+--
+--     if v_user is null then raise exception ... 'Autenticação obrigatória.'
+--
+-- e `auth.uid()` é nulo para `anon`. O problema é outro, e é de prazo longo:
+--
+--   • superfície não autenticada, alcançável por qualquer pessoa com a chave
+--     anon (que é pública por design) — uma função `SECURITY DEFINER` roda
+--     ignorando RLS, então a checagem de `auth.uid()` no corpo dela é a única
+--     coisa entre a internet e um privilégio elevado;
+--   • invisível na leitura: o código-fonte diz `to authenticated` e quem revisa
+--     conclui, razoavelmente, que `anon` está de fora;
+--   • permanente: `create or replace function` **preserva** a ACL existente,
+--     logo nenhuma reedição futura dessas funções corrige isso sozinha.
+--
+-- A correção é uma linha por função, e o valor dela está em fechar a distância
+-- entre o que o repositório afirma e o que o banco faz.
+-- ═══════════════════════════════════════════════════════════════════════════
+
+
+-- ─────────────────────────────────────────────────────────────────────────────
+-- O alcance real do problema: os dois schemas, não as três funções
+--
+-- A suspeita começou nas três RPCs de `public`. O gate no fim deste arquivo
+-- mostrou que `app` estava no mesmo estado, com 25 funções — `app.auditar`,
+-- `app.tem_papel`, `app.limite_plano`, `app.consumir_rate_limit` e as demais —
+-- todas executáveis por `anon` pelo mesmo motivo. Faz sentido: elas nasceram
+-- em 0001 a 0008, do lado desprotegido da 0009.
+--
+-- Por que revogar em massa é seguro aqui:
+--
+--   • `anon` tem privilégio em exatamente UMA tabela, `planos`, e a política
+--     dela é `qual: publico` — uma coluna booleana, sem chamada de função. Como
+--     política de RLS roda com o privilégio de quem consulta, esta é a única
+--     que `anon` chega a avaliar, e ela não depende de `app.*`.
+--   • funções de gatilho (`app.limitar_pautas`, `app.proteger_ultimo_owner`…)
+--     só disparam em escrita, e `anon` não tem escrita em lugar nenhum.
+--   • `authenticated` fica intocado: as políticas continuam chamando
+--     `app.e_membro`, `app.tem_papel` e companhia normalmente.
+--
+-- ── São DOIS defeitos diferentes, e um `revoke` só não resolve os dois ──────
+--
+-- Em `public`, as três RPCs têm concessão **nominal**: a ACL mostra
+-- `anon=X/postgres`. Vem do `alter default privileges` que todo projeto
+-- Supabase traz. Só sai com `revoke ... from anon`.
+--
+-- Em `app`, a ACL mostra `=X/postgres` — concessionário vazio é o **PUBLIC**,
+-- o padrão do próprio PostgreSQL para qualquer função nova. `anon` só aparece
+-- ali por ser membro de PUBLIC, e `revoke ... from anon` não faz absolutamente
+-- nada contra uma concessão a PUBLIC. Só sai com `revoke ... from public`.
+--
+-- Revogar de PUBLIC não atinge quem precisa executar:
+--
+--   • `authenticated` tem concessão nominal própria (`authenticated=X`) nas
+--     funções que as políticas de RLS chamam — `tem_papel`, `e_membro`,
+--     `limite_plano`, `oficio_visivel` e companhia. Elas seguem funcionando.
+--   • `service_role` idem, nas pontes das Edge Functions.
+--   • as funções que ficariam sem concessão alguma são, sem exceção, funções de
+--     **gatilho** mais a auxiliar `app.erro_limite`. Gatilho não precisa: o
+--     PostgreSQL exige EXECUTE na hora do `create trigger`, não a cada disparo.
+--     A prova está no próprio banco — `app.tocar_atualizado_em` já não tem
+--     concessão além de `postgres` desde a 0001, e os gatilhos
+--     `*_atualizado_em` dispararam normalmente no seed. E os quatro chamadores
+--     de `erro_limite` são `security definer`, então por dentro deles o usuário
+--     corrente é `postgres`, o dono.
+--
+-- `on all routines` em vez de `on all functions`: o segundo não inclui
+-- procedures, e o objetivo aqui é não deixar categoria de fora.
+-- ─────────────────────────────────────────────────────────────────────────────
+
+revoke all on all routines in schema public from public, anon;
+revoke all on all routines in schema app    from public, anon;
+
+
+-- ─────────────────────────────────────────────────────────────────────────────
+-- Gate: nenhuma função de `public` ou `app` pode ser executável por `anon`
+--
+-- O `revoke` acima conserta as três de hoje. Este bloco impede que a mesma
+-- armadilha volte amanhã: se alguém adicionar uma função nova e ela herdar a
+-- concessão padrão do Supabase, a migration que a introduziu falha aqui, na
+-- esteira, em vez de publicar uma porta aberta em silêncio.
+--
+-- `anon` continua com `usage` no schema `app` (a 0001 explica por quê: as
+-- políticas de RLS chamam `app.*` e sem `usage` toda query morreria). `usage`
+-- num schema não concede execução de função alguma — é justamente o que este
+-- gate confirma.
+-- ─────────────────────────────────────────────────────────────────────────────
+do $$
+declare
+  v_abertas text;
+begin
+  select string_agg(n.nspname || '.' || p.proname, ', ' order by p.proname)
+    into v_abertas
+    from pg_proc p
+    join pg_namespace n on n.oid = p.pronamespace
+   where n.nspname in ('public', 'app')
+     and has_function_privilege('anon', p.oid, 'EXECUTE');
+
+  if v_abertas is not null then
+    raise exception using
+      errcode = '42501',
+      message = format('Funções executáveis por anon: %s', v_abertas),
+      hint    = 'Adicione `revoke all on function ... from anon;` para cada uma.';
+  end if;
+end;
+$$;

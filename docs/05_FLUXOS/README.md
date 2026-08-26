@@ -1,4 +1,4 @@
-# 05 — Fluxos
+# 05, Fluxos
 
 ## Cadastro → primeiro quadro
 
@@ -26,7 +26,7 @@ O fluxo que a north star mede. Alvo: **menos de 60 segundos**.
                     └─ audit_log 'workspace.criado'
                           │
                           ▼
-                    /w/{slug} — quadro tematizado e povoado
+                    /w/{slug}, quadro tematizado e povoado
 ```
 
 **Decisões visíveis no fluxo.** O nome do workspace é derivado do primeiro nome, não
@@ -34,7 +34,7 @@ perguntado (`decisions.md` D11). O quadro nasce cheio, não vazio (D10). Não ex
 setup entre a escolha e o quadro.
 
 **Por que RPC e não três chamadas do cliente.** Falhar entre a segunda e a terceira
-deixaria o usuário num workspace com quadro vazio — e sem caminho de volta, porque o limite
+deixaria o usuário num workspace com quadro vazio, e sem caminho de volta, porque o limite
 do Solo já teria sido consumido pelo quadro que ele não pediu.
 
 ## Trabalho no quadro
@@ -75,7 +75,7 @@ POST /functions/v1/assinatura-criar          [JWT obrigatório]
     │
     ▼  redireciona para a fatura hospedada
 ┌─────────────────────────────────────────┐
-│  asaas.com — Pix · boleto · cartão      │  ← nenhum dado de cartão passa por nós
+│  asaas.com, Pix · boleto · cartão      │  ← nenhum dado de cartão passa por nós
 └─────────────────┬───────────────────────┘
                   │ pagamento
                   ▼
@@ -96,7 +96,7 @@ POST /functions/v1/asaas-webhook             [sem JWT · token próprio]
 
 ### Fatura perdida
 
-Boleto venceu, Pix expirou, aba fechada. `assinatura-portal` consulta a Asaas **ao vivo** —
+Boleto venceu, Pix expirou, aba fechada. `assinatura-portal` consulta a Asaas **ao vivo**,
 uma fatura vencida ganha link novo quando é reemitida, e o link guardado levaria a uma
 página morta. De quebra, sincroniza o histórico local caso um webhook tenha se perdido.
 
@@ -112,7 +112,7 @@ dono clica → confirmação mostra até quando o acesso vale
 ```
 
 Cancela-se primeiro na Asaas de propósito: se falhasse depois de marcar como cancelada, a
-recorrência continuaria cobrando enquanto o nosso banco diz que acabou — o pior
+recorrência continuaria cobrando enquanto o nosso banco diz que acabou, o pior
 desencontro possível.
 
 ## Inadimplência
@@ -139,7 +139,7 @@ vencimento sem pagamento
               │
               ▼ (enviado por fora)
 /convite?t={token}
-  aceita automaticamente ao abrir — a pessoa já clicou uma vez, no e-mail
+  aceita automaticamente ao abrir, a pessoa já clicou uma vez, no e-mail
     └─ aceitar_convite(token)   [SECURITY DEFINER]
          ├─ compara hash
          ├─ exige que o e-mail da conta bata com o convidado
@@ -148,7 +148,7 @@ vencimento sem pagamento
               └─ /w/{slug}
 ```
 
-Erro único para inexistente, expirado, já usado ou e-mail diferente — distinguir ensinaria
+Erro único para inexistente, expirado, já usado ou e-mail diferente, distinguir ensinaria
 a sondar tokens.
 
 ## Recuperação de senha
@@ -156,7 +156,7 @@ a sondar tokens.
 ```
 /recuperar-senha → resposta SEMPRE igual, exista a conta ou não
      └─ e-mail com link (validade 1 h)
-          └─ /nova-senha  — detectSessionInUrl troca o token por sessão
+          └─ /nova-senha, detectSessionInUrl troca o token por sessão
                ├─ sem sessão → "link inválido ou expirado" + pedir outro
                └─ com sessão → nova senha (requisitos visíveis) → entra
 ```

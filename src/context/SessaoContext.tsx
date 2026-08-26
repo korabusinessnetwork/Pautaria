@@ -1,10 +1,10 @@
 /**
- * Sessão — quem está logado, em todo o app.
+ * Sessão, quem está logado, em todo o app.
  *
  * `carregando` existe e é usado: sem ele, a primeira renderização acontece com
  * `sessao = null` e o roteador manda o usuário já autenticado para a tela de
  * login por uma fração de segundo. É o flash de logout, e ele mina a confiança
- * mais do que qualquer bug visível — quem viu uma vez fica achando que o app
+ * mais do que qualquer bug visível, quem viu uma vez fica achando que o app
  * "desloga sozinho".
  */
 

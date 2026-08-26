@@ -1,9 +1,9 @@
 /* ═══════════════════════════════════════════════════════════════════════════
-   Tokens — o handoff hi-fi traduzido para CSS.
+   Tokens, o handoff hi-fi traduzido para CSS.
 
    Estas variáveis são a única fonte de cor, tipografia, raio e espaçamento do
    Pautaria. Nenhum componente escreve `#FBFAF6` ou `13px` direto: escreve
-   `var(--superficie)` e `var(--txt-13)`. É o que permite o white-label — trocar
+   `var(--superficie)` e `var(--txt-13)`. É o que permite o white-label, trocar
    a identidade de um tenant é trocar valores aqui, não caçar hexadecimais em
    quarenta arquivos.
 
@@ -15,7 +15,7 @@
 :root {
   /* ── Papel e tinta ──────────────────────────────────────────────────────
      A base "studio pinboard": papel quente, não branco. O card é um tom
-     acima da superfície, e a superfície um tom acima do fundo — é o que dá a
+     acima da superfície, e a superfície um tom acima do fundo, é o que dá a
      sensação de ficha alfinetada em vez de retângulo desenhado.            */
   --fundo: #f2efe7;
   --sidebar: #eeeae0;
@@ -38,7 +38,7 @@
   --txt-rotulo: rgba(31, 27, 22, 0.42);
   --txt-forte: rgba(31, 27, 22, 0.72);
 
-  /* ── Accent — sobrescrito por ofício em runtime ────────────────────────
+  /* ── Accent, sobrescrito por ofício em runtime ────────────────────────
      Fallback: Marketing (hue 45, chroma .16).                              */
   --ac: oklch(60% 0.16 45);
   --acSoft: oklch(60% 0.16 45 / 0.13);

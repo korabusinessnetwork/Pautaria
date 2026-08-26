@@ -1,10 +1,10 @@
 /**
- * Legal — Termos de Uso e Política de Privacidade.
+ * Legal, Termos de Uso e Política de Privacidade.
  *
  * Um componente só, dois documentos. Não é economia de arquivo: os dois textos
  * compartilham o mesmo esqueleto (índice lateral com âncoras, versão visível,
  * data de vigência, nota de minuta) e mantê-los em componentes separados faria
- * a próxima revisão jurídica precisar ser aplicada duas vezes — que é
+ * a próxima revisão jurídica precisar ser aplicada duas vezes, que é
  * exatamente como um dos dois fica desatualizado sem ninguém perceber.
  *
  * ─────────────────────────────────────────────────────────────────────────────
@@ -17,13 +17,13 @@
  * Política de privacidade que promete controle inexistente é pior que política
  * nenhuma: vira declaração falsa a uma autoridade, e não só marketing ruim. Por
  * isso a seção de direitos do titular diz, com todas as letras, que hoje o
- * atendimento é por e-mail e manual — a esteira self-service é Fase 4.
+ * atendimento é por e-mail e manual, a esteira self-service é Fase 4.
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * SOBRE OS QUATRO ESTADOS
  *
  * Esta tela não busca dado: o texto legal é conteúdo versionado junto com o
- * código, de propósito — ele precisa ser idêntico para todo mundo e precisar de
+ * código, de propósito, ele precisa ser idêntico para todo mundo e precisar de
  * deploy para mudar. Sem requisição não há carregando, vazio nem erro; o único
  * estado possível é o de sucesso. Fabricar um spinner aqui seria teatro.
  *
@@ -33,7 +33,7 @@
  * `VERSAO_TERMOS` e `VERSAO_PRIVACIDADE` são exportadas porque o registro de consentimento da Fase 4
  * (`docs/09_BACKLOG`) precisa gravar *qual* versão a pessoa aceitou. Guardar só
  * "aceitou os termos" não prova nada quando o texto muda. Ao alterar qualquer
- * palavra com efeito jurídico, suba a versão — é ela que o consentimento cita.
+ * palavra com efeito jurídico, suba a versão, é ela que o consentimento cita.
  */
 
 import { useEffect, useState, type ReactNode } from 'react';
@@ -52,7 +52,7 @@ export type DocumentoLegal = 'termos' | 'privacidade';
  * São duas constantes de string em vez de um objeto por um motivo prosaico e
  * real: o Fast Refresh só preserva estado quando o módulo exporta componentes e
  * constantes simples. Um `Record` exportado aqui faria toda edição desta página
- * recarregar o app inteiro em desenvolvimento — e é uma página que se revisa
+ * recarregar o app inteiro em desenvolvimento, e é uma página que se revisa
  * lendo e rolando devagar.
  */
 export const VERSAO_TERMOS = '0.1.0-minuta';
@@ -83,8 +83,8 @@ interface Documento {
 /**
  * Marca um dado que só a revisão jurídica pode preencher.
  *
- * Existe para que o buraco seja impossível de não ver. A alternativa — inventar
- * um CNPJ plausível para "ficar bonito na tela" — produziria um contrato que
+ * Existe para que o buraco seja impossível de não ver. A alternativa, inventar
+ * um CNPJ plausível para "ficar bonito na tela", produziria um contrato que
  * aponta para uma empresa que não existe, e ninguém revisaria o que parece
  * pronto.
  */
@@ -103,7 +103,7 @@ const TERMOS: Documento = {
 
   resumo: (
     <ul className={estilos.resumoLista}>
-      <li>O Pautaria é um quadro de pautas. Escolher o ofício já entrega etapas, campos e termos prontos — não há tela de configuração antes do quadro.</li>
+      <li>O Pautaria é um quadro de pautas. Escolher o ofício já entrega etapas, campos e termos prontos, não há tela de configuração antes do quadro.</li>
       <li>O conteúdo das suas pautas é seu. Nós hospedamos e protegemos; não usamos para treinar nada nem vendemos a ninguém.</li>
       <li>Existe um plano gratuito permanente. Os planos pagos são cobrados pela Asaas, com recorrência mensal ou anual.</li>
       <li>O cancelamento é de um clique, sem funil de retenção, e o acesso continua até o fim do período já pago.</li>
@@ -163,7 +163,7 @@ const TERMOS: Documento = {
           </p>
           <p className={estilos.paragrafo}>
             A senha é pessoal e intransferível. Exigimos no mínimo dez caracteres e recusamos senhas
-            que já apareceram em vazamentos públicos conhecidos — a verificação é feita sem que a
+            que já apareceram em vazamentos públicos conhecidos, a verificação é feita sem que a
             sua senha saia do processo de autenticação. Ainda assim, guardar a senha em segurança é
             responsabilidade sua; se suspeitar de acesso indevido, troque-a e nos avise.
           </p>
@@ -186,14 +186,14 @@ const TERMOS: Documento = {
             verificada automaticamente a cada versão publicada.
           </p>
           <ul className={estilos.lista}>
-            <li><strong>Dono</strong> — administra tudo, incluindo assinatura e exclusão do workspace. Sempre existe pelo menos um.</li>
-            <li><strong>Admin</strong> — gerencia equipe, ofícios e pautas.</li>
-            <li><strong>Membro</strong> — cria, edita e move pautas.</li>
+            <li><strong>Dono</strong>, administra tudo, incluindo assinatura e exclusão do workspace. Sempre existe pelo menos um.</li>
+            <li><strong>Admin</strong>, gerencia equipe, ofícios e pautas.</li>
+            <li><strong>Membro</strong>, cria, edita e move pautas.</li>
           </ul>
           <p className={estilos.paragrafo}>
             O conteúdo que você cria continua seu. Você nos concede apenas a licença técnica
             necessária para hospedar, exibir, copiar em backup e transmitir esse conteúdo a você e a
-            quem você deu acesso — nada além disso. Não usamos o conteúdo das suas pautas para
+            quem você deu acesso, nada além disso. Não usamos o conteúdo das suas pautas para
             treinar modelos, para publicidade, nem o cedemos a terceiros.
           </p>
           <p className={estilos.paragrafo}>
@@ -209,8 +209,8 @@ const TERMOS: Documento = {
       corpo: (
         <>
           <p className={estilos.paragrafo}>
-            O plano gratuito é permanente, não é degustação. Os planos pagos ampliam limites — de
-            quadros e de pessoas — e são cobrados de forma recorrente, mensal ou anual, conforme o
+            O plano gratuito é permanente, não é degustação. Os planos pagos ampliam limites, de
+            quadros e de pessoas, e são cobrados de forma recorrente, mensal ou anual, conforme o
             ciclo escolhido na contratação.
           </p>
           <p className={estilos.paragrafo}>
@@ -232,7 +232,7 @@ const TERMOS: Documento = {
           <p className={estilos.paragrafo}>
             Se um pagamento falhar, a assinatura fica em atraso e a Asaas faz as tentativas de
             cobrança conforme a régua dela. Persistindo a falta de pagamento, o workspace volta ao
-            plano gratuito — as pautas continuam lá, sujeitas aos limites do plano gratuito.
+            plano gratuito, as pautas continuam lá, sujeitas aos limites do plano gratuito.
           </p>
           <p className={estilos.paragrafo}>
             Direito de arrependimento: contratação feita fora de estabelecimento comercial pode ser
@@ -286,7 +286,7 @@ const TERMOS: Documento = {
       corpo: (
         <p className={estilos.paragrafo}>
           O software, a marca, a identidade visual, os ofícios de fábrica e os textos do produto são
-          nossos ou licenciados a nós. Estes Termos não transferem nada disso a você — dão apenas o
+          nossos ou licenciados a nós. Estes Termos não transferem nada disso a você, dão apenas o
           direito de usar o serviço enquanto o contrato durar. O conteúdo que você cria segue sendo
           seu, como diz a seção 4.
         </p>
@@ -300,7 +300,7 @@ const TERMOS: Documento = {
           <p className={estilos.paragrafo}>
             Você pode encerrar a relação a qualquer momento, cancelando a assinatura e pedindo a
             exclusão da conta. Enquanto a esteira self-service não existir, o pedido de exclusão é
-            feito por e-mail e atendido manualmente — a Política de Privacidade explica como.
+            feito por e-mail e atendido manualmente, a Política de Privacidade explica como.
           </p>
           <p className={estilos.paragrafo}>
             Podemos suspender ou encerrar o acesso em caso de violação destes Termos, de ordem
@@ -322,7 +322,7 @@ const TERMOS: Documento = {
             deliberadamente.
           </p>
           <p className={estilos.paragrafo}>
-            <Pendente>Limite de responsabilidade, exclusões e redação final a definir na revisão jurídica</Pendente> —
+            <Pendente>Limite de responsabilidade, exclusões e redação final a definir na revisão jurídica</Pendente>,
             cláusula de limitação é justamente onde uma minuta escrita sem advogado costuma ser
             nula, e uma cláusula nula não protege ninguém.
           </p>
@@ -380,7 +380,7 @@ const PRIVACIDADE: Documento = {
     <ul className={estilos.resumoLista}>
       <li>Guardamos pouco: nome, e-mail e as iniciais do seu avatar. Só isso identifica você na nossa base.</li>
       <li>CPF ou CNPJ apenas trafega até a Asaas na hora de assinar. Não fica armazenado conosco.</li>
-      <li>Nenhum dado de cartão passa por aqui, em ponto algum — o pagamento acontece na página da Asaas.</li>
+      <li>Nenhum dado de cartão passa por aqui, em ponto algum, o pagamento acontece na página da Asaas.</li>
       <li>Endereço de IP em registro de auditoria é guardado pseudonimizado, nunca em claro.</li>
       <li>Seus direitos de titular são atendidos hoje por e-mail, com atendimento manual. Não existe botão de exportar ou excluir no app; dizemos isso porque é verdade.</li>
     </ul>
@@ -445,7 +445,7 @@ const PRIVACIDADE: Documento = {
                   <th scope="row">CPF ou CNPJ</th>
                   <td>exigência fiscal do processamento de pagamento</td>
                   <td>
-                    <strong>apenas em trânsito</strong> até a Asaas — não repousa conosco
+                    <strong>apenas em trânsito</strong> até a Asaas, não repousa conosco
                   </td>
                 </tr>
                 <tr>
@@ -500,7 +500,7 @@ const PRIVACIDADE: Documento = {
               Pautaria. Número, validade e código de segurança são digitados na página hospedada
               pela Asaas e nunca passam pelo nosso sistema.
             </li>
-            <li>Endereço, data de nascimento, foto ou documento digitalizado — não pedimos e não temos onde guardar.</li>
+            <li>Endereço, data de nascimento, foto ou documento digitalizado, não pedimos e não temos onde guardar.</li>
             <li>Telefone obrigatório: ele é opcional, e só na contratação de plano pago.</li>
             <li>Dado sensível (art. 5º, II da LGPD): não solicitamos nenhum. Se você digitar algum no conteúdo de uma pauta, ele fica sob a sua responsabilidade como quem decidiu inseri-lo.</li>
             <li>Rastreamento publicitário, perfilamento comportamental ou venda de dados: não fazemos, em nenhuma hipótese.</li>
@@ -550,13 +550,13 @@ const PRIVACIDADE: Documento = {
             operadores, e apenas o mínimo que cada um precisa:
           </p>
           <ul className={estilos.lista}>
-            <li><strong>Supabase</strong> — banco de dados, autenticação e funções do servidor.</li>
-            <li><strong>Vercel</strong> — hospedagem da aplicação que roda no seu navegador.</li>
-            <li><strong>Asaas</strong> — emissão e processamento das cobranças recorrentes. Recebe nome de cobrança, e-mail, CPF ou CNPJ e, se informado, telefone.</li>
+            <li><strong>Supabase</strong>, banco de dados, autenticação e funções do servidor.</li>
+            <li><strong>Vercel</strong>, hospedagem da aplicação que roda no seu navegador.</li>
+            <li><strong>Asaas</strong>, emissão e processamento das cobranças recorrentes. Recebe nome de cobrança, e-mail, CPF ou CNPJ e, se informado, telefone.</li>
           </ul>
           <p className={estilos.paragrafo}>
             Também podemos compartilhar dados para cumprir obrigação legal ou ordem de autoridade
-            competente — e, nesse caso, avisamos você sempre que a lei permitir.
+            competente, e, nesse caso, avisamos você sempre que a lei permitir.
           </p>
           <p className={estilos.paragrafo}>
             <strong>Transferência internacional.</strong> Nossos provedores de infraestrutura podem
@@ -574,7 +574,7 @@ const PRIVACIDADE: Documento = {
           <p className={estilos.paragrafo}>
             Não usamos cookie de publicidade nem de rastreamento de terceiro. O que existe é
             armazenamento local usado pela biblioteca de autenticação para manter você conectado
-            entre visitas — sem ele, você precisaria digitar a senha a cada carregamento de página.
+            entre visitas, sem ele, você precisaria digitar a senha a cada carregamento de página.
           </p>
           <p className={estilos.paragrafo}>
             Limpar os dados do site no navegador encerra a sessão e não apaga nada da sua conta.
@@ -595,7 +595,7 @@ const PRIVACIDADE: Documento = {
             </li>
             <li>Senha com no mínimo dez caracteres e recusa de senhas presentes em vazamentos públicos conhecidos.</li>
             <li>Sessão curta, com renovação rotativa: reutilizar um token antigo derruba a família inteira de tokens.</li>
-            <li>Token de convite guardado apenas como resumo criptográfico — um vazamento do banco não devolve o link.</li>
+            <li>Token de convite guardado apenas como resumo criptográfico, um vazamento do banco não devolve o link.</li>
             <li>Registro de auditoria somente-adição, que distingue o que o servidor afirma do que o cliente afirma.</li>
             <li>Nunca registramos senha, token, CPF, CNPJ ou dado financeiro em texto claro nos nossos logs.</li>
           </ul>
@@ -644,15 +644,15 @@ const PRIVACIDADE: Documento = {
             <li>portabilidade dos seus dados a outro fornecedor;</li>
             <li>eliminação dos dados tratados com base em consentimento;</li>
             <li>informação sobre com quem compartilhamos seus dados;</li>
-            <li>revisão de decisão automatizada — o Pautaria não toma nenhuma sobre você.</li>
+            <li>revisão de decisão automatizada, o Pautaria não toma nenhuma sobre você.</li>
           </ul>
 
           <div className={estilos.destaqueHonesto}>
             <p className={estilos.paragrafo}>
               <strong>Como esses direitos são atendidos hoje:</strong> por e-mail, com apuração
               manual, no prazo legal. <strong>Não existe botão de exportar ou de excluir a conta
-              dentro do aplicativo.</strong> A esteira self-service — exportação dos seus dados e
-              exclusão com purga real — está planejada para a Fase 4 e ainda não foi construída.
+              dentro do aplicativo.</strong> A esteira self-service, exportação dos seus dados e
+              exclusão com purga real, está planejada para a Fase 4 e ainda não foi construída.
             </p>
             <p className={estilos.paragrafo}>
               Preferimos dizer isso a desenhar um botão que não faz o que promete. Quando a esteira
@@ -663,7 +663,7 @@ const PRIVACIDADE: Documento = {
           <p className={estilos.paragrafo}>
             Para exercer qualquer um desses direitos, escreva para{' '}
             <Pendente>endereço de e-mail do encarregado a preencher</Pendente>, informando o e-mail
-            cadastrado na sua conta. Pedimos confirmação de identidade antes de atender — é a mesma
+            cadastrado na sua conta. Pedimos confirmação de identidade antes de atender, é a mesma
             proteção que impede outra pessoa de pedir seus dados no seu lugar.
           </p>
         </>
@@ -687,7 +687,7 @@ const PRIVACIDADE: Documento = {
         <p className={estilos.paragrafo}>
           Esta Política tem versão e data de vigência, mostradas no topo da página. Mudança
           relevante é anunciada antes de entrar em vigor. A partir da Fase 4, cada aceite ficará
-          registrado com o número da versão aceita — é o que permite saber, depois, exatamente a
+          registrado com o número da versão aceita, é o que permite saber, depois, exatamente a
           qual texto cada pessoa concordou.
         </p>
       ),
@@ -795,7 +795,7 @@ export function Legal({ documento }: Props) {
       </header>
 
       <div className={estilos.avisoMinuta}>
-        <Aviso tom="atencao" titulo="Minuta — não use como documento válido">
+        <Aviso tom="atencao" titulo="Minuta, não use como documento válido">
           <span>
             Este texto ainda não passou por revisão de advogado e contém lacunas assinaladas em
             destaque (razão social, CNPJ, foro, encarregado). Ele descreve fielmente o que o sistema

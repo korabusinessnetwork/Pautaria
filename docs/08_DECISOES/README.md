@@ -1,8 +1,8 @@
-# 08 — Decisões de arquitetura (ADRs)
+# 08, Decisões de arquitetura (ADRs)
 
 > Decisão sem ADR é decisão perdida. Um ADR registra **o porquê** de uma escolha
 > estrutural, no momento em que ela é tomada, com as alternativas descartadas e as
-> consequências ruins — para que alguém daqui a um ano entenda sem reconstruir o
+> consequências ruins, para que alguém daqui a um ano entenda sem reconstruir o
 > raciocínio.
 
 ## Índice
@@ -23,7 +23,7 @@ Se **qualquer** item for verdadeiro:
 
 - Muda a arquitetura geral (camadas, onde a lógica vive, front × backend)
 - Muda a stack (framework, banco, provedor de auth, hosting)
-- Muda o modelo de dados de forma estrutural (não é adicionar coluna — é mudar como o
+- Muda o modelo de dados de forma estrutural (não é adicionar coluna, é mudar como o
   isolamento ou o relacionamento central funciona)
 - Envolve trade-off que alguém vai questionar depois
 - Contradiz ou substitui uma decisão já registrada
@@ -41,7 +41,7 @@ não está óbvia olhando o código" for sim, é ADR.
 **Proposto** → **Aceito** → **Supersedido**.
 
 Um ADR supersedido **não é apagado nem reescrito**: fica como registro histórico, com
-`Supersedido por:` apontando o novo. Supersessão parcial é explicitada no corpo — qual
+`Supersedido por:` apontando o novo. Supersessão parcial é explicitada no corpo, qual
 parte continua valendo e qual saiu.
 
 Numeração sequencial, três dígitos, **imutável**. Nunca renumerar, nem quando rejeitado.

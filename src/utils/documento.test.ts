@@ -11,7 +11,7 @@ import {
 
 /**
  * Os CPFs e CNPJs abaixo são numericamente válidos (fecham o dígito
- * verificador) e não pertencem a ninguém — são os números de teste que a
+ * verificador) e não pertencem a ninguém, são os números de teste que a
  * própria Receita e os geradores públicos usam como exemplo.
  */
 const CPF_VALIDO = '52998224725';

@@ -1,5 +1,5 @@
 /**
- * Aviso — erro, alerta e informação, no mesmo formato.
+ * Aviso, erro, alerta e informação, no mesmo formato.
  *
  * Toda falha que chega à UI passa por aqui, e por isso o componente aceita um
  * `ErroApp`: ele já sabe extrair a mensagem em português e, quando o código é
@@ -18,7 +18,7 @@ interface Props {
   tom?: Tom;
   titulo?: string;
   children?: ReactNode;
-  /** Erro capturado — a mensagem e o tom saem dele. */
+  /** Erro capturado, a mensagem e o tom saem dele. */
   erro?: unknown;
   /** Rota do upgrade, para erros de limite de plano. */
   linkPlano?: string;

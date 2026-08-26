@@ -11,7 +11,7 @@ const BOM = '\uFEFF';
 /**
  * Um ofício de teste com rótulos que não existem em nenhum ofício real. É de
  * propósito: se algum dia alguém trocar `campo1Label` por "Canal" fixo no
- * código, estes testes quebram — que é exatamente o trabalho deles.
+ * código, estes testes quebram, que é exatamente o trabalho deles.
  */
 const OFICIO: OficioExportavel = {
   campo1Label: 'Canal',
@@ -41,7 +41,7 @@ function linhasDe(csv: string): string[] {
   return csv.replace(BOM, '').split('\r\n');
 }
 
-describe('gerarCsvPautas — cabeçalho', () => {
+describe('gerarCsvPautas, cabeçalho', () => {
   it('tira os rótulos dos campos livres do ofício, não de string fixa', () => {
     const csv = gerarCsvPautas({ pautas: [], oficio: OFICIO });
     expect(linhasDe(csv)[0]).toBe('"Etapa","Título","Canal","Formato","Prazo"');
@@ -72,7 +72,7 @@ describe('gerarCsvPautas — cabeçalho', () => {
   });
 });
 
-describe('gerarCsvPautas — escape', () => {
+describe('gerarCsvPautas, escape', () => {
   it('dobra as aspas de dentro do campo', () => {
     const csv = gerarCsvPautas({
       pautas: [pauta({ titulo: 'A série "Bastidores"' })],
@@ -89,7 +89,7 @@ describe('gerarCsvPautas — escape', () => {
     const linha = linhasDe(csv)[1] ?? '';
 
     expect(linha).toContain('"Roteiro, corte e trilha"');
-    // Cinco campos citados — a vírgula do título não virou separador.
+    // Cinco campos citados, a vírgula do título não virou separador.
     expect(linha.match(/"[^"]*"/g)).toHaveLength(5);
   });
 
@@ -120,7 +120,7 @@ describe('gerarCsvPautas — escape', () => {
   });
 });
 
-describe('gerarCsvPautas — injeção de fórmula', () => {
+describe('gerarCsvPautas, injeção de fórmula', () => {
   // Um título é texto digitado por uma pessoa e aberto por outra. Sem a aspa
   // simples, a planilha executa esse texto. Ver OWASP "CSV Injection".
   it.each([
@@ -155,7 +155,7 @@ describe('gerarCsvPautas — injeção de fórmula', () => {
   });
 });
 
-describe('gerarCsvPautas — acentuação', () => {
+describe('gerarCsvPautas, acentuação', () => {
   it('começa com o BOM de UTF-8', () => {
     // Sem estes três bytes o Excel no Windows lê Latin-1 e "Revisão" vira
     // "RevisÃ£o".
@@ -164,15 +164,15 @@ describe('gerarCsvPautas — acentuação', () => {
 
   it('mantém os acentos intactos no conteúdo', () => {
     const csv = gerarCsvPautas({
-      pautas: [pauta({ titulo: 'Revisão de pauta — ação nº 3', etapaId: 'e2' })],
+      pautas: [pauta({ titulo: 'Revisão de pauta, ação nº 3', etapaId: 'e2' })],
       oficio: OFICIO,
     });
-    expect(csv).toContain('"Revisão de pauta — ação nº 3"');
+    expect(csv).toContain('"Revisão de pauta, ação nº 3"');
     expect(csv).toContain('"Em produção"');
   });
 });
 
-describe('gerarCsvPautas — campos ausentes', () => {
+describe('gerarCsvPautas, campos ausentes', () => {
   it('deixa a célula vazia em vez de escrever "null" ou travessão', () => {
     const csv = gerarCsvPautas({
       pautas: [pauta({ titulo: 'Sem nada', campo1: null, campo2: null, prazo: null })],
@@ -209,7 +209,7 @@ describe('gerarCsvPautas — campos ausentes', () => {
   });
 });
 
-describe('gerarCsvPautas — conteúdo das linhas', () => {
+describe('gerarCsvPautas, conteúdo das linhas', () => {
   it('escreve o prazo em formato brasileiro', () => {
     const csv = gerarCsvPautas({ pautas: [pauta({ prazo: '2026-08-20' })], oficio: OFICIO });
     // 20/08, não 19/08: a data é lida como local, nunca como UTC.

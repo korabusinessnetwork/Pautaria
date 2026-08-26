@@ -1,5 +1,5 @@
 /**
- * Preços — página pública.
+ * Preços, página pública.
  *
  * Os planos vêm da tabela `planos`, a mesma que a Edge Function lê para
  * calcular o valor enviado à Asaas. Isso não é elegância de arquitetura: é a
@@ -126,7 +126,7 @@ export function Precos() {
           nem guarda dados do seu cartão.
         </p>
         <p>
-          Cancele quando quiser, em um clique — e continue usando até o fim do período que
+          Cancele quando quiser, em um clique, e continue usando até o fim do período que
           você já pagou.
         </p>
         <p className={estilos.rodapeLinks}>

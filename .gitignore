@@ -9,7 +9,7 @@ dist-ssr/
 build/
 *.local
 
-# Ambiente — NUNCA versionar. Só .env.example entra no git.
+# Ambiente, NUNCA versionar. Só .env.example entra no git.
 .env
 .env.*
 !.env.example

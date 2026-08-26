@@ -1,13 +1,13 @@
-# 09 — Backlog
+# 09, Backlog
 
 > Ordenado por fase do roadmap (`memory/identity.md`). Limitações conhecidas com nome e
 > número vivem em `memory/bugs.md`; aqui está o que ainda não existe.
 
-## Fase 1 — Fundação + MVP monetizável · **entregue**
+## Fase 1, Fundação + MVP monetizável · **entregue**
 
 - [x] Fundação documental completa (`memory/`, `docs/00`→`11`, 7 ADRs)
 - [x] Banco: 10 migrations, RLS em toda tabela, FKs compostas, triggers de limite
-- [x] Teste de isolamento entre tenants — 89 asserções, gate de release
+- [x] Teste de isolamento entre tenants, 89 asserções, gate de release
 - [x] Edge Functions: contratar, portal, cancelar, webhook, reconciliar
 - [x] Camada de serviços + validação Zod nas duas direções
 - [x] UI fiel ao handoff: abertura, quadro com drag-and-drop, tabela, drawer
@@ -28,19 +28,19 @@
 - [ ] Rodar o checklist de `docs/11_SEGURANCA` ponta a ponta
 - [ ] Sair do plano Hobby da Vercel antes da primeira cobrança real (uso comercial)
 
-## Fase 2 — Colaboração
+## Fase 2, Colaboração
 
 | Item | Por quê | Tamanho |
 |---|---|---|
 | **Desarquivar pela UI** | O serviço já existe; falta a tela. Enquanto não houver, arquivar é tratado como irreversível e confirma | P |
 | **Comentários na pauta** | O pedido mais previsível de quem usa em time | M |
 | **Feed de atividade** | `audit_log` já grava; falta exibir com os rótulos de `ROTULO_EVENTO` | P |
-| **Notificação de menção/atribuição** | Depende de e-mail transacional (custo — ver restrições) | M |
+| **Notificação de menção/atribuição** | Depende de e-mail transacional (custo, ver restrições) | M |
 | **Realtime de presença** | Ver quem está no quadro agora | P |
 | **Múltiplos quadros no plano pago** | O banco já permite; falta o seletor na sidebar | P |
 | **Filtros salvos** | "só o que vence esta semana", "só meus" | M |
 
-## Fase 3 — Ofícios personalizados e exportação
+## Fase 3, Ofícios personalizados e exportação
 
 | Item | Por quê | Tamanho |
 |---|---|---|
@@ -52,19 +52,19 @@
 | **Importar de CSV/Trello** | Reduz o custo de trocar de ferramenta | G |
 | **Logo e nome por tenant** | `workspaces.tema.logoUrl` reservado; falta upload | M |
 
-## Fase 4 — Segurança avançada e LGPD
+## Fase 4, Segurança avançada e LGPD
 
 | Item | Por quê | Tamanho |
 |---|---|---|
 | **MFA/TOTP** | Suporte previsto e desligado em `config.toml`; falta inscrição, verificação e recuperação | M |
 | **Sessões ativas com revogação** | "Sair de todos os dispositivos" | M |
-| **Exportar meus dados (JSON)** | Portabilidade — LGPD art. 18 | M |
-| **Excluir conta com purga** | Esquecimento — LGPD art. 18. Precisa decidir o que fazer com workspaces de que a pessoa é única dona | M |
+| **Exportar meus dados (JSON)** | Portabilidade, LGPD art. 18 | M |
+| **Excluir conta com purga** | Esquecimento, LGPD art. 18. Precisa decidir o que fazer com workspaces de que a pessoa é única dona | M |
 | **Registro de consentimento** | Termos e privacidade com versão e data | P |
 | **Retenção e anonimização de log** | Política escrita e rotina que a aplique | P |
 | **Monitoramento (Sentry)** | Hoje um erro em produção só aparece se o usuário contar. Custo ~US$ 26/mês | P |
 
-## Fase 5 — Automação
+## Fase 5, Automação
 
 | Item | Por quê | Tamanho |
 |---|---|---|
@@ -87,7 +87,7 @@
 ## Ideias sem prioridade
 
 Vistas em quadro (calendário, linha do tempo) · subtarefas · anexos · modo escuro
-(o design é claro por identidade — exigiria um segundo conjunto de tokens) · app mobile ·
+(o design é claro por identidade, exigiria um segundo conjunto de tokens) · app mobile ·
 ofícios da comunidade · IA sugerindo pautas a partir do histórico.
 
 ## Como priorizar aqui
@@ -96,6 +96,6 @@ ofícios da comunidade · IA sugerindo pautas a partir do histórico.
    frente.
 2. **Bloqueio de receita vem antes de conforto.** Se algo impede alguém de pagar ou de
    convidar o time, sobe.
-3. **Segurança e LGPD têm data**, não prioridade relativa — são compromissos assumidos.
+3. **Segurança e LGPD têm data**, não prioridade relativa, são compromissos assumidos.
 4. **Consultar `memory/restrictions.md` antes.** Metade das boas ideias esbarra numa
    restrição de custo ou de produto, e descobrir isso depois de começar é retrabalho.

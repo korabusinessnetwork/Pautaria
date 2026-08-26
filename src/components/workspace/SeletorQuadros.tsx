@@ -1,9 +1,9 @@
 /**
- * Seletor de quadros — a lista de quadros do workspace, na sidebar.
+ * Seletor de quadros, a lista de quadros do workspace, na sidebar.
  *
  * O banco sempre permitiu vários quadros por workspace e o plano pago vende
  * isso; a sidebar é que só mostrava o primeiro. Este componente é a peça que
- * faltava — e ele existe separado da `Sidebar` por dois motivos:
+ * faltava, e ele existe separado da `Sidebar` por dois motivos:
  *
  * 1. Ele não lê contexto nenhum. Recebe `quadros`, `quadroAtivoId` e três
  *    callbacks, o que o torna montável num teste sem provedor, sem rede e sem
@@ -14,7 +14,7 @@
  *    legível *antes* de acontecer. Um quadro de Marketing pintado com o accent
  *    do quadro de TI que está aberto agora seria uma mentira visual.
  *
- * Nenhum nome de ofício aparece aqui — a lista vem do banco, e o par
+ * Nenhum nome de ofício aparece aqui, a lista vem do banco, e o par
  * (hue, chroma) vira as quatro variações do accent por construção.
  */
 
@@ -53,7 +53,7 @@ interface Props {
   quadros: QuadroDoSeletor[];
   quadroAtivoId: string | null;
   aoSelecionar: (quadroId: string) => void;
-  /** Cria um quadro com este título. Pode ser assíncrono — o botão espera. */
+  /** Cria um quadro com este título. Pode ser assíncrono, o botão espera. */
   aoCriar: (titulo: string) => void | Promise<void>;
   aoRenomear: (quadroId: string, titulo: string) => void | Promise<void>;
   /** `false` esconde criar e renomear: membro comum não mexe na estrutura. */
@@ -173,7 +173,7 @@ export function SeletorQuadros({
     }
   }
 
-  /** Esc cancela em qualquer campo de edição — atalho esperado, não enfeite. */
+  /** Esc cancela em qualquer campo de edição, atalho esperado, não enfeite. */
   function teclado(evento: KeyboardEvent<HTMLInputElement>) {
     if (evento.key === 'Escape') {
       evento.preventDefault();
@@ -229,7 +229,7 @@ export function SeletorQuadros({
         <p className={estilos.vazio}>
           Nenhum quadro por aqui ainda.
           <span className={estilos.vazioDica}>
-            Crie o primeiro para começar a pautar — o ofício escolhido já traz as etapas
+            Crie o primeiro para começar a pautar, o ofício escolhido já traz as etapas
             prontas.
           </span>
         </p>
@@ -277,7 +277,7 @@ export function SeletorQuadros({
                     </button>
 
                     {/* O duplo clique é o gesto rápido; este botão é o caminho
-                        de teclado equivalente — e o único que existe no toque. */}
+                        de teclado equivalente, e o único que existe no toque. */}
                     {podeAdministrar ? (
                       <button
                         type="button"

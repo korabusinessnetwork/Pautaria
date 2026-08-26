@@ -5,7 +5,7 @@
  * do plano nasce desabilitado com o motivo à vista; não deixe o usuário clicar
  * para receber um não."*
  *
- * Ele não **aplica** limite nenhum — quem aplica são os triggers da migration
+ * Ele não **aplica** limite nenhum, quem aplica são os triggers da migration
  * 0007, e nada que aconteça aqui muda isso. O papel deste código é puramente de
  * cortesia: saber, antes do clique, que o clique não vai funcionar, e dizer o
  * porquê num idioma que a pessoa entende.
@@ -18,7 +18,7 @@ import type { LimitesPlano } from '@/lib/tipos';
 export interface Veredito {
   /** `true` quando a ação pode ser tentada. */
   liberado: boolean;
-  /** Por que não — texto pronto para o `title` do botão ou um aviso inline. */
+  /** Por que não, texto pronto para o `title` do botão ou um aviso inline. */
   motivo: string;
   /** `true` quando resolver o problema é assinar um plano melhor. */
   sugerirUpgrade: boolean;
@@ -36,7 +36,7 @@ export interface Limites {
   convidarMembro: Veredito;
   criarOficio: Veredito;
   exportar: Veredito;
-  /** Quanto falta para bater o teto de pautas — alimenta a barra de uso. */
+  /** Quanto falta para bater o teto de pautas, alimenta a barra de uso. */
   pautasRestantes: number | null;
   membrosRestantes: number | null;
   limites: LimitesPlano | null;
@@ -83,7 +83,7 @@ export function useLimites(pautasNoQuadroAtual = 0): Limites {
     const criarQuadro = maxQuadros !== null && uso.quadros >= maxQuadros
       ? bloqueio(
           maxQuadros === 1
-            ? 'O plano Solo tem um quadro. Você pode trocar o ofício dele quando quiser — trocar é grátis.'
+            ? 'O plano Solo tem um quadro. Você pode trocar o ofício dele quando quiser, trocar é grátis.'
             : `Seu plano permite ${maxQuadros} quadros.`,
         )
       : LIBERADO;

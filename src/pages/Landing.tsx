@@ -1,10 +1,10 @@
 /**
- * Landing pública — a porta do funil.
+ * Landing pública, a porta do funil.
  *
  * É a primeira tela que alguém vê do Pautaria, e ela tem uma única obrigação:
  * fazer a promessa ("toda pauta tem um sotaque") e **provar** a promessa na
  * mesma rolagem. Por isso a vitrine dos ofícios não é uma lista de features com
- * ícone — é o quadro real de cada ofício, com as etapas reais e os rótulos de
+ * ícone, é o quadro real de cada ofício, com as etapas reais e os rótulos de
  * campo reais. Quem chega aqui vê o produto antes de criar conta.
  *
  * ─────────────────────────────────────────────────────────────────────────────
@@ -19,7 +19,7 @@
  * A constante `VITRINE_DE_OFICIOS` foi então modelada com os **mesmos nomes de
  * campo da tabela** (`campo1Label`, `tituloQuadro`, `hue`, `chroma`, `mono`).
  * No dia em que existir um endpoint público de catálogo, trocar a origem é
- * trocar a linha do `const` por um `useQuery` — nenhum JSX abaixo sabe que
+ * trocar a linha do `const` por um `useQuery`, nenhum JSX abaixo sabe que
  * "Marketing" existe: tudo é lido do objeto.
  *
  * ─────────────────────────────────────────────────────────────────────────────
@@ -27,7 +27,7 @@
  *
  * O único dado assíncrono desta página é o catálogo de planos, e ele carrega os
  * quatro estados (carregando, vazio, erro, sucesso) na seção de preço. O resto
- * é vitrine estática — de propósito, pelo motivo acima. Os preços, esses, vêm
+ * é vitrine estática, de propósito, pelo motivo acima. Os preços, esses, vêm
  * do banco: a mesma tabela que a Edge Function lê para cobrar. Preço escrito no
  * JSX é promessa que ninguém validou.
  */
@@ -49,7 +49,7 @@ import estilos from './Landing.module.css';
  * Para onde vai quem já está logado e cai na landing.
  *
  * Hoje `/` é o `Destino` (rota protegida). Quando esta página assumir `/`, o
- * `Destino` precisa de rota própria — ver a nota de integração. A rota vive
+ * `Destino` precisa de rota própria, ver a nota de integração. A rota vive
  * numa constante para que essa troca seja uma linha, e não uma caçada.
  */
 const ROTA_DO_APP = '/app';
@@ -68,7 +68,7 @@ interface CartaoDaVitrine {
 }
 
 interface ColunaDaVitrine {
-  /** Índice em `etapas` — assim a coluna nunca discorda do nome da etapa. */
+  /** Índice em `etapas`, assim a coluna nunca discorda do nome da etapa. */
   etapa: number;
   cartoes: CartaoDaVitrine[];
 }
@@ -83,7 +83,7 @@ interface OficioDaVitrine {
   tituloQuadro: string;
   campo1Label: string;
   campo2Label: string;
-  /** Chips e etiquetas em monoespaçada — é do ofício, não do componente. */
+  /** Chips e etiquetas em monoespaçada, é do ofício, não do componente. */
   mono: boolean;
   etapas: string[];
   colunas: ColunaDaVitrine[];
@@ -91,7 +91,7 @@ interface OficioDaVitrine {
 
 /**
  * Espelho da seed `supabase/seeds/0001_oficios.sql`. Se um ofício mudar lá,
- * muda aqui — e só aqui.
+ * muda aqui, e só aqui.
  *
  * A última coluna de cada ofício fica vazia de propósito: o estado vazio que
  * ensina a próxima ação é parte do produto, e a landing mostra o produto.
@@ -129,7 +129,7 @@ const VITRINE_DE_OFICIOS: [OficioDaVitrine, ...OficioDaVitrine[]] = [
         etapa: 1,
         cartoes: [
           {
-            titulo: 'Reels — 3 erros de quem começa',
+            titulo: 'Reels, 3 erros de quem começa',
             campo1: 'Instagram',
             campo2: 'Aquisição',
             prazo: 'sex',
@@ -140,7 +140,7 @@ const VITRINE_DE_OFICIOS: [OficioDaVitrine, ...OficioDaVitrine[]] = [
         etapa: 2,
         cartoes: [
           {
-            titulo: 'Newsletter #42 — cases',
+            titulo: 'Newsletter #42, cases',
             campo1: 'E-mail',
             campo2: 'Retenção',
             prazo: 'há 2 dias',
@@ -230,7 +230,7 @@ const VITRINE_DE_OFICIOS: [OficioDaVitrine, ...OficioDaVitrine[]] = [
         etapa: 2,
         cartoes: [
           {
-            titulo: 'Capítulo 4 — curso de UX',
+            titulo: 'Capítulo 4, curso de UX',
             campo1: 'Estudo',
             campo2: 'Alta',
             prazo: 'sex',
@@ -243,7 +243,7 @@ const VITRINE_DE_OFICIOS: [OficioDaVitrine, ...OficioDaVitrine[]] = [
 ];
 
 export function Landing() {
-  // Enquanto a sessão carrega, a página mostra o caminho público — é o caso da
+  // Enquanto a sessão carrega, a página mostra o caminho público, é o caso da
   // esmagadora maioria de quem chega aqui, e evita o pisca-pisca de trocar o
   // CTA depois. Sem isso, quem já está logado veria "Entrar" por um instante.
   const { autenticado } = useSessao();
@@ -321,7 +321,7 @@ export function Landing() {
             O problema
           </h2>
           <p className={estilos.frase}>
-            Toda ferramenta genérica começa igual — uma tela em branco, três colunas
+            Toda ferramenta genérica começa igual, uma tela em branco, três colunas
             chamadas <em>To do · Doing · Done</em> e a conta de inventar o resto, que
             ninguém termina de pagar às 14h de uma terça.
           </p>
@@ -334,8 +334,8 @@ export function Landing() {
             O ofício é a configuração.
           </h2>
           <p className={estilos.apoio}>
-            Três ofícios, três quadros diferentes. Escolha um — com o mouse ou pelo
-            teclado — e o quadro logo abaixo troca de sotaque junto.
+            Três ofícios, três quadros diferentes. Escolha um, com o mouse ou pelo
+            teclado, e o quadro logo abaixo troca de sotaque junto.
           </p>
 
           <div className={estilos.grade}>
@@ -353,7 +353,7 @@ export function Landing() {
                   onFocus={() => setOficioEmFoco(oficio)}
                   onClick={() => setOficioEmFoco(oficio)}
                   /* Não é estilo inline: é o par (hue, chroma) do ofício virando
-                     token. As regras continuam todas no CSS Module — que só usa
+                     token. As regras continuam todas no CSS Module, que só usa
                      estas variáveis em :hover e no estado escolhido, para o bloco
                      nascer neutro e assumir o accent quando for a vez dele. */
                   style={
@@ -409,7 +409,7 @@ export function Landing() {
           </p>
 
           {/* O accent do ofício em foco vira token aqui, e desce por herança
-              para Etiqueta e Chip — os mesmos componentes do quadro de verdade,
+              para Etiqueta e Chip, os mesmos componentes do quadro de verdade,
               não uma imitação desenhada só para a landing. */}
           <div
             className={estilos.mesa}
@@ -476,8 +476,8 @@ export function Landing() {
           {planos.isLoading ? (
             <CarregandoInline mensagem="Consultando os planos…" />
           ) : planos.error || catalogo.length === 0 ? (
-            /* Erro e catálogo vazio dizem a mesma coisa a quem visita — não sei o
-               preço agora — e têm a mesma próxima ação. Um alerta vermelho na
+            /* Erro e catálogo vazio dizem a mesma coisa a quem visita, não sei o
+               preço agora, e têm a mesma próxima ação. Um alerta vermelho na
                porta do funil assustaria mais do que informa; a frase é discreta,
                honesta e leva para a página que tem a resposta. */
             <p className={estilos.precoIndisponivel}>

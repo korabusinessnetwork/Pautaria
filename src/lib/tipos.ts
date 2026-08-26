@@ -1,7 +1,7 @@
 /**
  * Tipos de domínio e contratos de dados.
  *
- * Os schemas Zod aqui não validam entrada do usuário — validam o que **volta do
+ * Os schemas Zod aqui não validam entrada do usuário, validam o que **volta do
  * banco** antes de chegar à UI. Parece paranoia até a primeira vez que uma
  * migration renomeia uma coluna e o app passa a renderizar `undefined` em silêncio
  * por três dias. Com o schema, a fronteira falha alto no momento exato em que o
@@ -9,7 +9,7 @@
  *
  * Regra de nomenclatura do projeto (CLAUDE.md): o banco fala português em
  * snake_case; a UI fala português em camelCase. A conversão acontece nos
- * `transform` deste arquivo — em nenhum outro lugar.
+ * `transform` deste arquivo, em nenhum outro lugar.
  */
 
 import { z } from 'zod';
@@ -116,7 +116,7 @@ export const zMembro = z
 export type Membro = z.infer<typeof zMembro>;
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Ofício — a configuração que vira produto
+// Ofício, a configuração que vira produto
 // ─────────────────────────────────────────────────────────────────────────────
 export const zEtapa = z
   .object({ id: z.string().uuid(), nome: z.string(), ordem: z.number() })
@@ -304,7 +304,7 @@ export const zAssinatura = z
 
 export type Assinatura = z.infer<typeof zAssinatura>;
 
-/** Uso corrente vs. limites — alimenta os avisos da UI antes do clique. */
+/** Uso corrente vs. limites, alimenta os avisos da UI antes do clique. */
 export const zUso = z
   .object({
     workspace_id: z.string().uuid(),

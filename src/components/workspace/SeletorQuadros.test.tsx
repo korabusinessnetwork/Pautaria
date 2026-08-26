@@ -3,10 +3,10 @@
  *
  * A regra que estes testes protegem vem de duas fontes que se somam:
  *
- *   `CLAUDE.md` — prevenção de erro é melhor que mensagem de erro: o botão que
+ *   `CLAUDE.md`, prevenção de erro é melhor que mensagem de erro: o botão que
  *   não vai funcionar nasce desabilitado, com o motivo à vista.
  *
- *   `memory/restrictions.md` P1 — **trocar de ofício nunca é paywall**. O plano
+ *   `memory/restrictions.md` P1, **trocar de ofício nunca é paywall**. O plano
  *   Solo limita a *um quadro*, e o motivo precisa dizer que trocar o sotaque do
  *   quadro atual continua grátis. Sem essa frase, o limite lê como se o produto
  *   cobrasse pela única coisa que o diferencia.
@@ -43,7 +43,7 @@ function montar(props: Partial<Parameters<typeof SeletorQuadros>[0]> = {}) {
   return { props: { ...padrao, ...props }, ...render(<SeletorQuadros {...padrao} {...props} />) };
 }
 
-describe('SeletorQuadros — navegação', () => {
+describe('SeletorQuadros, navegação', () => {
   it('lista os quadros com o nome do ofício de cada um', () => {
     montar();
     expect(screen.getByText('Pauta de conteúdo')).toBeInTheDocument();
@@ -54,8 +54,8 @@ describe('SeletorQuadros — navegação', () => {
   it('marca o quadro ativo para leitor de tela', () => {
     montar({ quadroAtivoId: 'q2' });
     // Âncora no início: "Renomear o quadro Pauta do time" também casaria com
-    // /Pauta do time/. O nome acessível do botão de seleção vem do conteúdo —
-    // título + nome do ofício —, não do atributo `title`.
+    // /Pauta do time/. O nome acessível do botão de seleção vem do conteúdo,
+    // título + nome do ofício, não do atributo `title`.
     const lista = screen.getByRole('navigation', { name: /quadros/i });
     const ativo = within(lista).getByRole('button', { name: /^Pauta do time/ });
     expect(ativo).toHaveAttribute('aria-current', 'true');
@@ -70,7 +70,7 @@ describe('SeletorQuadros — navegação', () => {
   });
 });
 
-describe('SeletorQuadros — limite de plano', () => {
+describe('SeletorQuadros, limite de plano', () => {
   it('deixa criar quando o plano permite', async () => {
     const aoCriar = vi.fn();
     montar({ aoCriar });
@@ -87,7 +87,7 @@ describe('SeletorQuadros — limite de plano', () => {
       limiteCriar: {
         liberado: false,
         motivo:
-          'O plano Solo tem um quadro. Você pode trocar o ofício dele quando quiser — trocar é grátis.',
+          'O plano Solo tem um quadro. Você pode trocar o ofício dele quando quiser, trocar é grátis.',
       },
     });
 
@@ -105,7 +105,7 @@ describe('SeletorQuadros — limite de plano', () => {
       limiteCriar: {
         liberado: false,
         motivo:
-          'O plano Solo tem um quadro. Você pode trocar o ofício dele quando quiser — trocar é grátis.',
+          'O plano Solo tem um quadro. Você pode trocar o ofício dele quando quiser, trocar é grátis.',
       },
     });
 
@@ -123,7 +123,7 @@ describe('SeletorQuadros — limite de plano', () => {
   });
 });
 
-describe('SeletorQuadros — renomear', () => {
+describe('SeletorQuadros, renomear', () => {
   it('renomeia pelo botão, que é o caminho de teclado e o único no toque', async () => {
     const aoRenomear = vi.fn();
     montar({ aoRenomear });

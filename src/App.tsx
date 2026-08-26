@@ -22,18 +22,18 @@ import { NaoEncontrado } from './pages/NaoEncontrado';
 /**
  * Rotas.
  *
- * A raiz `/` é a **landing pública** — a porta do funil, sem sessão. A entrada
+ * A raiz `/` é a **landing pública**, a porta do funil, sem sessão. A entrada
  * do aplicativo é `/app`, que não renderiza tela: é `Destino`, que decide para
  * onde mandar quem chega (sem workspace → abertura; com workspace → o quadro).
  * Essa decisão precisa de dados e por isso não cabe num `<Navigate>` estático.
  *
  * A separação entre as duas é recente e cobra atenção: qualquer redirecionamento
  * pós-login que aponte para `/` devolve o usuário autenticado para a página de
- * vendas — e, vindo de `Entrar`, cria um laço. Por isso os destinos vivem em
+ * vendas, e, vindo de `Entrar`, cria um laço. Por isso os destinos vivem em
  * `src/constants/rotas.ts` e não como literais espalhados.
  *
  * Toda rota de dentro passa por `RotaProtegida`, que **verifica a sessão antes
- * de renderizar** — nunca depois. Renderizar primeiro e redirecionar em
+ * de renderizar**, nunca depois. Renderizar primeiro e redirecionar em
  * `useEffect` mostraria o quadro por um instante para quem não deveria vê-lo.
  */
 export function App() {

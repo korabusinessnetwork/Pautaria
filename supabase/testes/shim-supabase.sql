@@ -1,12 +1,12 @@
 -- ═══════════════════════════════════════════════════════════════════════════
---  SHIM — o mínimo do Supabase, num Postgres puro
+--  SHIM, o mínimo do Supabase, num Postgres puro
 --
 --  As migrations do Pautaria dependem de coisas que a plataforma Supabase
 --  fornece: os papéis `anon` / `authenticated` / `service_role`, o schema
 --  `auth` com `auth.users` e `auth.uid()`, e a publicação `supabase_realtime`.
 --
 --  Este arquivo recria esse contrato mínimo para que as migrations e o teste de
---  isolamento rodem contra um Postgres comum — em CI, num contêiner, na máquina
+--  isolamento rodem contra um Postgres comum, em CI, num contêiner, na máquina
 --  de quem não quer subir o stack inteiro. Não é uma reimplementação do
 --  Supabase: é a superfície que o nosso schema toca, e nada além.
 --

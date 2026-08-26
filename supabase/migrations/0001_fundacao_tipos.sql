@@ -1,12 +1,12 @@
 -- ═══════════════════════════════════════════════════════════════════════════
--- 0001 — Fundação: schema privado, tipos de domínio e utilitários
+-- 0001, Fundação: schema privado, tipos de domínio e utilitários
 --
 -- Nada aqui cria tabela. Este arquivo estabelece o vocabulário do banco (enums)
 -- e a caixa de ferramentas (`app`) usada pelas políticas de RLS das migrations
 -- seguintes.
 --
 -- Convenção do projeto: o schema `app` guarda funções internas de autorização e
--- regra. Ele NÃO é exposto na API do PostgREST — só o `public` é. Isso significa
+-- regra. Ele NÃO é exposto na API do PostgREST, só o `public` é. Isso significa
 -- que essas funções não podem ser chamadas diretamente do browser; existem
 -- apenas para serem invocadas de dentro de políticas e triggers.
 -- ═══════════════════════════════════════════════════════════════════════════
@@ -17,14 +17,14 @@ comment on schema app is
   'Funções internas de autorização e regra de negócio. Não exposto via PostgREST.';
 
 -- `usage` no schema é necessário: as políticas de RLS chamam `app.e_membro()` e
--- companhia, e uma política é avaliada com os privilégios de quem consulta —
+-- companhia, e uma política é avaliada com os privilégios de quem consulta,
 -- sem `usage`, toda query autenticada morreria com "permission denied for
 -- schema app".
 --
 -- Isso NÃO expõe nada: `usage` num schema não dá direito a executar função
 -- alguma; cada `grant execute` é concedido individualmente, junto da função
 -- que o justifica. E o schema `app` fica fora de `config.toml → api.schemas`,
--- então o PostgREST sequer publica uma rota para ele — não há como chamar
+-- então o PostgREST sequer publica uma rota para ele, não há como chamar
 -- `app.*` a partir do browser, com ou sem privilégio.
 revoke all on schema app from public;
 grant usage on schema app to anon, authenticated, service_role;
@@ -41,17 +41,17 @@ grant usage on schema app to anon, authenticated, service_role;
 create type public.plano as enum ('solo', 'estudio', 'time');
 
 -- Papel de um usuário dentro de um workspace.
---   owner  — dono; único que assina, cancela e exclui o workspace. Sempre ≥ 1.
---   admin  — gerencia membros, ofícios e quadros; não mexe em assinatura.
---   membro — cria e move pautas.
+--   owner, dono; único que assina, cancela e exclui o workspace. Sempre ≥ 1.
+--   admin, gerencia membros, ofícios e quadros; não mexe em assinatura.
+--   membro, cria e move pautas.
 create type public.papel as enum ('owner', 'admin', 'membro');
 
 -- Estado do tenant.
---   ativo         — tudo liberado
---   inadimplente  — pagamento atrasado, ainda dentro do período de tolerância:
+--   ativo, tudo liberado
+--   inadimplente, pagamento atrasado, ainda dentro do período de tolerância:
 --                   continua gravável (não punimos o usuário antes da hora)
---   suspenso      — tolerância esgotada: somente leitura, dados preservados
---   cancelado     — encerrado pelo dono: somente leitura até a purga
+--   suspenso, tolerância esgotada: somente leitura, dados preservados
+--   cancelado, encerrado pelo dono: somente leitura até a purga
 create type public.status_workspace as enum
   ('ativo', 'inadimplente', 'suspenso', 'cancelado');
 
@@ -115,7 +115,7 @@ comment on function app.gerar_slug(text) is
 
 -- Hash de token de uso único (convites). Guardamos o hash, nunca o token: se o
 -- banco vazar, os convites em aberto não viram acesso.
--- `sha256` é nativa do Postgres desde a 11 — sem dependência de extensão.
+-- `sha256` é nativa do Postgres desde a 11, sem dependência de extensão.
 create or replace function app.hash_token(p_token text)
 returns text
 language sql
@@ -134,7 +134,7 @@ comment on function app.hash_token(text) is
 -- `gerar_slug` é chamada de dentro de `public.criar_workspace`, que roda como
 -- SECURITY INVOKER de propósito (para manter a RLS valendo no onboarding).
 -- Logo, quem chama precisa poder executá-la. É pura transformação de texto,
--- sem acesso a dado — conceder é inofensivo.
+-- sem acesso a dado, conceder é inofensivo.
 --
 -- `hash_token` NÃO é concedida: ela só é chamada de dentro de
 -- `public.aceitar_convite`, que é SECURITY DEFINER. Dar acesso a ela ao cliente

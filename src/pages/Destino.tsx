@@ -1,5 +1,5 @@
 /**
- * Destino — para onde vai quem entra na raiz.
+ * Destino, para onde vai quem entra na raiz.
  *
  * A decisão depende de dados (o usuário já tem workspace?) e por isso não cabe
  * num `<Navigate>` estático no roteador. Sem workspace → abertura, para escolher

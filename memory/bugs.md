@@ -1,4 +1,4 @@
-# Bugs conhecidos — Pautaria
+# Bugs conhecidos, Pautaria
 
 ## Objetivo
 Registrar bugs conhecidos, limitações aceitas e correções feitas com trade-off, para que
@@ -45,7 +45,7 @@ alguém que não sabia que era decisão. Este arquivo separa as duas coisas.
 
 ## Corrigidos na fundação
 
-### B1 — `[CORRIGIDO]` Build de produção gerava bundle vazio
+### B1, `[CORRIGIDO]` Build de produção gerava bundle vazio
 *crítico · 2026-08-17 · corrigido no mesmo dia*
 
 **Sintoma.** `npm run build` verde, bundle de 920 bytes, app inexistente.
@@ -56,14 +56,14 @@ aborta o build de produção sem as variáveis.
 **Verificação.** Build sem env deve falhar; build com env deve conter a string `sotaque`.
 *Promovido para `learnings.md` A1.*
 
-### B2 — `[CORRIGIDO]` Toda query autenticada morria com "permission denied for schema app"
+### B2, `[CORRIGIDO]` Toda query autenticada morria com "permission denied for schema app"
 *crítico · 2026-08-17*
 
 **Causa.** `authenticated` sem `usage` no schema `app`, que as políticas de RLS precisam
 para chamar `app.e_membro()`.
 **Correção.** Migration 0001. *Promovido para `learnings.md` A2.*
 
-### B3 — `[CORRIGIDO]` Onboarding falhava com violação de RLS
+### B3, `[CORRIGIDO]` Onboarding falhava com violação de RLS
 *alto · 2026-08-17*
 
 **Causa.** `INSERT ... RETURNING` exige a política de SELECT, que só passa depois do
@@ -71,7 +71,7 @@ trigger `AFTER INSERT` criar o vínculo de dono.
 **Correção.** Migration 0008: uuid gerado na função, sem `RETURNING`.
 *Promovido para `learnings.md` A3.*
 
-### B4 — `[CORRIGIDO]` Troca de ofício falhava com "permission denied for table pautas"
+### B4, `[CORRIGIDO]` Troca de ofício falhava com "permission denied for table pautas"
 *alto · 2026-08-17*
 
 **Causa.** `trocar_oficio_quadro` era SECURITY INVOKER e precisa escrever
@@ -79,9 +79,9 @@ trigger `AFTER INSERT` criar o vínculo de dono.
 **Correção.** Migration 0008: função virou SECURITY DEFINER **com bloco de autorização
 explícito na entrada** (papel + workspace gravável).
 **Atenção para o futuro.** Toda função DEFINER deste projeto deve abrir com esse bloco.
-Se não abrir, é bug de segurança — a RLS está desligada lá dentro.
+Se não abrir, é bug de segurança, a RLS está desligada lá dentro.
 
-### B5 — `[CORRIGIDO]` Três testes de isolamento passavam pelo motivo errado
+### B5, `[CORRIGIDO]` Três testes de isolamento passavam pelo motivo errado
 *crítico · 2026-08-17*
 
 **Causa.** `\set` com aspas triplas gerava erro de sintaxe interpretado como "bloqueado";
@@ -91,14 +91,14 @@ onde o comando roda e afeta zero linhas.
 ataque, e um `UPDATE ... WHERE true` sem filtro como teste-canário.
 *Promovido para `learnings.md` A4.*
 
-### B6 — `[CORRIGIDO]` `aceitar_convite` com "column reference is ambiguous"
+### B6, `[CORRIGIDO]` `aceitar_convite` com "column reference is ambiguous"
 *médio · 2026-08-17*
 
 **Causa.** Nome de parâmetro OUT colidindo com coluna na lista do `ON CONFLICT`.
 **Correção.** `if not exists` explícito em vez de `ON CONFLICT`.
 *Promovido para `learnings.md` A5.*
 
-### B7 — `[CORRIGIDO]` Dados de demonstração vazaram para o bundle de produção
+### B7, `[CORRIGIDO]` Dados de demonstração vazaram para o bundle de produção
 *alto · 2026-08-24*
 
 **Sintoma.** Build verde, e ~9 KB de fixtures ("Estúdio Aurora", "Marina Alves")
@@ -114,65 +114,65 @@ build. Gate no CI procurando quatro marcadores em `dist/`.
 
 ## Limitações aceitas (não são bugs)
 
-### L1 — Ordenação fracionária esgota precisão após ~50 inserções no mesmo ponto
+### L1, Ordenação fracionária esgota precisão após ~50 inserções no mesmo ponto
 *baixo · por desenho*
 
 Dividir ao meio repetidamente esgota o `double` por volta da 50ª inserção **entre os dois
 mesmos cards**. Inatingível no uso real de um quadro de pautas.
 `precisaRenumerar()` e `renumerar()` existem e estão testados; falta ligá-los a um gatilho
-automático — hoje seria intervenção manual. Registrado por honestidade.
+automático, hoje seria intervenção manual. Registrado por honestidade.
 
-### L2 — `[RESOLVIDO 2026-08-24]` Arquivar não tinha UI de desarquivar
+### L2, `[RESOLVIDO 2026-08-24]` Arquivar não tinha UI de desarquivar
 *era médio*
 
 A tela `/w/:slug/arquivadas` existe: lista, desarquiva e (com confirmação
-explícita) exclui em definitivo. O drawer ainda confirma antes de arquivar —
+explícita) exclui em definitivo. O drawer ainda confirma antes de arquivar,
 agora por cortesia, não por falta de caminho de volta.
 
-### L9 — `npm run telas` é gate manual, não roda no CI
+### L9, `npm run telas` é gate manual, não roda no CI
 *baixo · aceito*
 
 A verificação de transbordo horizontal e a captura das telas precisam de um
 Chromium e de um servidor de desenvolvimento no ar. Rodar isso no CI exigiria
 baixar o navegador a cada execução. Fica como gate manual antes de mexer em
-layout — `npm run telas:mobile`.
+layout, `npm run telas:mobile`.
 
-### L3 — Drag-and-drop não funciona por teclado
+### L3, Drag-and-drop não funciona por teclado
 *médio · por desenho*
 
 `draggable` do HTML5 não é acessível por teclado, e nenhuma configuração muda isso. O
 caminho alternativo são as pills "MOVER PARA" do drawer, que fazem a mesma operação.
-Registrado para que ninguém "conserte" adicionando `tabindex` ao card — o que daria a
+Registrado para que ninguém "conserte" adicionando `tabindex` ao card, o que daria a
 impressão de acessibilidade sem entregá-la.
 
-### L4 — Reenviar convite não existe
+### L4, Reenviar convite não existe
 *baixo · por desenho*
 
 Guardamos só o hash do token; o valor original não existe mais em lugar nenhum. Revogar e
 criar outro é o caminho. Ver `decisions.md` D12.
 
-### L5 — Sem monitoramento de erro em produção
+### L5, Sem monitoramento de erro em produção
 *médio · custo, Fase 4*
 
 `console.error` e a fronteira de erro global. Sentry adiado por custo
 (`restrictions.md` § Custo). Enquanto não houver, erro de produção só aparece se o usuário
 contar.
 
-### L6 — LGPD self-service ainda não existe
+### L6, LGPD self-service ainda não existe
 *alto · Fase 4*
 
 Exportação, exclusão com purga e registro de consentimento estão no roadmap. Até lá,
 pedido de titular é atendido manualmente. Dívida consciente, registrada em
 `restrictions.md` L1.
 
-### L7 — Teste de isolamento roda em Postgres 16, produção é 15
+### L7, Teste de isolamento roda em Postgres 16, produção é 15
 *baixo · aceito*
 
 `scripts/banco-efemero.sh` usa a versão instalada na máquina; o Supabase serve PG15. Nada
 usado no schema é exclusivo do 16, e `supabase db reset` valida na versão real. Vale saber
 que a validação local é uma aproximação.
 
-### L8 — Realtime invalida a consulta inteira em vez de aplicar o delta
+### L8, Realtime invalida a consulta inteira em vez de aplicar o delta
 *baixo · por desenho*
 
 Ao receber evento, o quadro refaz a consulta. É mais tráfego do que o necessário e elimina
@@ -181,16 +181,55 @@ centenas de pautas.
 
 ---
 
+### B8, `[CORRIGIDO]` Todas as funções do banco eram executáveis por `anon`
+*2026-08-26 · banco · encontrado no primeiro deploy hospedado*
+
+**Sintoma.** Nenhum. O repositório dizia `grant execute ... to authenticated` e o banco
+concedia EXECUTE a `anon` em 28 funções, incluindo as três RPCs de `public` e as 25 de
+`app` (`tem_papel`, `auditar`, `limite_plano`, `consumir_rate_limit`…). Só apareceu
+porque a auditoria consultou `has_function_privilege` em vez de ler o `.sql`.
+
+**Causa, que são duas e se disfarçam de uma.** Em `public`, a ACL trazia
+`anon=X/postgres`, concessão **nominal** herdada do `alter default privileges` que todo
+projeto Supabase traz de fábrica. Em `app`, trazia `=X/postgres` — concessionário vazio
+é o **PUBLIC**, padrão do próprio PostgreSQL. São coisas diferentes: `revoke ... from
+anon` não remove concessão a PUBLIC, e `revoke ... from public` não remove concessão
+nominal a `anon`. A 0008 fazia só o segundo, mirando o alvo errado para o seu caso.
+
+**Por que a 0009 não protegeu.** Ela inverte exatamente esse padrão, e corretamente. Mas
+`alter default privileges` só alcança objetos criados **depois** dela. Por isso as
+funções da 0010 nasceram fechadas e as de 0001 a 0008 não. A ordem das migrations virou
+política de segurança sem ninguém decidir isso.
+
+**Impacto real: nenhuma exploração.** As três RPCs de `public` abortam em
+`auth.uid() is null`, e o schema `app` fica fora de `api.schemas`, logo o PostgREST não
+publica rota para ele. O que existia era superfície: função `SECURITY DEFINER` roda
+ignorando RLS, então a checagem no corpo dela era a única barreira — e `create or
+replace` **preserva** ACL, então nenhuma reedição futura consertaria sozinha.
+
+**Correção.** Migration 0011: `revoke all on all routines ... from public, anon` nos dois
+schemas, mais um gate que falha a migration se qualquer função ficar executável por
+`anon`. `authenticated` e `service_role` têm concessão nominal própria e seguem intactos;
+as funções que ficaram sem concessão são de gatilho, e gatilho exige EXECUTE no
+`create trigger`, não a cada disparo (prova: `app.tocar_atualizado_em` já estava assim
+desde a 0001 e sempre funcionou).
+
+**Lição.** Privilégio não se confere lendo a migration, se confere perguntando ao banco.
+Ver `memory/learnings.md` A11 — é o mesmo modo de falha da política de senha, e apareceu
+no mesmo dia.
+
+---
+
 ## Riscos conhecidos, ainda não observados
 
-### R1 — Corrida entre webhook e reconciliação no mesmo workspace
+### R1, Corrida entre webhook e reconciliação no mesmo workspace
 *teórico*
 
 `aplicar_estado_assinatura` faz `select ... for update` e é uma derivação pura, então
 executá-la duas vezes em paralelo converge. Não observado; registrado porque é o ponto
 onde uma inconsistência de plano apareceria primeiro.
 
-### R2 — Vercel Hobby não permite uso comercial
+### R2, Vercel Hobby não permite uso comercial
 *administrativo*
 
 O plano Hobby é gratuito para projetos não comerciais. No dia da primeira cobrança real, o

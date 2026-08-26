@@ -1,5 +1,5 @@
 /**
- * Atividade — a linha do tempo do workspace.
+ * Atividade, a linha do tempo do workspace.
  *
  * Esta tela existe porque o `audit_log` já era escrito e nunca lido. Ela responde
  * a uma pergunta que só aparece em dia ruim: "quem mexeu nisso, e quando?".
@@ -12,13 +12,13 @@
  *    que o servidor constatou ("a cobrança foi confirmada"). Exibir os dois com
  *    o mesmo peso seria mentir por omissão: só o segundo grupo tem valor numa
  *    investigação, porque só ele não pode ser forjado por um cliente. Daí a
- *    marca visual e o filtro — quem está apurando um problema de cobrança quer
+ *    marca visual e o filtro, quem está apurando um problema de cobrança quer
  *    exatamente as linhas de servidor, e não deveria ter que garimpá-las.
  *
  * 2. **Quem não pode ver recebe explicação, não uma lista vazia.** A RLS não
  *    recusa a consulta de um membro comum: ela devolve zero linhas. Sem
  *    tratamento, a tela diria "nada aconteceu ainda" para um workspace movimentado
- *    — informação falsa com cara de bug. Por isso a permissão é checada antes de
+ *, informação falsa com cara de bug. Por isso a permissão é checada antes de
  *    consultar, e a ausência de permissão tem texto próprio.
  */
 
@@ -116,7 +116,7 @@ function Conteudo() {
     queryFn: () => atividadeService.listarAtividade(workspace!.id, limite),
     enabled: habilitada,
     // "Carregar mais" muda a chave da consulta. Sem isto, a lista sumiria e
-    // voltaria maior a cada clique — a pessoa perderia o lugar onde estava
+    // voltaria maior a cada clique, a pessoa perderia o lugar onde estava
     // lendo, que é o oposto do que um botão de "mais" promete.
     placeholderData: keepPreviousData,
   });
@@ -185,7 +185,7 @@ function Conteudo() {
         <section className={estilos.painel}>
           <Aviso tom="info" titulo="Só o dono e os admins veem o histórico.">
             <span>
-              O registro de atividade guarda quem fez o quê — inclusive em cobrança e
+              O registro de atividade guarda quem fez o quê, inclusive em cobrança e
               equipe. Por isso ele fica com quem administra o workspace. Se você precisa
               consultar alguma coisa aqui, peça a quem administra.
             </span>
@@ -331,7 +331,7 @@ function ItemAtividade({ item }: { item: ItemExibido }) {
                 <Etiqueta>servidor</Etiqueta>
               </span>
               <span className="apenas-leitor">
-                Registrado pelo servidor — não pode ter sido forjado pelo navegador.
+                Registrado pelo servidor, não pode ter sido forjado pelo navegador.
               </span>
             </>
           ) : null}

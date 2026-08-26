@@ -1,12 +1,12 @@
 /**
- * O card é onde a promessa do produto vira pixel — e onde ela é mais fácil de
+ * O card é onde a promessa do produto vira pixel, e onde ela é mais fácil de
  * quebrar sem perceber.
  *
  * A regra que estes testes protegem está em `memory/restrictions.md` P2:
  * *nenhum componente conhece o nome de um ofício*. O card não pode saber que
  * existe "Marketing"; ele recebe um ofício e obedece. Um `if (oficio.chave ===
  * 'ti')` compilaria, passaria no lint, e mataria a promessa de que um ofício
- * novo é um INSERT — sem nenhum sinal.
+ * novo é um INSERT, sem nenhum sinal.
  */
 
 import { describe, expect, it, vi } from 'vitest';
@@ -28,7 +28,7 @@ function montar(props: Partial<Parameters<typeof PautaCard>[0]> = {}) {
   return render(<PautaCard {...padrao} {...props} />);
 }
 
-describe('PautaCard — o ofício manda', () => {
+describe('PautaCard, o ofício manda', () => {
   it('mostra os dois campos livres com os valores da pauta', () => {
     montar({ pauta: pauta({ campo1: 'Instagram', campo2: 'Aquisição' }) });
 
@@ -36,7 +36,7 @@ describe('PautaCard — o ofício manda', () => {
     expect(screen.getByText('Aquisição')).toBeInTheDocument();
   });
 
-  it('não renderiza chip de campo vazio — o traço do protótipo é renderização, não dado', () => {
+  it('não renderiza chip de campo vazio, o traço do protótipo é renderização, não dado', () => {
     montar({ pauta: pauta({ campo1: 'Instagram', campo2: null }) });
 
     expect(screen.getByText('Instagram')).toBeInTheDocument();
@@ -59,7 +59,7 @@ describe('PautaCard — o ofício manda', () => {
   });
 });
 
-describe('PautaCard — responsável', () => {
+describe('PautaCard, responsável', () => {
   it('mostra o avatar quando o quadro é de time', () => {
     const pessoa = membro({ nome: 'Marina Alves', iniciais: 'MA' });
     montar({
@@ -71,7 +71,7 @@ describe('PautaCard — responsável', () => {
     expect(screen.getByText('MA')).toBeInTheDocument();
   });
 
-  it('esconde quando o ofício é solo — decisão do ofício, não do plano', () => {
+  it('esconde quando o ofício é solo, decisão do ofício, não do plano', () => {
     const pessoa = membro();
     montar({
       oficio: oficioSolo(),
@@ -85,7 +85,7 @@ describe('PautaCard — responsável', () => {
   });
 });
 
-describe('PautaCard — prazo', () => {
+describe('PautaCard, prazo', () => {
   it('diz "hoje" em vez da data', () => {
     montar({ pauta: pauta({ prazo: emDias(0) }) });
     expect(screen.getByText('hoje')).toBeInTheDocument();
@@ -96,7 +96,7 @@ describe('PautaCard — prazo', () => {
     expect(screen.getByText('amanhã')).toBeInTheDocument();
   });
 
-  it('marca atraso com texto próprio — a pergunta real é "estou atrasado?"', () => {
+  it('marca atraso com texto próprio, a pergunta real é "estou atrasado?"', () => {
     montar({ pauta: pauta({ prazo: emDias(-3) }) });
     expect(screen.getByText('há 3 dias')).toBeInTheDocument();
   });
@@ -107,7 +107,7 @@ describe('PautaCard — prazo', () => {
   });
 });
 
-describe('PautaCard — interação', () => {
+describe('PautaCard, interação', () => {
   it('clicar abre o detalhe', async () => {
     const aoAbrir = vi.fn();
     montar({ aoAbrir });
@@ -116,7 +116,7 @@ describe('PautaCard — interação', () => {
     expect(aoAbrir).toHaveBeenCalledOnce();
   });
 
-  it('é alcançável por teclado — o arrasto não pode ser o único caminho', async () => {
+  it('é alcançável por teclado, o arrasto não pode ser o único caminho', async () => {
     const aoAbrir = vi.fn();
     montar({ aoAbrir });
 
@@ -128,7 +128,7 @@ describe('PautaCard — interação', () => {
   });
 
   it('o título aparece por inteiro, sem truncar no DOM', () => {
-    const longo = 'Newsletter #42 — cases de quem começou do zero e chegou lá';
+    const longo = 'Newsletter #42, cases de quem começou do zero e chegou lá';
     montar({ pauta: pauta({ titulo: longo }) });
     expect(screen.getByText(longo)).toBeInTheDocument();
   });

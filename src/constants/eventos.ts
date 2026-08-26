@@ -36,7 +36,7 @@ export const EVENTOS = {
   MEMBRO_REMOVIDO: 'membro.removido',
   MEMBRO_PAPEL_ALTERADO: 'membro.papel_alterado',
 
-  // Cobrança — escritos só pelo servidor (origem = 'servidor')
+  // Cobrança, escritos só pelo servidor (origem = 'servidor')
   ASSINATURA_CONTRATADA: 'assinatura.contratada',
   ASSINATURA_ATIVADA: 'assinatura.ativada',
   ASSINATURA_CANCELADA: 'assinatura.cancelada',

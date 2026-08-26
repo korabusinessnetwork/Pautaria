@@ -1,7 +1,7 @@
-/* Controle visual — densidade e exportação.
+/* Controle visual, densidade e exportação.
 
    O alternador é o mesmo segmentado de "Quadro | Tabela" da topbar: mesma
-   trilha, mesmo raio, mesma pastilha branca sob a opção ativa. Deliberado — os
+   trilha, mesmo raio, mesma pastilha branca sob a opção ativa. Deliberado, os
    dois controles ficam lado a lado na mesma faixa, e duas versões do mesmo
    componente a 30px de distância é o tipo de inconsistência que ninguém nomeia
    mas todo mundo sente.

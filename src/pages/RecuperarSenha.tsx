@@ -1,8 +1,8 @@
 /**
  * Recuperação de senha.
  *
- * A resposta é sempre a mesma — "se existe conta com esse e-mail, mandamos o
- * link" — independentemente de a conta existir. Confirmar a existência aqui
+ * A resposta é sempre a mesma, "se existe conta com esse e-mail, mandamos o
+ * link", independentemente de a conta existir. Confirmar a existência aqui
  * transformaria o formulário num verificador de clientes: qualquer pessoa
  * poderia testar e-mails e descobrir quem usa o Pautaria.
  */

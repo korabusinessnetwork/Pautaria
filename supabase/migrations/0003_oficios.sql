@@ -1,9 +1,9 @@
 -- ═══════════════════════════════════════════════════════════════════════════
--- 0003 — Ofícios: a configuração que vira produto
+-- 0003, Ofícios: a configuração que vira produto
 --
 -- Esta é a migration mais importante do ponto de vista de **produto**. Tudo que
--- o usuário percebe como "o sistema se adaptou a mim" — as colunas do quadro, o
--- rótulo dos campos, o título, a cor, os templates, a fonte dos chips — está
+-- o usuário percebe como "o sistema se adaptou a mim", as colunas do quadro, o
+-- rótulo dos campos, o título, a cor, os templates, a fonte dos chips, está
 -- aqui, como dado.
 --
 -- A consequência prática: **um ofício novo é um INSERT, não um deploy.** Nenhum
@@ -50,7 +50,7 @@ create table public.oficios (
 
   -- ── Modos ────────────────────────────────────────────────────────────────
   -- mono: chips e etiquetas em fonte monoespaçada (identidade de TI/Dev)
-  -- solo: quadro de uma pessoa só — esconde responsável e avatares
+  -- solo: quadro de uma pessoa só, esconde responsável e avatares
   mono           boolean not null default false,
   solo           boolean not null default false,
 
@@ -67,7 +67,7 @@ comment on column public.oficios.solo is
   'Quadro individual: some com responsável e avatares mesmo no plano Time.';
 
 -- Chave única por escopo. Dois índices parciais em vez de um `unique
--- (workspace_id, chave)` porque NULL nunca conflita com NULL no Postgres — sem
+-- (workspace_id, chave)` porque NULL nunca conflita com NULL no Postgres, sem
 -- isto, nada impediria dois ofícios de sistema com a chave 'mkt'.
 create unique index oficios_sistema_chave_idx
   on public.oficios (chave) where workspace_id is null;
@@ -82,7 +82,7 @@ create trigger oficios_atualizado_em
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- oficio_etapas — as colunas do kanban
+-- oficio_etapas, as colunas do kanban
 -- ─────────────────────────────────────────────────────────────────────────────
 create table public.oficio_etapas (
   id         uuid primary key default gen_random_uuid(),
@@ -108,7 +108,7 @@ create index oficio_etapas_oficio_idx on public.oficio_etapas (oficio_id, ordem)
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- oficio_templates — pautas de um clique
+-- oficio_templates, pautas de um clique
 -- ─────────────────────────────────────────────────────────────────────────────
 create table public.oficio_templates (
   id         uuid primary key default gen_random_uuid(),
@@ -150,7 +150,7 @@ comment on function app.oficio_visivel(uuid) is
 
 
 -- Editável: só ofício próprio do tenant, e só por dono/admin. Ofício do sistema
--- é imutável pela API — mudá-lo é migration, não clique.
+-- é imutável pela API, mudá-lo é migration, não clique.
 create or replace function app.oficio_editavel(p_oficio uuid)
 returns boolean
 language sql
@@ -268,7 +268,7 @@ create policy "templates: removo só de ofício próprio"
 
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- oficio_exemplos — o quadro que já nasce cheio
+-- oficio_exemplos, o quadro que já nasce cheio
 --
 -- O aha moment do Pautaria é cair num quadro **populado**, não num quadro
 -- vazio com as colunas certas. Um kanban zerado ainda é uma tela em branco:

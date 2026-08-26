@@ -1,11 +1,11 @@
-# 00 — Visão
+# 00, Visão
 
 > Por que o Pautaria existe. Se um documento contradiz este, o erro está no outro.
 > A identidade completa (personas, tom, valores) vive em `memory/identity.md`.
 
 ## O problema
 
-Quem trabalha por fluxo — social media, squad de produto, autônomo — precisa de um quadro.
+Quem trabalha por fluxo, social media, squad de produto, autônomo, precisa de um quadro.
 As ferramentas disponíveis entregam uma tela em branco e transferem a configuração para o
 usuário: nomear colunas, inventar campos, decidir vocabulário.
 
@@ -29,7 +29,7 @@ uma cor, três templates e seis pautas de exemplo. Nada disso é perguntado.
 
 Escolher "TI · Dev" entrega Backlog → Deploy, `Sprint` e `Estimativa`, chips em fonte
 monoespaçada. Escolher "Produtividade" entrega quatro colunas, `Contexto` e `Energia`, e
-some com responsável e avatares — porque é um quadro de uma pessoa só.
+some com responsável e avatares, porque é um quadro de uma pessoa só.
 
 ## North star
 
@@ -54,7 +54,7 @@ precisa de fundamento escrito.
 
 ## Como o produto escala
 
-Um nicho novo — jurídico, obra, consultório, edição de vídeo — é:
+Um nicho novo, jurídico, obra, consultório, edição de vídeo, é:
 
 ```sql
 insert into oficios (chave, nome, glifo, hue, chroma, titulo_quadro,
@@ -77,11 +77,11 @@ Assinatura recorrente via Asaas, cobrada do **workspace**.
 | `estudio` | R$ 29/mês · R$ 290/ano | quem vive de pauta |
 | `time` | R$ 79/mês · R$ 790/ano | quando entram outras pessoas |
 
-O gratuito é o funil, não uma amostra temporal — ver `memory/decisions.md` D1.
+O gratuito é o funil, não uma amostra temporal, ver `memory/decisions.md` D1.
 
 ## Fase atual
 
-**Fase 1 — Fundação + MVP monetizável.** Auth, workspace multi-tenant, quadro e tabela,
+**Fase 1, Fundação + MVP monetizável.** Auth, workspace multi-tenant, quadro e tabela,
 os três ofícios do sistema, assinatura Asaas ponta a ponta, limites de plano aplicados
 pelo banco, e o teste de isolamento entre tenants como gate de release.
 

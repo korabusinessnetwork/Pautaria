@@ -1,4 +1,4 @@
-# 07 — Contrato das APIs
+# 07, Contrato das APIs
 
 Três superfícies: **PostgREST** (dados de domínio, protegido por RLS + grants), **Edge
 Functions** (tudo que envolve dinheiro) e **RPC** (operações atômicas ou que precisam de
@@ -13,7 +13,7 @@ Toda Edge Function responde no mesmo formato:
 { "data": null, "error": { "codigo": "plano_ja_ativo", "mensagem": "…" } }
 ```
 
-`codigo` é a parte **estável** do contrato — o front decide comportamento por ele.
+`codigo` é a parte **estável** do contrato, o front decide comportamento por ele.
 `mensagem` é para o humano e pode mudar sem quebrar nada. Casar erro por texto é o tipo de
 acoplamento que quebra silenciosamente na primeira revisão de copy.
 
@@ -25,7 +25,7 @@ acoplamento que quebra silenciosamente na primeira revisão de copy.
 | `sem_permissao` | 403 | autenticado, papel insuficiente |
 | `entrada_invalida` | 422 | falhou o schema Zod |
 | `documento_invalido` | 422 | CPF/CNPJ com dígito errado (código próprio: o front destaca o campo) |
-| `nao_encontrado` | 404 | inexistente **ou** invisível para quem pediu — não distinguimos |
+| `nao_encontrado` | 404 | inexistente **ou** invisível para quem pediu, não distinguimos |
 | `plano_ja_ativo` | 409 | já existe assinatura viva no workspace |
 | `plano_inexistente` | 422 | plano fora do catálogo, ou gratuito |
 | `assinatura_inexistente` | 404 | nada a pagar ou cancelar |
@@ -66,7 +66,7 @@ o navegador de alguém logado disparar chamadas autenticadas.
   "aguardandoFatura": false }
 ```
 
-**Não existe campo de valor na entrada.** O preço é lido de `planos` dentro da função —
+**Não existe campo de valor na entrada.** O preço é lido de `planos` dentro da função,
 aceitá-lo do cliente seria deixá-lo assinar o Time por um centavo.
 
 Rate limit: 5/h por usuário. Erros: `sem_permissao`, `plano_ja_ativo`,
@@ -143,7 +143,7 @@ RLS. Lote máximo de 500 por execução; falha em um workspace não interrompe o
 | `aceitar_convite(token)` | `authenticated` | entrar num workspace |
 | `trocar_oficio_quadro(quadro, oficio)` | `authenticated` (dono/admin) | trocar o sotaque |
 
-`criar_workspace` é **SECURITY INVOKER** de propósito — não precisa de privilégio extra e
+`criar_workspace` é **SECURITY INVOKER** de propósito, não precisa de privilégio extra e
 mantém RLS e limites de plano valendo. As outras duas são DEFINER, e por isso abrem com um
 bloco de autorização explícito. Toda função DEFINER deste projeto deve abrir assim; se não
 abrir, é bug de segurança.
@@ -155,11 +155,11 @@ abrir, é bug de segurança.
 
 Existem em `public` porque o PostgREST só enxerga `public`, e o schema `app` fica fora da
 API de propósito. A rota existe; a permissão não. `anon` e `authenticated` recebem 403 do
-Postgres — verificado no Bloco 6 do teste de isolamento.
+Postgres, verificado no Bloco 6 do teste de isolamento.
 
 ---
 
-## PostgREST — acesso direto (protegido por RLS)
+## PostgREST, acesso direto (protegido por RLS)
 
 | Tabela | `anon` | `authenticated` |
 |---|---|---|

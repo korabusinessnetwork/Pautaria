@@ -2,7 +2,7 @@
  * Ponte para as Edge Functions.
  *
  * Toda operação de dinheiro passa por aqui. O front nunca escreve em
- * `assinaturas` ou `workspaces.plano` — nem conseguiria: o banco recusa por
+ * `assinaturas` ou `workspaces.plano`, nem conseguiria: o banco recusa por
  * privilégio de coluna (migration 0002). Este arquivo é, literalmente, o único
  * caminho do browser até a cobrança.
  */

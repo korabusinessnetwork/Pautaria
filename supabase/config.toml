@@ -7,7 +7,7 @@ project_id = "pautaria"
 enabled = true
 port = 54321
 # Só `public` é exposto pela API. O schema `app` guarda as funções de
-# autorização e permanece inalcançável a partir do browser — de propósito.
+# autorização e permanece inalcançável a partir do browser, de propósito.
 schemas = ["public"]
 extra_search_path = ["public", "extensions"]
 max_rows = 1000
@@ -44,6 +44,18 @@ refresh_token_reuse_interval = 10
 enable_signup = true
 enable_anonymous_sign_ins = false
 
+# Politica de senha. ATENCAO ao nome das chaves: elas moram no nivel [auth].
+# Este arquivo antes usava [auth.password] com min_length/required_characters,
+# que o CLI simplesmente IGNORA, sem aviso, sem erro. O efeito era o pior
+# possivel: o arquivo dizia "minimo 10 caracteres" e o projeto hospedado
+# continuava aceitando 6. Politica de seguranca que existe so no documento e
+# pior que politica ausente, porque ninguem vai conferir de novo.
+#
+# Comprimento importa mais que simbolo obrigatorio; 10 com variedade de
+# maiuscula, minuscula e digito e o piso para um SaaS pago.
+minimum_password_length = 10
+password_requirements = "lower_upper_letters_digits"
+
 [auth.email]
 enable_signup = true
 double_confirm_changes = true
@@ -51,37 +63,65 @@ enable_confirmations = true
 secure_password_change = true
 # Link de confirmação/recuperação vale 1 hora. O padrão de 24h é generoso
 # demais para um e-mail que pode ficar aberto numa máquina compartilhada.
+
+# Os dois ajustes abaixo existem para NAO regredir. O default do CLI e
+# max_frequency="1s" e otp_length=6, ambos mais fracos que o padrao que o
+# projeto hospedado ja trazia (1m e 8). Sem fixa-los aqui, cada
+# `config push` afrouxaria os dois silenciosamente.
+#   max_frequency, intervalo minimo entre dois e-mails ao mesmo destino;
+#     1s transforma o formulario de recuperacao em canhao de spam.
+#   otp_length, digitos do codigo de uso unico; 6 digitos sao 1 milhao de
+#     combinacoes, 8 sao 100 milhoes.
+max_frequency = "1m0s"
+otp_length = 8
 otp_expiry = 3600
 
-[auth.email.template.confirmation]
-subject = "Confirme seu e-mail — Pautaria"
-
-[auth.email.template.recovery]
-subject = "Redefinir sua senha — Pautaria"
-
-[auth.email.template.invite]
-subject = "Você foi convidado para um workspace no Pautaria"
+# ── Templates de e-mail: DESLIGADOS por restricao de custo ──────────────
+# A API recusa customizar template em projeto Free usando o provedor de
+# e-mail padrao: "Email template modification is not available for free
+# tier projects using the default email provider." E `config push` e
+# tudo-ou-nada: manter estas linhas ativas derruba o push inteiro, junto
+# com as regras de senha e a site_url.
+#
+# Reativar exige SMTP proprio em [auth.email.smtp] (ha opcoes gratuitas).
+# Ate la o usuario recebe o texto padrao, em ingles, o que contraria o
+# principio de vocabulario do usuario, mas nao bloqueia o cadastro.
+# Ver docs/08_DECISOES quando a decisao de SMTP for tomada.
+#
+# [auth.email.template.confirmation]
+# subject = "Confirme seu e-mail, Pautaria"
+#
+# [auth.email.template.recovery]
+# subject = "Redefinir sua senha, Pautaria"
+#
+# [auth.email.template.invite]
+# subject = "Você foi convidado para um workspace no Pautaria"
 
 # Senha: 10 caracteres com exigência de variedade. Comprimento importa mais que
 # símbolo obrigatório, mas o mínimo padrão (6) é curto demais para um SaaS pago.
-[auth.password]
-min_length = 10
-required_characters = "abcdefghijklmnopqrstuvwxyz:ABCDEFGHIJKLMNOPQRSTUVWXYZ:0123456789"
-
-# Verificação contra vazamentos conhecidos (HaveIBeenPwned). Gratuito e é a
-# defesa mais eficaz que existe contra credential stuffing.
-[auth.password.hibp]
-enabled = true
+# ── HaveIBeenPwned: ADIADO por restricao de custo ────────────────────────
+# A verificacao contra senhas vazadas NAO e gratuita, ao contrario do que
+# dizia o comentario anterior aqui. A API responde 402:
+#   "Configuring leaked password protection via HaveIBeenPwned.org is
+#    available on Pro Plans and up."
+# Custo para ligar: plano Pro, ~US$ 25/mes por projeto.
+# Alternativa gratuita: nenhuma equivalente no Supabase. Mitigacao atual e o
+# minimo de 10 caracteres com variedade, acima.
+# Recomendacao: ligar quando houver receita, antes de abrir cadastro publico.
+# Deixar as chaves ativas aqui derruba o `config push` inteiro com 402.
 
 [auth.rate_limit]
 email_sent = 10
 sign_in_sign_ups = 20
 token_refresh = 150
-anonymous_users = 0
+# A API remota recusa 0 ("Expected a value greater than or equal to 1"), entao 1
+# e o piso possivel. Nao afrouxa nada: `enable_anonymous_sign_ins = false`
+# acima ja fecha a porta, e este limite so existiria se ela fosse aberta.
+anonymous_users = 1
 
 [auth.mfa]
 # TOTP fica para a Fase 4 (ver docs/09_BACKLOG). O suporte é ativado aqui
-# quando a UI de inscrição/verificação existir — ligar antes só criaria uma
+# quando a UI de inscrição/verificação existir, ligar antes só criaria uma
 # funcionalidade sem porta de entrada.
 max_enrolled_factors = 10
 
@@ -103,17 +143,26 @@ inspector_port = 8083
 # Toda função que o app chama exige JWT. Mudar qualquer linha abaixo para
 # `false` sem um mecanismo de autenticação equivalente é vulnerabilidade.
 
+# `import_map` explicito em cada funcao: sem ele o bundler do deploy nao acha
+# `supabase/functions/deno.json` e falha com "Relative import path
+# '@supabase/supabase-js' not prefixed with / or ./ or ../". O caminho e
+# relativo a este arquivo.
 [functions.assinatura-criar]
 verify_jwt = true
+import_map = "./functions/deno.json"
 
 [functions.assinatura-portal]
 verify_jwt = true
+import_map = "./functions/deno.json"
 
 [functions.assinatura-cancelar]
 verify_jwt = true
+import_map = "./functions/deno.json"
 
 [functions.asaas-webhook]
 verify_jwt = false
+import_map = "./functions/deno.json"
 
 [functions.assinaturas-reconciliar]
 verify_jwt = false
+import_map = "./functions/deno.json"

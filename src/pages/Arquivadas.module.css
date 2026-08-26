@@ -1,8 +1,8 @@
-/* Arquivadas — o arquivo do quadro.
+/* Arquivadas, o arquivo do quadro.
    Mesmo esqueleto de tela interna de Equipe e Configurações (coluna estreita
    centrada sobre o papel), com uma diferença deliberada de temperatura: a ficha
    arquivada é mais apagada que o card do quadro. Ela existe, mas não está mais
-   no mural — e a tela precisa dizer isso antes de qualquer texto. */
+   no mural, e a tela precisa dizer isso antes de qualquer texto. */
 
 .tela {
   min-height: 100vh;
@@ -181,7 +181,7 @@
 
 /* ── Confirmação da exclusão ───────────────────────────────────────────────
    Ocupa a linha inteira de propósito: a única ação sem volta desta tela não
-   divide espaço com nada. O tom de perigo é o semântico, não o accent — uma
+   divide espaço com nada. O tom de perigo é o semântico, não o accent, uma
    exclusão precisa ler como exclusão mesmo num ofício de matiz vermelha.     */
 
 .confirmacao {
@@ -209,7 +209,7 @@
 
 /* ── Estado vazio ──────────────────────────────────────────────────────────
    Ensina a próxima ação em vez de constatar a ausência. "Nada arquivado" e
-   ponto final deixaria a pessoa sem saber como arquivar — e sem saber que o
+   ponto final deixaria a pessoa sem saber como arquivar, e sem saber que o
    arquivo é reversível, que é justamente o que esta tela veio provar.        */
 
 .vazio {

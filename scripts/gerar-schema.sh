@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# gerar-schema.sh — consolida supabase/migrations/*.sql em supabase/schema.sql
+# gerar-schema.sh, consolida supabase/migrations/*.sql em supabase/schema.sql
 #
 # `schema.sql` é a fonte de verdade legível do banco (CLAUDE.md). Manter os dois
 # à mão garantiria divergência; por isso ele é GERADO. Rode este script sempre
@@ -18,7 +18,7 @@ DESTINO="$RAIZ/supabase/schema.sql"
 {
   cat <<'CABECALHO'
 -- ═══════════════════════════════════════════════════════════════════════════
---  P A U T A R I A  —  S C H E M A  D O  B A N C O
+--  P A U T A R I A, S C H E M A  D O  B A N C O
 --
 --  ⚠️  ARQUIVO GERADO. Não edite aqui.
 --

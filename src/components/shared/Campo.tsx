@@ -1,5 +1,5 @@
 /**
- * Campo de formulário — rótulo, input, dica e erro, sempre associados.
+ * Campo de formulário, rótulo, input, dica e erro, sempre associados.
  *
  * O `useId` liga rótulo, dica e erro ao input via `htmlFor`, `aria-describedby`
  * e `aria-errormessage`. Fazer isso à mão em cada formulário é o tipo de coisa

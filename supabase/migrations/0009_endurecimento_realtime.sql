@@ -1,8 +1,8 @@
 -- ═══════════════════════════════════════════════════════════════════════════
--- 0009 — Endurecimento do schema e realtime
+-- 0009, Endurecimento do schema e realtime
 --
 -- As migrations anteriores protegeram as tabelas que existem. Esta protege as
--- que **ainda não existem** — que é onde brechas costumam nascer.
+-- que **ainda não existem**, que é onde brechas costumam nascer.
 --
 -- O Postgres, e o Supabase por cima dele, são generosos por padrão: uma tabela
 -- nova em `public` já sai com privilégio para `anon` e `authenticated`, e uma
@@ -25,7 +25,18 @@ declare
   v_role text;
 begin
   foreach v_role in array array['postgres', 'supabase_admin'] loop
-    if exists (select 1 from pg_roles where rolname = v_role) then
+    -- Duas condicoes, nao uma. O papel precisa existir E o usuario corrente
+    -- precisa ser membro dele: `alter default privileges for role X` exige
+    -- filiacao a X. Localmente o `postgres` e superusuario e passa nos dois
+    -- papeis; no Supabase hospedado ele NAO e membro de `supabase_admin`, e
+    -- checar so a existencia derrubava a migration inteira com
+    -- "permission denied to change default privileges" (SQLSTATE 42501).
+    --
+    -- Pular `supabase_admin` no ambiente hospedado nao abre brecha: quem cria
+    -- tabela em `public` ali e o `postgres` (via migration), e os privilegios
+    -- padrao dele estao cobertos pela primeira volta do laco.
+    if exists (select 1 from pg_roles where rolname = v_role)
+       and pg_has_role(current_user, v_role, 'USAGE') then
       execute format(
         'alter default privileges for role %I in schema public
            revoke all on tables from anon, authenticated', v_role);
@@ -49,7 +60,7 @@ revoke create on schema public from public, anon, authenticated;
 --
 -- Esta função é o gate automatizado: `scripts/testar-isolamento.sh` falha o
 -- build se ela devolver qualquer linha. Uma tabela de negócio sem RLS não é um
--- aviso a ser triado depois — é um build quebrado.
+-- aviso a ser triado depois, é um build quebrado.
 -- ─────────────────────────────────────────────────────────────────────────────
 create or replace function app.tabelas_sem_rls()
 returns table (tabela text, motivo text)
@@ -94,7 +105,7 @@ grant execute on function app.tabelas_sem_rls() to service_role;
 --
 -- Só o que a UI realmente precisa acompanhar ao vivo: uma pauta que outro
 -- membro moveu, e o quadro que mudou de ofício. `assinaturas`, `cobrancas`,
--- `audit_log` e `profiles` ficam de fora — assinar tabela financeira via
+-- `audit_log` e `profiles` ficam de fora, assinar tabela financeira via
 -- websocket é ampliar superfície sem ganho de produto.
 --
 -- O Realtime do Supabase aplica RLS na entrega: um membro do workspace A não
@@ -111,7 +122,7 @@ $$;
 
 -- REPLICA IDENTITY FULL faz o payload do evento carregar os valores antigos da
 -- linha. É o que permite à UI saber de qual etapa a pauta saiu e animar o
--- movimento — sem isso, um UPDATE chega só com a chave primária.
+-- movimento, sem isso, um UPDATE chega só com a chave primária.
 alter table public.pautas  replica identity full;
 alter table public.quadros replica identity full;
 
@@ -120,4 +131,4 @@ alter table public.quadros replica identity full;
 -- Rastro de versão do schema
 -- ─────────────────────────────────────────────────────────────────────────────
 comment on schema public is
-  'Pautaria — schema de aplicação. Toda tabela aqui tem RLS. Ver docs/11_SEGURANCA.';
+  'Pautaria, schema de aplicação. Toda tabela aqui tem RLS. Ver docs/11_SEGURANCA.';

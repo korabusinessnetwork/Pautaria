@@ -1,5 +1,5 @@
 /**
- * Autenticação — cadastro, entrada, saída e recuperação.
+ * Autenticação, cadastro, entrada, saída e recuperação.
  *
  * Duas decisões de segurança visíveis daqui:
  *
@@ -103,7 +103,7 @@ export async function entrar(email: string, senha: string): Promise<Session> {
   });
 
   if (error || !data.session) {
-    // Mensagem única para senha errada e e-mail inexistente — de novo, para não
+    // Mensagem única para senha errada e e-mail inexistente, de novo, para não
     // transformar o login num oráculo de "esse e-mail tem conta aqui".
     throw new ErroApp('nao_autenticado', 'E-mail ou senha incorretos.');
   }

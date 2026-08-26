@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════════════════
-   Base — reset mínimo e elementos globais.
+   Base, reset mínimo e elementos globais.
    Tudo o mais é CSS Module co-localizado com seu componente.
    ═══════════════════════════════════════════════════════════════════════════ */
 
@@ -79,7 +79,7 @@ textarea::placeholder {
 }
 
 /* Foco visível de verdade. O anel segue o accent do ofício, então ele é
-   coerente com o tema sem nunca sumir — remover outline "porque fica feio" é
+   coerente com o tema sem nunca sumir, remover outline "porque fica feio" é
    como tirar o corrimão da escada.                                           */
 :where(a, button, input, textarea, select, [tabindex]):focus-visible {
   outline: 2px solid var(--ac);
@@ -150,7 +150,7 @@ textarea::placeholder {
   }
 }
 
-/* Barra de rolagem discreta — o quadro rola muito na horizontal e a barra
+/* Barra de rolagem discreta, o quadro rola muito na horizontal e a barra
    padrão do sistema quebra a sensação de mesa de trabalho.                   */
 * {
   scrollbar-width: thin;

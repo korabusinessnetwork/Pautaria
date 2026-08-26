@@ -1,4 +1,4 @@
-# 01 — Arquitetura
+# 01, Arquitetura
 
 > Decisões registradas em `docs/08_DECISOES/`. Este documento descreve o sistema como ele
 > é; os ADRs explicam por que ele é assim.
@@ -39,7 +39,7 @@ Edge Function**, nunca no navegador.
 ```
 
 **Vercel** serve o front estático. **Supabase** hospeda banco, auth e funções. A credencial
-da Asaas existe apenas em Supabase Secrets — não passa pela Vercel em momento algum.
+da Asaas existe apenas em Supabase Secrets, não passa pela Vercel em momento algum.
 
 ## As quatro fronteiras
 
@@ -56,8 +56,8 @@ consulta passa por um lugar onde há contrato, validação e tratamento de erro.
 
 Duas camadas que se cobrem:
 
-- **RLS** decide *quais linhas* — `app.e_membro(workspace_id)`.
-- **GRANT de coluna** decide *quais colunas* — `plano`, `status` e `asaas_customer_id`
+- **RLS** decide *quais linhas*, `app.e_membro(workspace_id)`.
+- **GRANT de coluna** decide *quais colunas*, `plano`, `status` e `asaas_customer_id`
   ficam fora do `grant update` de `authenticated`.
 
 Uma política frouxa não vira escalada de privilégio, porque o Postgres recusa a coluna
@@ -67,13 +67,13 @@ antes de avaliar a linha. E os privilégios padrão do schema foram revertidos (
 ### 3. Navegador ↔ dinheiro: as Edge Functions
 
 O front **lê** `assinaturas` e `cobrancas` (RLS libera para dono e admin) e **pede**
-mudanças chamando função. Não existe caminho do browser até uma escrita de cobrança — o
+mudanças chamando função. Não existe caminho do browser até uma escrita de cobrança, o
 banco recusaria de qualquer forma, e o teste de isolamento prova isso a cada build.
 
 ### 4. Interno ↔ exposto: o schema `app`
 
 Funções de autorização e regra vivem em `app`, que fica fora de `api.schemas` no
-`config.toml` — o PostgREST nem publica rota para ele. O que as Edge Functions precisam
+`config.toml`, o PostgREST nem publica rota para ele. O que as Edge Functions precisam
 alcançar recebe uma **ponte nominal** em `public`, com `grant execute` só para
 `service_role` (migration 0010).
 
@@ -104,7 +104,7 @@ que o usuário não clique num botão que não vai funcionar. Quem recusa é o b
 
 O tema é o caso especial: o accent do ofício vira quatro variáveis CSS aplicadas em
 `document.documentElement`. Trocar de ofício muda quatro strings e o app inteiro se
-re-tematiza — sem prop drilling, sem re-render em cascata.
+re-tematiza, sem prop drilling, sem re-render em cascata.
 
 ## Fluxo de dados de uma pauta movida
 

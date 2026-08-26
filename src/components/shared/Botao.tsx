@@ -4,10 +4,10 @@
  * A prop `motivoDesabilitado` é a peça de produto deste componente. Um botão
  * desabilitado sem explicação é uma parede: o usuário vê que não pode, não sabe
  * por quê, e conclui que o app está quebrado. Com o motivo, ele vira uma
- * conversa — "você atingiu o limite do plano Solo" é acionável.
+ * conversa, "você atingiu o limite do plano Solo" é acionável.
  *
  * O motivo aparece como `title` (mouse) e `aria-describedby` (leitor de tela),
- * e o botão continua focável quando desabilitado por regra de negócio — porque
+ * e o botão continua focável quando desabilitado por regra de negócio, porque
  * um elemento que some da navegação por teclado leva a informação junto.
  */
 

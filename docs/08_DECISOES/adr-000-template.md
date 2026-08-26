@@ -1,7 +1,7 @@
 # ADR-000: Título que diz a decisão, não o tema
 
 > Template. Copie para `adr-NNN.md`. Bom título: "Adoção de Supabase com RLS direto no
-> front em vez de API própria" — diz o quê e a alternativa. Ruim: "Decisão sobre banco".
+> front em vez de API própria", diz o quê e a alternativa. Ruim: "Decisão sobre banco".
 
 **Status:** Proposto | Aceito | Rejeitado | Supersedido
 **Data:** AAAA-MM-DD
@@ -24,10 +24,10 @@ O que foi decidido, em uma ou duas frases diretas. Sem hedging.
 Pelo menos uma alternativa **real** que foi descartada, com o motivo. Um ADR sem
 alternativas é suspeito de racionalização a posteriori.
 
-### Alternativa A — nome
+### Alternativa A, nome
 Por que era plausível. Por que não foi escolhida. O que se perde ao descartá-la.
 
-### Alternativa B — nome
+### Alternativa B, nome
 Idem.
 
 ## Consequências

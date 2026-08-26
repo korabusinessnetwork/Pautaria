@@ -1,16 +1,16 @@
-# 10 — Prompts
+# 10, Prompts
 
 > Biblioteca de prompts para agentes de IA que trabalham neste repositório. O objetivo é
-> que um agente novo produza código indistinguível do que já existe — o que significa
+> que um agente novo produza código indistinguível do que já existe, o que significa
 > carregar as restrições certas **antes** de escrever, não corrigir depois.
 
 ## Leitura obrigatória antes de qualquer tarefa
 
 Nesta ordem:
 
-1. `CLAUDE.md` — a constituição. Precede qualquer preferência.
-2. `memory/restrictions.md` — prioridade máxima; metade das ideias esbarra aqui.
-3. `docs/00_VISAO` — o que o produto é, e o que ele não é.
+1. `CLAUDE.md`, a constituição. Precede qualquer preferência.
+2. `memory/restrictions.md`, prioridade máxima; metade das ideias esbarra aqui.
+3. `docs/00_VISAO`, o que o produto é, e o que ele não é.
 4. O documento da área tocada (`03_` regras, `04_` modelagem, `11_` segurança).
 
 ## Prompt-base
@@ -24,7 +24,7 @@ Antes de escrever qualquer linha:
 3. confirme que a tarefa não contraria docs/00_VISAO
 
 Invariantes que não se negociam:
-- Nenhum componente importa @supabase/supabase-js — tudo por src/lib/*.service.ts
+- Nenhum componente importa @supabase/supabase-js, tudo por src/lib/*.service.ts
 - Nenhum componente conhece o nome de um ofício. Rótulo vem de oficio.*, cor de (hue, chroma)
 - Tabela nova nasce com RLS + políticas + grants nominais NA MESMA migration
 - Nada de dinheiro no navegador: assinatura é Edge Function
@@ -50,7 +50,7 @@ Crie uma migration OU acrescente ao seed com:
   chroma (~0.13–0.16), titulo_quadro, campo1_label, campo2_label, mono, solo, ordem
 - oficio_etapas: 3 a 6, ordem começando em 0
 - oficio_templates: 3
-- oficio_exemplos: 5 a 6, com prazo_dias relativo — inclua pelo menos um NEGATIVO
+- oficio_exemplos: 5 a 6, com prazo_dias relativo, inclua pelo menos um NEGATIVO
   (um quadro só com prazos futuros parece catálogo, não trabalho em andamento)
 
 Pesquise o vocabulário real de quem exerce esse ofício. "Etapa 1, Etapa 2" reprova.
@@ -66,7 +66,7 @@ Crie a tabela {NOME} para {FINALIDADE}.
 Na MESMA migration, obrigatoriamente:
 1. workspace_id + FK + índice (é tabela de negócio → é multi-tenant)
 2. revoke all from anon, authenticated
-3. grant nominal — por COLUNA onde a coluna é sensível
+3. grant nominal, por COLUNA onde a coluna é sensível
 4. alter table ... enable row level security
 5. políticas para select/insert/update/delete usando app.e_membro / app.tem_papel /
    app.workspace_gravavel
@@ -76,7 +76,7 @@ Se a integridade envolver "pertence ao mesmo X que Y", prefira FK COMPOSTA a tri
 (migration 0004 tem o padrão).
 
 Depois: acrescente asserções ao supabase/testes/isolamento.sql provando que o tenant A
-não lê nem escreve na do tenant B — e lembre que RLS pode barrar de dois jeitos
+não lê nem escreve na do tenant B, e lembre que RLS pode barrar de dois jeitos
 (exceção em WITH CHECK, zero linhas em USING). Use pg_temp.linhas_afetadas().
 
 Rode bash scripts/banco-efemero.sh e bash scripts/gerar-schema.sh.
@@ -140,7 +140,7 @@ Para cada achado: o vetor concreto, não "boa prática". Se não souber dizer co
 explora, provavelmente não é achado.
 ```
 
-## Anti-padrões — recuse mesmo se pedirem
+## Anti-padrões, recuse mesmo se pedirem
 
 | Pedido | Por que recusar | O que fazer |
 |---|---|---|

@@ -11,7 +11,7 @@
  *
  * 2. **Arquivar pede confirmação.** O CLAUDE.md exige que toda ação destrutiva
  *    seja reversível *ou* confirmada. Arquivar é tecnicamente reversível
- *    (`arquivada_em` volta a nulo), mas não existe UI de desarquivar ainda —
+ *    (`arquivada_em` volta a nulo), mas não existe UI de desarquivar ainda,
  *    então, até existir, ela é tratada como irreversível e confirma.
  */
 
@@ -270,7 +270,7 @@ export function DrawerPauta({
         {confirmandoArquivo ? (
           <div className={estilos.confirmacao}>
             <p className={estilos.confirmacaoTexto}>
-              Arquivar tira a pauta do quadro. Ela continua guardada — nada é apagado.
+              Arquivar tira a pauta do quadro. Ela continua guardada, nada é apagado.
             </p>
             <div className={estilos.confirmacaoAcoes}>
               <Botao

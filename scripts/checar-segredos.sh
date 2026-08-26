@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# checar-segredos.sh — varredura de segredo vazado no repositório
+# checar-segredos.sh, varredura de segredo vazado no repositório
 #
 # Roda no CI e antes de todo deploy. Procura os padrões que realmente aparecem
 # num vazamento de projeto Supabase/Asaas, não uma lista genérica.
@@ -11,7 +11,7 @@
 # A primeira versão deste script reprovava o próprio repositório: acusava o
 # `.env.example` de ser um `.env`, a chave-exemplo do INSTALACAO.md de ser uma
 # chave real, e a tabela de anti-padrões do docs/10_PROMPTS de conter uma
-# variável proibida — que ela cita justamente para dizer "não faça isto".
+# variável proibida, que ela cita justamente para dizer "não faça isto".
 #
 # Um scanner que grita à toa é um scanner que as pessoas aprendem a ignorar, e
 # aí ele deixa de proteger no dia em que estiver certo. Por isso cada checagem
@@ -40,7 +40,7 @@ echo "▸ Varredura de segredos"
 # ── 1. Arquivo .env versionado (exceto o exemplo) ────────────────────────────
 ENVS=$(git ls-files | grep -E '(^|/)\.env($|\.)' | grep -v '\.env\.example$' || true)
 if [ -n "$ENVS" ]; then
-  reprovar "arquivo .env versionado — git rm --cached:"
+  reprovar "arquivo .env versionado, git rm --cached:"
   echo "$ENVS" | sed 's/^/      /'
 else
   echo "  ✓ nenhum .env versionado (só o .env.example)"
@@ -48,7 +48,7 @@ fi
 
 # ── 2. Chave service_role do Supabase ────────────────────────────────────────
 # O JWT do service_role começa com `eyJ`. Procuramos a atribuição concreta, não
-# a palavra "service_role" — que aparece legitimamente em migrations e docs.
+# a palavra "service_role", que aparece legitimamente em migrations e docs.
 SERVICE=$(git ls-files -z | xargs -0 grep -lE 'SUPABASE_SERVICE_ROLE_KEY *= *["'"'"']?eyJ' 2>/dev/null \
           | grep -vE "$EH_DOC" || true)
 if [ -n "$SERVICE" ]; then

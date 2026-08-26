@@ -1,5 +1,5 @@
 /**
- * Tema — o accent do ofício, em OKLCH.
+ * Tema, o accent do ofício, em OKLCH.
  *
  * O handoff de design define o accent como quatro derivações de um par
  * (hue, chroma):
@@ -13,7 +13,7 @@
  * consequência prática: um ofício novo não tem como sair com paleta
  * inconsistente. Quem cadastra escolhe uma matiz; as quatro variações saem
  * corretas por construção, com a mesma luminosidade percebida dos outros
- * ofícios — que é justamente o que o OKLCH garante e o HSL não.
+ * ofícios, que é justamente o que o OKLCH garante e o HSL não.
  *
  * O `--acDeep` em 44% de luminosidade não é escolha estética: é o que mantém
  * contraste de texto legível sobre o `--acSoft` em qualquer matiz do círculo.
@@ -50,7 +50,7 @@ export function variaveisDeAccent(hue: number, chroma: number): Record<string, s
 
 /**
  * Cor de avatar a partir da matiz do perfil. Luminosidade e croma fixos para
- * que nenhum avatar fique ilegível — a única variável é a matiz, derivada do id
+ * que nenhum avatar fique ilegível, a única variável é a matiz, derivada do id
  * do usuário no cadastro (trigger `ao_criar_usuario`, migration 0002).
  */
 export function avatarDe(hue: number): { fundo: string; texto: string } {
@@ -67,7 +67,7 @@ export function avatarDe(hue: number): { fundo: string; texto: string } {
  * A troca de ofício re-tematiza o app inteiro sem recarregar nada: mudam
  * quatro variáveis CSS em `:root`, e cada componente que usa `var(--ac)` se
  * atualiza junto. É o que faz a promessa "troque de ofício quando quiser"
- * parecer instantânea — porque é.
+ * parecer instantânea, porque é.
  */
 export function aplicarAccentGlobal(hue: number, chroma: number): void {
   const raiz = document.documentElement;

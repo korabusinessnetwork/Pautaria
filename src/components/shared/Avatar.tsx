@@ -1,5 +1,5 @@
 /**
- * Avatar — iniciais em círculo, cor derivada do perfil.
+ * Avatar, iniciais em círculo, cor derivada do perfil.
  *
  * Sem upload de foto: cor e iniciais vêm do banco (`profiles.avatar_hue`,
  * `profiles.iniciais`), com a matiz derivada do id do usuário no cadastro. O

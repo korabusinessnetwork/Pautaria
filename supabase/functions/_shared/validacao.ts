@@ -1,5 +1,5 @@
 /**
- * Contratos de entrada — Zod na fronteira.
+ * Contratos de entrada, Zod na fronteira.
  *
  * Nenhuma função lê `body.workspaceId` direto. Tudo passa por um schema, e o
  * que não bater com o schema é recusado com `entrada_invalida` antes de tocar o
@@ -52,7 +52,7 @@ export const entradaCancelar = z.object({
  * `passthrough()` de propósito: a Asaas adiciona campos ao longo do tempo, e um
  * schema estrito recusaria eventos legítimos numa quinta-feira qualquer por
  * causa de um campo novo que não nos interessa. Validamos com rigor o que
- * usamos e deixamos o resto passar — ele é gravado íntegro em
+ * usamos e deixamos o resto passar, ele é gravado íntegro em
  * `webhook_eventos.payload` para perícia.
  */
 export const eventoAsaas = z

@@ -1,5 +1,5 @@
 -- ═══════════════════════════════════════════════════════════════════════════
--- 0007 — Limites de plano, aplicados pelo banco
+-- 0007, Limites de plano, aplicados pelo banco
 --
 -- A UI desabilita o botão para ser gentil. O banco recusa a linha para ser
 -- correto. São camadas diferentes com propósitos diferentes, e só a segunda é
@@ -10,7 +10,7 @@
 -- Detalhe que costuma passar batido: `count(*)` seguido de `if` tem corrida.
 -- Duas requisições simultâneas contam 39 pautas cada, ambas passam, e o
 -- workspace termina com 41 num plano de 40. O `pg_advisory_xact_lock` por
--- workspace serializa apenas as inserções concorrentes do MESMO tenant — o
+-- workspace serializa apenas as inserções concorrentes do MESMO tenant, o
 -- custo é nulo no caso normal (ninguém cria duas pautas no mesmo milissegundo)
 -- e a contagem passa a ser exata.
 --
@@ -37,7 +37,7 @@ comment on function app.travar_workspace(uuid) is
 
 
 -- Mensagem de erro padronizada. Errcode P0001 com um `hint` que a camada de
--- serviços traduz em `plano_limite_atingido` — o front recebe um código
+-- serviços traduz em `plano_limite_atingido`, o front recebe um código
 -- estável, não uma string para casar com regex.
 create or replace function app.erro_limite(p_mensagem text)
 returns void
@@ -210,7 +210,7 @@ create trigger limitar_oficios_personalizados
 
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- Visão de uso — alimenta a UI para desabilitar botão ANTES do clique
+-- Visão de uso, alimenta a UI para desabilitar botão ANTES do clique
 --
 -- `security_invoker = true` é essencial: sem isso a view rodaria com os
 -- privilégios de quem a criou e devolveria o uso de todos os tenants. Com ele,

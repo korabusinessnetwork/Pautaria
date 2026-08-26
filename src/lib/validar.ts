@@ -13,7 +13,7 @@
  * Nota de tipagem: as funções são genéricas sobre o **schema** (`S extends
  * ZodTypeAny`) e não sobre o tipo de saída. Os schemas de `tipos.ts` usam
  * `.transform()` para converter snake_case do banco em camelCase da UI, e um
- * schema com transform tem entrada e saída diferentes — `ZodType<T>` assume que
+ * schema com transform tem entrada e saída diferentes, `ZodType<T>` assume que
  * são iguais e recusaria todos eles. Inferir a partir de `S` mantém os dois
  * lados corretos.
  */

@@ -1,10 +1,10 @@
 /**
- * Ordenação fracionária — mover um card sem renumerar a coluna.
+ * Ordenação fracionária, mover um card sem renumerar a coluna.
  *
  * A posição de uma pauta é um `double precision`, não um índice inteiro.
  * Arrastar um card entre dois outros vira a média das posições vizinhas: um
  * UPDATE, uma linha. Com índice inteiro, o mesmo gesto exigiria reescrever
- * todas as pautas abaixo — e duas pessoas arrastando ao mesmo tempo
+ * todas as pautas abaixo, e duas pessoas arrastando ao mesmo tempo
  * produziriam ordens diferentes, porque cada uma renumeraria a partir do que
  * viu.
  *
@@ -73,7 +73,7 @@ export function renumerar<T extends { id: string; posicao: number }>(
  * Calcula as vizinhas de um destino de drop.
  *
  * `destino` é o índice onde o card vai ficar dentro da coluna já **sem** ele.
- * Quem chama precisa remover o card arrastado da lista antes — senão, ao mover
+ * Quem chama precisa remover o card arrastado da lista antes, senão, ao mover
  * dentro da própria coluna, ele entraria como vizinho de si mesmo e a posição
  * calculada não sairia do lugar.
  */

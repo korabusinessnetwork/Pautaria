@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 #
-# testar-isolamento.sh — o gate de segurança do banco
+# testar-isolamento.sh, o gate de segurança do banco
 #
 # Prova, contra um Postgres de verdade, as duas afirmações que sustentam o
 # isolamento entre tenants do Pautaria:
 #
 #   1. Nenhuma tabela de negócio ficou sem RLS.
 #   2. Um usuário do workspace A não lê, não escreve e não apaga nada do
-#      workspace B — e não consegue se dar um plano melhor.
+#      workspace B, e não consegue se dar um plano melhor.
 #
 # Um teste que apenas afirma "configuramos RLS" não vale nada. Este cria dois
 # tenants reais, assume a identidade de cada usuário via `set local role` +

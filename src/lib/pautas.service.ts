@@ -1,8 +1,8 @@
 /**
- * Quadros e pautas — o dado operacional.
+ * Quadros e pautas, o dado operacional.
  *
  * Sobre `posicao`: é `double precision`, não um inteiro sequencial. Mover uma
- * pauta entre duas outras vira a média das vizinhas — um UPDATE de uma linha.
+ * pauta entre duas outras vira a média das vizinhas, um UPDATE de uma linha.
  * Com índice inteiro, o mesmo movimento renumeraria a coluna inteira, e duas
  * pessoas arrastando cards ao mesmo tempo produziriam ordens divergentes. Ver
  * `posicaoEntre` em `src/utils/ordenacao.ts`.
@@ -79,7 +79,7 @@ export async function renomearQuadro(id: string, titulo: string): Promise<void> 
 }
 
 /**
- * Troca o ofício do quadro levando as pautas junto — "a pauta viaja junto".
+ * Troca o ofício do quadro levando as pautas junto, "a pauta viaja junto".
  * RPC porque precisa ser atômica e mexe em coluna que o cliente não escreve
  * (migration 0008).
  */
@@ -209,7 +209,7 @@ export async function atualizarPauta(
  *
  * `posicaoEntre` recebe as vizinhas de destino; nenhuma outra linha é tocada.
  * A FK composta `pautas_etapa_oficio_fk` garante que a etapa de destino é do
- * mesmo ofício — não há como arrastar um card para a coluna de outro quadro,
+ * mesmo ofício, não há como arrastar um card para a coluna de outro quadro,
  * nem mesmo forjando a requisição.
  */
 export async function moverPauta(entrada: {
@@ -302,7 +302,7 @@ export async function excluirPauta(id: string): Promise<void> {
 /**
  * Realtime: o quadro de outro membro se move sozinho.
  *
- * O Realtime do Supabase aplica RLS na entrega — um membro do workspace A não
+ * O Realtime do Supabase aplica RLS na entrega, um membro do workspace A não
  * recebe evento do workspace B, mesmo assinando o canal. Ainda assim filtramos
  * por `quadro_id` no servidor para não trafegar o que a tela não vai usar.
  */
